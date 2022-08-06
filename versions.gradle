@@ -35,7 +35,7 @@ ext {
   ]
 
   deps = [
-      supportAppCompat    : "androidx.appcompat:appcompat:1.1.0",
+      supportAppCompat    : "androidx.appcompat:appcompat:1.4.2",
       supportDesign       : "com.google.android.material:material:1.1.0",
       supportMultidex     : "androidx.multidex:multidex:2.0.1",
 
