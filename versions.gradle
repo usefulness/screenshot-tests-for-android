@@ -17,7 +17,6 @@
 ext {
   final screenshotTestVersion = VERSION_NAME
   final dexmakerVersion = "1.4"
-  final lithoVersion = "0.40.0"
 
   versions = [
       kotlin    : '1.6.10',
@@ -41,11 +40,6 @@ ext {
       supportMultidex     : "androidx.multidex:multidex:2.0.1",
 
       kotlinStdlib        : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${versions.kotlin}",
-
-      lithoCore           : "com.facebook.litho:litho-core:$lithoVersion",
-      lithoWidget         : "com.facebook.litho:litho-widget:$lithoVersion",
-      lithoAnnotations    : "com.facebook.litho:litho-annotations:$lithoVersion",
-      lithoProcessor      : "com.facebook.litho:litho-processor:$lithoVersion",
 
       gson                : "com.google.code.gson:gson:2.8.6",
 

@@ -1,75 +1,37 @@
-/*
- * Copyright (c) Meta Platforms, Inc. and affiliates.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+import org.jetbrains.kotlin.gradle.plugin.KotlinPluginWrapperKt
 
-apply plugin: 'com.github.ben-manes.versions'
+plugins {
+  id("com.starter.config")
+  id("com.starter.versioning")
+}
 
-buildscript {
-  apply from: rootProject.file('versions.gradle')
-  repositories {
-    mavenCentral()
-    google()
-    jcenter()
-  }
-
-  dependencies {
-    classpath plugs.agp
-    classpath plugs.versions
-    classpath plugs.publish
-    classpath plugs.dokka
-  }
+commonConfig {
+  javaFilesAllowed false
+  javaVersion JavaVersion.VERSION_1_8
 }
 
 allprojects {
-  version = property('VERSION_NAME')
-  repositories {
-    mavenCentral()
-    google()
-    jcenter()
+  pluginManager.withPlugin("kotlin") { plugin ->
+    def kotlinVersion = KotlinPluginWrapperKt.getKotlinPluginVersion(project)
+    configurations.configureEach {
+      resolutionStrategy.eachDependency {
+        if (requested.group == 'org.jetbrains.kotlin' && requested.name.startsWith("kotlin")) {
+          useVersion kotlinVersion
+        }
+      }
+    }
   }
-}
-
-def taskLogOutput = new StringBuilder()
-gradle.addListener(new TaskExecutionListener() {
-  def listener = new StandardOutputListener() {
-    @Override
-    void onOutput(CharSequence charSequence) {
-      taskLogOutput.append(charSequence)
+  tasks.withType(Test).configureEach {
+    doLast {
+      Thread.sleep(2000) // https://github.com/gradle/gradle/issues/16603
     }
   }
 
-  @Override
-  void beforeExecute(Task task) {
-    task.logging.addStandardOutputListener(listener)
-  }
-
-  @Override
-  void afterExecute(Task task, TaskState state) {
-    task.logging.removeStandardOutputListener(listener)
-  }
-})
-
-task cleanAll(dependsOn: [
-    ':core:clean',
-    ':plugin:clean',
-    ':layout-hierarchy-common:clean',
-    ':layout-hierarchy-litho:clean',
-])
-
-task integrationTest(dependsOn: ':sample:runDebugAndroidTestScreenshotTest') {
-  doLast {
-    assert taskLogOutput.toString().contains('Found 12 screenshots')
+  pluginManager.withPlugin("java") {
+    java {
+      toolchain {
+        languageVersion = JavaLanguageVersion.of(JavaVersion.VERSION_17.toString())
+      }
+    }
   }
 }
