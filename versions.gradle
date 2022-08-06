@@ -54,7 +54,7 @@ ext {
       dexmakerDx          : "com.crittercism.dexmaker:dexmaker-dx:$dexmakerVersion",
       dexmakerMockito     : "com.crittercism.dexmaker:dexmaker-mockito:$dexmakerVersion",
 
-      espresso            : "androidx.test.espresso:espresso-core:3.1.0",
+      espresso            : "androidx.test.espresso:espresso-core:3.4.0",
       testRunner          : "androidx.test:runner:1.2.0",
       orchestrator        : "androidx.test:orchestrator:1.4.1",
       androidTestRules    : "androidx.test:rules:1.1.0",
