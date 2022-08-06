@@ -40,15 +40,18 @@ tasks.withType(Test).configureEach {
   }
 }
 
-//afterEvaluate {
-//  generateReleaseBuildConfig.enabled = false
-//}
-
 dependencies {
-  implementation("com.google.code.gson:gson:2.9.0")
   implementation(libs.androidx.annotation)
   implementation(libs.androidx.core)
   implementation(libs.gson)
+
   testImplementation(libs.junit.jupiter)
   testImplementation(libs.assertj.core)
+
+  androidTestImplementation(libs.junit4.core)
+  androidTestImplementation(libs.androidtest.runner)
+  androidTestImplementation(libs.androidtest.junitext)
+  androidTestImplementation(libs.androidtest.rules)
+  androidTestImplementation(libs.espresso.core)
+  androidTestImplementation(libs.assertj.core)
 }

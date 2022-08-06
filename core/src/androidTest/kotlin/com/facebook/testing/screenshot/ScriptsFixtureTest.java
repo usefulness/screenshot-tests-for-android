@@ -21,12 +21,16 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import androidx.test.InstrumentationRegistry;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+
 import org.junit.Before;
+import org.junit.runner.RunWith;
 
 /**
  * This is not really a test, this test is just a "fixture" for all the tests for the scripts
  * related to running tests and getting screenshots.
  */
+@RunWith(AndroidJUnit4.class)
 public class ScriptsFixtureTest {
   private static final int HEIGHT = 100;
   private static final int WIDTH = 200;
