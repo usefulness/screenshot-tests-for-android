@@ -101,7 +101,11 @@ jobs:
           target: google_apis
           arch: x86
           disable-spellchecker: true
-          script: ./gradlew pytests connectedCheck
+          script: |
+            adb shell settings put global hidden_api_policy_p_apps 1
+            adb shell settings put global hidden_api_policy_pre_p_apps 1
+            adb shell settings put global hidden_api_policy  1
+            ./gradlew pytests connectedCheck 
 
       - name: Upload screenshot tests result
         uses: actions/upload-artifact@v3

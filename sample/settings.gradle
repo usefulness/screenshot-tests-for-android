@@ -1,24 +1,23 @@
 import org.gradle.api.initialization.resolve.RepositoriesMode
 
 pluginManagement {
+  repositories {
+    gradlePluginPortal()
+    google()
+  }
   dependencyResolutionManagement {
     repositories {
+      google()
       mavenCentral()
       gradlePluginPortal()
     }
   }
 }
 
-dependencyResolutionManagement {
-  repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-  repositories {
-    google()
-    mavenCentral()
-  }
-}
-
 rootProject.name = "com.github.usefulness.testing.screenshot.sample"
 
+include "android"
+
 if (!hasProperty("useMavenLocal")) {
-  includeBuild "../.."
+  includeBuild "../"
 }

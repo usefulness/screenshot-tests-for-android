@@ -1,7 +1,7 @@
 plugins {
   id("com.starter.library.android")
+  id("com.github.usefulness.testing.screenshots")
 }
-
 
 screenshots {
   multipleDevices true
