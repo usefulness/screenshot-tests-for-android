@@ -20,11 +20,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-import androidx.test.InstrumentationRegistry;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import androidx.test.core.app.ApplicationProvider;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.platform.app.InstrumentationRegistry;
 
 /**
  * This is not really a test, this test is just a "fixture" for all the tests for the scripts
@@ -38,8 +41,8 @@ public class ScriptsFixtureTest {
   private TextView mTextView;
 
   @Before
-  public void setUp() throws Exception {
-    mTextView = new TextView(InstrumentationRegistry.getInstrumentation().getTargetContext());
+  public void setUp() {
+    mTextView = new TextView(ApplicationProvider.getApplicationContext());
     mTextView.setText("foobar");
 
     // Unfortunately TextView needs a LayoutParams for onDraw
@@ -50,11 +53,13 @@ public class ScriptsFixtureTest {
     measureAndLayout();
   }
 
-  public void testGetTextViewScreenshot() throws Throwable {
+  @Test
+  public void testGetTextViewScreenshot() {
     Screenshot.snap(mTextView).record();
   }
 
-  public void testSecondScreenshot() throws Throwable {
+  @Test
+  public void testSecondScreenshot() {
     mTextView.setText("foobar3");
     measureAndLayout();
     Screenshot.snap(mTextView).record();
@@ -63,20 +68,17 @@ public class ScriptsFixtureTest {
   private void measureAndLayout() {
     final Throwable[] exceptions = new Throwable[1];
     InstrumentationRegistry.getInstrumentation()
-        .runOnMainSync(
-            new Runnable() {
-              public void run() {
-                try {
-                  mTextView.measure(
-                      View.MeasureSpec.makeMeasureSpec(WIDTH, View.MeasureSpec.EXACTLY),
-                      View.MeasureSpec.makeMeasureSpec(HEIGHT, View.MeasureSpec.EXACTLY));
-                  mTextView.layout(
-                      0, 0, mTextView.getMeasuredWidth(), mTextView.getMeasuredHeight());
-                } catch (Throwable throwable) {
-                  exceptions[0] = throwable;
-                }
-              }
-            });
+        .runOnMainSync(() -> {
+          try {
+            mTextView.measure(
+                View.MeasureSpec.makeMeasureSpec(WIDTH, View.MeasureSpec.EXACTLY),
+                View.MeasureSpec.makeMeasureSpec(HEIGHT, View.MeasureSpec.EXACTLY));
+            mTextView.layout(
+                0, 0, mTextView.getMeasuredWidth(), mTextView.getMeasuredHeight());
+          } catch (Throwable throwable) {
+            exceptions[0] = throwable;
+          }
+        });
     if (exceptions[0] != null) {
       throw new RuntimeException(exceptions[0]);
     }

@@ -43,13 +43,6 @@ tasks.named("compileKotlin") {
   sourceSets {
     main {
       kotlin.srcDirs += 'src/generated'
-    }
-  }
-}
-
-tasks.named("compileJava") {
-  sourceSets {
-    main {
       resources.srcDirs 'src/py'
       resources {
         exclude '**/*.pyc'

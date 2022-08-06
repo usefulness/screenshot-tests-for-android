@@ -6,7 +6,7 @@ plugins {
 android {
   defaultConfig {
     minSdk 23
-    testInstrumentationRunner "com.facebook.testing.screenshot.CustomScreenshotTestRunner"
+    testInstrumentationRunner "com.usefulness.testing.screenshot.CustomScreenshotTestRunner"
   }
   publishing {
     singleVariant("release")
@@ -29,7 +29,6 @@ tasks.withType(JavaCompile).configureEach {
   options.release.set(JavaVersion.VERSION_1_8.majorVersion.toInteger())
 }
 
-
 tasks.withType(Test).configureEach {
   useJUnitPlatform()
   testLogging {
@@ -48,10 +47,10 @@ dependencies {
   testImplementation(libs.junit.jupiter)
   testImplementation(libs.assertj.core)
 
-  androidTestImplementation(libs.junit4.core)
-  androidTestImplementation(libs.androidtest.runner)
-  androidTestImplementation(libs.androidtest.junitext)
-  androidTestImplementation(libs.androidtest.rules)
-  androidTestImplementation(libs.espresso.core)
   androidTestImplementation(libs.assertj.core)
+  androidTestImplementation(libs.espresso.core)
+  androidTestImplementation(libs.androidtest.core)
+  androidTestImplementation(libs.androidtest.runner)
+  androidTestImplementation(libs.androidtest.rules)
+  androidTestImplementation(libs.androidtest.junitext)
 }

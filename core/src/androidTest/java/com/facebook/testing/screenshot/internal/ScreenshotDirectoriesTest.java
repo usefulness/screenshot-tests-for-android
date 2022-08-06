@@ -20,6 +20,8 @@ import static org.junit.Assert.*;
 
 import android.content.Context;
 import androidx.test.InstrumentationRegistry;
+import androidx.test.core.app.ApplicationProvider;
+
 import java.io.File;
 import org.junit.After;
 import org.junit.Test;
@@ -28,7 +30,7 @@ public class ScreenshotDirectoriesTest {
   File mDir;
 
   @After
-  public void teardown() throws Exception {
+  public void teardown() {
     if (mDir != null) {
       mDir.delete();
     }
@@ -36,7 +38,7 @@ public class ScreenshotDirectoriesTest {
 
   @Test
   public void testUsesSdcard() {
-    Context context = InstrumentationRegistry.getTargetContext();
+    Context context = ApplicationProvider.getApplicationContext();
     ScreenshotDirectories dirs = new ScreenshotDirectories(context);
 
     mDir = dirs.get("foobar");

@@ -28,6 +28,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import androidx.test.InstrumentationRegistry;
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -42,8 +43,8 @@ public class ViewHelpersTest {
   private Context targetContext;
 
   @Before
-  public void setUp() throws Exception {
-    targetContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+  public void setUp() {
+    targetContext = ApplicationProvider.getApplicationContext();
     mTextView = new TextView(targetContext);
     mTextView.setText("foobar");
   }

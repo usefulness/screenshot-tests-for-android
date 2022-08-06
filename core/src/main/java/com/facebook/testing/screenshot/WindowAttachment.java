@@ -41,16 +41,12 @@ public abstract class WindowAttachment {
 
   @Nullable private static Object sAttachInfo = null;
 
-  private static final InvocationHandler sInvocationHandler =
-      new InvocationHandler() {
-        @Override
-        public @Nullable Object invoke(Object project, Method method, Object[] args) {
-          if ("getCoverStateSwitch".equals(method.getName())) {
-            // needed for Samsung version of Android 8.0
-            return false;
-          }
-          return null;
+  private static final InvocationHandler sInvocationHandler = (project, method, args) -> {
+        if ("getCoverStateSwitch".equals(method.getName())) {
+          // needed for Samsung version of Android 8.0
+          return false;
         }
+        return null;
       };
 
   private WindowAttachment() {}
