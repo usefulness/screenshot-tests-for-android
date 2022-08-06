@@ -28,10 +28,11 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import androidx.test.InstrumentationRegistry;
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.Espresso;
-import androidx.test.rule.ActivityTestRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.platform.app.InstrumentationRegistry;
+import androidx.test.rule.ActivityTestRule;
 
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -51,8 +52,8 @@ public class WindowAttachmentTest {
   public ActivityTestRule<MyActivity> activityTestRule = new ActivityTestRule<>(MyActivity.class);
 
   @Before
-  public void setUp() throws Exception {
-    mContext = InstrumentationRegistry.getTargetContext();
+  public void setUp() {
+    mContext = ApplicationProvider.getApplicationContext();
     KeyguardManager km = (KeyguardManager) mContext.getSystemService(Context.KEYGUARD_SERVICE);
     mLock = km.newKeyguardLock("SelectAtTagActivityTest");
     mLock.disableKeyguard();
@@ -130,16 +131,10 @@ public class WindowAttachmentTest {
   }
 
   @Test
-  public void testSetAttachInfo() throws Throwable {
+  public void testSetAttachInfo() {
     final MyView view = new MyView(mContext);
     InstrumentationRegistry.getInstrumentation()
-        .runOnMainSync(
-            new Runnable() {
-              @Override
-              public void run() {
-                WindowAttachment.setAttachInfo(view);
-              }
-            });
+        .runOnMainSync(() -> WindowAttachment.setAttachInfo(view));
 
     assertNotNull(view.getWindowToken());
   }

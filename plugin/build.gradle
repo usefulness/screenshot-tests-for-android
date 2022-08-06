@@ -4,6 +4,7 @@ plugins {
   id("com.starter.library.kotlin")
   id("java-gradle-plugin")
   id("com.starter.publishing")
+  id("com.gradle.plugin-publish") version("1.0.0-rc-1")
 }
 
 final GENERATED_PACKAGE_NAME = "com.facebook.testing.screenshot.generated"
@@ -43,13 +44,6 @@ tasks.named("compileKotlin") {
   sourceSets {
     main {
       kotlin.srcDirs += 'src/generated'
-    }
-  }
-}
-
-tasks.named("compileJava") {
-  sourceSets {
-    main {
       resources.srcDirs 'src/py'
       resources {
         exclude '**/*.pyc'
@@ -67,6 +61,23 @@ tasks.named('clean') {
 tasks.register("pyTests", Exec) {
   workingDir file('./src/py')
   commandLine 'python3', '-m', 'unittest', 'discover'
+}
+
+pluginBundle {
+  website = "https://github.com/usefulness/screenshot-tests-for-android/"
+  vcsUrl = "git@github.com:usefulness/screenshot-tests-for-android.git"
+  tags = ["android", "screenshots"]
+}
+
+gradlePlugin {
+  plugins {
+    greetingsPlugin {
+      id = 'com.github.usefulness.testing.screenshots'
+      displayName = 'Screenshot Tests for Android\n'
+      description = 'https://github.com/facebook/screenshot-tests-for-android fork'
+      implementationClass = 'com.facebook.testing.screenshot.build.ScreenshotsPlugin'
+    }
+  }
 }
 
 dependencies {

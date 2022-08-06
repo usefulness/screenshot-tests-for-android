@@ -1,7 +1,8 @@
 plugins {
-  id "com.starter.config"
+  id("com.starter.config") version "0.49.0"
+  id("com.starter.library.android") version "0.49.0" apply false
 }
 
 commonConfig {
-  javaFilesAllowed = false
+  javaFilesAllowed = true
 }
