@@ -7,6 +7,10 @@ android {
     exclude 'LICENSE.txt'
   }
 
+  lint {
+    baseline = file("lint-baseline.xml")
+  }
+
   defaultConfig {
     testInstrumentationRunner "com.facebook.testing.screenshot.CustomScreenshotTestRunner"
   }

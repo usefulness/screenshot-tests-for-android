@@ -20,7 +20,11 @@ import android.text.TextUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import androidx.annotation.NonNull;
+
 public abstract class AbstractAttributePlugin implements AttributePlugin {
+
+  @NonNull
   protected String prefix(String name) {
     String prefix = namespace();
     if (TextUtils.isEmpty(prefix)) {

@@ -1,0 +1,2050 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<issues format="6" by="lint 7.2.2" type="baseline" client="gradle" dependencies="false" name="AGP (7.2.2)" variant="all" version="7.2.2">
+
+    <issue
+        id="ScopedStorage"
+        message="WRITE_EXTERNAL_STORAGE no longer provides write access when targeting Android 10+"
+        errorLine1="  &lt;uses-permission android:name=&quot;android.permission.WRITE_EXTERNAL_STORAGE&quot;/>"
+        errorLine2="                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/AndroidManifest.xml"
+            line="6"
+            column="34"/>
+    </issue>
+
+    <issue
+        id="AnnotateVersionCheck"
+        message="This field should be annotated with `ChecksSdkIntAtLeast(api=android.os.Build.VERSION_CODES.KITKAT)`"
+        errorLine1="  private boolean mEnableBitmapReconfigure = Build.VERSION.SDK_INT >= 19;"
+        errorLine2="                  ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/ScreenshotImpl.java"
+            line="65"
+            column="19"/>
+    </issue>
+
+    <issue
+        id="ObsoleteSdkInt"
+        message="Unnecessary; SDK_INT is always >= 23"
+        errorLine1="    if (Build.VERSION.SDK_INT >= 11) {"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/LayoutHierarchyDumper.java"
+            line="118"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="ObsoleteSdkInt"
+        message="Unnecessary; SDK_INT is always >= 23"
+        errorLine1="    if (Build.VERSION.SDK_INT >= 11) {"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/LayoutHierarchyDumper.java"
+            line="125"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="ObsoleteSdkInt"
+        message="Unnecessary; SDK_INT is never &lt; 23"
+        errorLine1="      if ((permission.equals(READ_PERMISSION) &amp;&amp; Build.VERSION.SDK_INT &lt; 16)"
+        errorLine2="                                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/ScreenshotDirectories.java"
+            line="59"
+            column="50"/>
+    </issue>
+
+    <issue
+        id="ObsoleteSdkInt"
+        message="Unnecessary; SDK_INT is never &lt; 23"
+        errorLine1="      if (Build.VERSION.SDK_INT &lt; 23) {"
+        errorLine2="          ~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/ScreenshotDirectories.java"
+            line="64"
+            column="11"/>
+    </issue>
+
+    <issue
+        id="ObsoleteSdkInt"
+        message="Unnecessary; SDK_INT is never &lt; 23"
+        errorLine1="    if (Build.VERSION.SDK_INT &lt; 23) {"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/ScreenshotDirectories.java"
+            line="74"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="ObsoleteSdkInt"
+        message="Unnecessary; SDK_INT is always >= 23"
+        errorLine1="  private boolean mEnableBitmapReconfigure = Build.VERSION.SDK_INT >= 19;"
+        errorLine2="                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/ScreenshotImpl.java"
+            line="65"
+            column="46"/>
+    </issue>
+
+    <issue
+        id="ObsoleteSdkInt"
+        message="Unnecessary; SDK_INT is always >= 19"
+        errorLine1="  @TargetApi(Build.VERSION_CODES.KITKAT)"
+        errorLine2="  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/ScreenshotImpl.java"
+            line="217"
+            column="3"/>
+    </issue>
+
+    <issue
+        id="ObsoleteSdkInt"
+        message="Unnecessary; SDK_INT is never &lt; 23"
+        errorLine1="    if (Build.VERSION.SDK_INT &lt; 23) {"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/WindowAttachment.java"
+            line="79"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="ObsoleteSdkInt"
+        message="Unnecessary; SDK_INT is always >= 23"
+        errorLine1="      if (Build.VERSION.SDK_INT >= 11) {"
+        errorLine2="          ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/WindowAttachment.java"
+            line="141"
+            column="11"/>
+    </issue>
+
+    <issue
+        id="ObsoleteSdkInt"
+        message="Unnecessary; SDK_INT is always >= 23"
+        errorLine1="      } else if (Build.VERSION.SDK_INT >= 17) {"
+        errorLine2="                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/WindowAttachment.java"
+            line="188"
+            column="18"/>
+    </issue>
+
+    <issue
+        id="ObsoleteSdkInt"
+        message="Unnecessary; SDK_INT is always >= 23"
+        errorLine1="      } else if (Build.VERSION.SDK_INT >= 16) {"
+        errorLine2="                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/WindowAttachment.java"
+            line="203"
+            column="18"/>
+    </issue>
+
+    <issue
+        id="ObsoleteSdkInt"
+        message="Unnecessary; SDK_INT is always >= 23"
+        errorLine1="      if (Build.VERSION.SDK_INT >= 11) {"
+        errorLine2="          ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/WindowAttachment.java"
+            line="225"
+            column="11"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  protected String prefix(String name) {"
+        errorLine2="                          ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/AbstractAttributePlugin.java"
+            line="28"
+            column="27"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  protected void put(JSONObject node, String key, String value) throws JSONException {"
+        errorLine2="                     ~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/AbstractAttributePlugin.java"
+            line="36"
+            column="22"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  protected void put(JSONObject node, String key, String value) throws JSONException {"
+        errorLine2="                                      ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/AbstractAttributePlugin.java"
+            line="36"
+            column="39"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  protected void put(JSONObject node, String key, String value) throws JSONException {"
+        errorLine2="                                                  ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/AbstractAttributePlugin.java"
+            line="36"
+            column="51"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  protected void putPlain(JSONObject node, String key, String value) throws JSONException {"
+        errorLine2="                          ~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/AbstractAttributePlugin.java"
+            line="40"
+            column="27"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  protected void putPlain(JSONObject node, String key, String value) throws JSONException {"
+        errorLine2="                                           ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/AbstractAttributePlugin.java"
+            line="40"
+            column="44"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  protected void putPlain(JSONObject node, String key, String value) throws JSONException {"
+        errorLine2="                                                       ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/AbstractAttributePlugin.java"
+            line="40"
+            column="56"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  protected void putRequired(JSONObject node, String name, int left, int top, int width, int height)"
+        errorLine2="                             ~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/AbstractAttributePlugin.java"
+            line="44"
+            column="30"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  protected void putRequired(JSONObject node, String name, int left, int top, int width, int height)"
+        errorLine2="                                              ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/AbstractAttributePlugin.java"
+            line="44"
+            column="47"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public static JSONObject dumpHierarchy(AccessibilityUtil.AXTreeNode axTree) throws JSONException {"
+        errorLine2="                ~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/AccessibilityHierarchyDumper.java"
+            line="36"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public static JSONObject dumpHierarchy(AccessibilityUtil.AXTreeNode axTree) throws JSONException {"
+        errorLine2="                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/AccessibilityHierarchyDumper.java"
+            line="36"
+            column="42"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public static JSONObject dumpHierarchy(View view) throws JSONException {"
+        errorLine2="                ~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/AccessibilityHierarchyDumper.java"
+            line="166"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public static JSONObject dumpHierarchy(View view) throws JSONException {"
+        errorLine2="                                         ~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/AccessibilityHierarchyDumper.java"
+            line="166"
+            column="42"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public static JSONArray dumpIssues(AccessibilityUtil.AXTreeNode axTree) throws JSONException {"
+        errorLine2="                ~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/AccessibilityIssuesDumper.java"
+            line="31"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public static JSONArray dumpIssues(AccessibilityUtil.AXTreeNode axTree) throws JSONException {"
+        errorLine2="                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/AccessibilityIssuesDumper.java"
+            line="31"
+            column="38"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="    public static AccessibilityRole fromValue(String value) {"
+        errorLine2="                  ~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/AccessibilityUtil.java"
+            line="100"
+            column="19"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="    public static AccessibilityRole fromValue(String value) {"
+        errorLine2="                                              ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/AccessibilityUtil.java"
+            line="100"
+            column="47"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public static AccessibilityRole getRole(View view) {"
+        errorLine2="                ~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/AccessibilityUtil.java"
+            line="117"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public static AccessibilityRole getRole(View view) {"
+        errorLine2="                                          ~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/AccessibilityUtil.java"
+            line="117"
+            column="43"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public static AccessibilityRole getRole(AccessibilityNodeInfoCompat nodeInfo) {"
+        errorLine2="                ~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/AccessibilityUtil.java"
+            line="135"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public static AccessibilityRole getRole(AccessibilityNodeInfoCompat nodeInfo) {"
+        errorLine2="                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/AccessibilityUtil.java"
+            line="135"
+            column="43"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public static boolean areBoundsIdenticalToWindow(AccessibilityNodeInfoCompat node, View view) {"
+        errorLine2="                                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/AccessibilityUtil.java"
+            line="444"
+            column="52"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public static boolean areBoundsIdenticalToWindow(AccessibilityNodeInfoCompat node, View view) {"
+        errorLine2="                                                                                     ~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/AccessibilityUtil.java"
+            line="444"
+            column="86"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public static boolean hasVisibleChildren(View view) {"
+        errorLine2="                                           ~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/AccessibilityUtil.java"
+            line="478"
+            column="44"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public static boolean isTalkbackFocusable(View view) {"
+        errorLine2="                                            ~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/AccessibilityUtil.java"
+            line="507"
+            column="45"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public static AXTreeNode generateAccessibilityTree(View view, @Nullable AXTreeNode parent) {"
+        errorLine2="                ~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/AccessibilityUtil.java"
+            line="582"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public static AXTreeNode generateAccessibilityTree(View view, @Nullable AXTreeNode parent) {"
+        errorLine2="                                                     ~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/AccessibilityUtil.java"
+            line="582"
+            column="54"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="    public AXTreeNode(View view, @Nullable AXTreeNode parent) {"
+        errorLine2="                      ~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/AccessibilityUtil.java"
+            line="602"
+            column="23"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="    public View getView() {"
+        errorLine2="           ~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/AccessibilityUtil.java"
+            line="608"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="    public List&lt;AXTreeNode> getChildren() {"
+        errorLine2="           ~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/AccessibilityUtil.java"
+            line="616"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="    public void addChild(AXTreeNode child) {"
+        errorLine2="                         ~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/AccessibilityUtil.java"
+            line="624"
+            column="26"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="    public List&lt;AXTreeNode> getAllNodes() {"
+        errorLine2="           ~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/AccessibilityUtil.java"
+            line="632"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="    public void addAllNodes(List&lt;AXTreeNode> nodes) {"
+        errorLine2="                            ~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/AccessibilityUtil.java"
+            line="638"
+            column="29"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  String writeBitmap(String name, int tilei, int tilej, Bitmap bitmap) throws IOException;"
+        errorLine2="  ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/Album.java"
+            line="29"
+            column="3"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  String writeBitmap(String name, int tilei, int tilej, Bitmap bitmap) throws IOException;"
+        errorLine2="                     ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/Album.java"
+            line="29"
+            column="22"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  String writeBitmap(String name, int tilei, int tilej, Bitmap bitmap) throws IOException;"
+        errorLine2="                                                        ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/Album.java"
+            line="29"
+            column="57"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  void writeViewHierarchyFile(String name, String data) throws IOException;"
+        errorLine2="                              ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/Album.java"
+            line="43"
+            column="31"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  void writeViewHierarchyFile(String name, String data) throws IOException;"
+        errorLine2="                                           ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/Album.java"
+            line="43"
+            column="44"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  void writeAxIssuesFile(String name, String data) throws IOException;"
+        errorLine2="                         ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/Album.java"
+            line="51"
+            column="26"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  void writeAxIssuesFile(String name, String data) throws IOException;"
+        errorLine2="                                      ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/Album.java"
+            line="51"
+            column="39"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  void addRecord(RecordBuilderImpl recordBuilder) throws IOException;"
+        errorLine2="                 ~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/Album.java"
+            line="54"
+            column="18"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public static AlbumImpl create(Context context, String name) {"
+        errorLine2="                ~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/AlbumImpl.java"
+            line="60"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public static AlbumImpl create(Context context, String name) {"
+        errorLine2="                                 ~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/AlbumImpl.java"
+            line="60"
+            column="34"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public static AlbumImpl create(Context context, String name) {"
+        errorLine2="                                                  ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/AlbumImpl.java"
+            line="60"
+            column="51"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public String writeBitmap(String name, int tilei, int tilej, Bitmap bitmap) throws IOException {"
+        errorLine2="         ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/AlbumImpl.java"
+            line="114"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public String writeBitmap(String name, int tilei, int tilej, Bitmap bitmap) throws IOException {"
+        errorLine2="                            ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/AlbumImpl.java"
+            line="114"
+            column="29"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public String writeBitmap(String name, int tilei, int tilej, Bitmap bitmap) throws IOException {"
+        errorLine2="                                                               ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/AlbumImpl.java"
+            line="114"
+            column="64"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public void writeAxIssuesFile(String name, String data) throws IOException {"
+        errorLine2="                                ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/AlbumImpl.java"
+            line="156"
+            column="33"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public void writeAxIssuesFile(String name, String data) throws IOException {"
+        errorLine2="                                             ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/AlbumImpl.java"
+            line="156"
+            column="46"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public void writeViewHierarchyFile(String name, String data) throws IOException {"
+        errorLine2="                                     ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/AlbumImpl.java"
+            line="161"
+            column="38"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public void writeViewHierarchyFile(String name, String data) throws IOException {"
+        errorLine2="                                                  ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/AlbumImpl.java"
+            line="161"
+            column="51"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public void writeMetadataFile(String name, String data) throws IOException {"
+        errorLine2="                                ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/AlbumImpl.java"
+            line="165"
+            column="33"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public void writeMetadataFile(String name, String data) throws IOException {"
+        errorLine2="                                             ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/AlbumImpl.java"
+            line="165"
+            column="46"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public void addRecord(RecordBuilderImpl recordBuilder) throws IOException {"
+        errorLine2="                        ~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/AlbumImpl.java"
+            line="176"
+            column="25"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  boolean accept(Object obj);"
+        errorLine2="                 ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/AttributePlugin.java"
+            line="35"
+            column="18"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  String namespace();"
+        errorLine2="  ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/AttributePlugin.java"
+            line="38"
+            column="3"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  void putAttributes(JSONObject node, Object obj, Point offset) throws JSONException;"
+        errorLine2="                     ~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/AttributePlugin.java"
+            line="41"
+            column="22"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  void putAttributes(JSONObject node, Object obj, Point offset) throws JSONException;"
+        errorLine2="                                      ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/AttributePlugin.java"
+            line="41"
+            column="39"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  void putAttributes(JSONObject node, Object obj, Point offset) throws JSONException;"
+        errorLine2="                                                  ~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/AttributePlugin.java"
+            line="41"
+            column="51"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public static BaseViewAttributePlugin getInstance() {"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/BaseViewAttributePlugin.java"
+            line="28"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public boolean accept(Object obj) {"
+        errorLine2="                        ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/BaseViewAttributePlugin.java"
+            line="37"
+            column="25"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public String namespace() {"
+        errorLine2="         ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/BaseViewAttributePlugin.java"
+            line="42"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public void putAttributes(JSONObject node, Object obj, Point offset) throws JSONException {"
+        errorLine2="                            ~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/BaseViewAttributePlugin.java"
+            line="47"
+            column="29"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public void putAttributes(JSONObject node, Object obj, Point offset) throws JSONException {"
+        errorLine2="                                             ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/BaseViewAttributePlugin.java"
+            line="47"
+            column="46"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public void putAttributes(JSONObject node, Object obj, Point offset) throws JSONException {"
+        errorLine2="                                                         ~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/BaseViewAttributePlugin.java"
+            line="47"
+            column="58"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public static BaseViewHierarchyPlugin getInstance() {"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/BaseViewHierarchyPlugin.java"
+            line="29"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public boolean accept(Object obj) {"
+        errorLine2="                        ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/BaseViewHierarchyPlugin.java"
+            line="38"
+            column="25"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public void putHierarchy(LayoutHierarchyDumper dumper, JSONObject root, Object view, Point offset)"
+        errorLine2="                           ~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/BaseViewHierarchyPlugin.java"
+            line="43"
+            column="28"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public void putHierarchy(LayoutHierarchyDumper dumper, JSONObject root, Object view, Point offset)"
+        errorLine2="                                                         ~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/BaseViewHierarchyPlugin.java"
+            line="43"
+            column="58"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public void putHierarchy(LayoutHierarchyDumper dumper, JSONObject root, Object view, Point offset)"
+        errorLine2="                                                                          ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/BaseViewHierarchyPlugin.java"
+            line="43"
+            column="75"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public void putHierarchy(LayoutHierarchyDumper dumper, JSONObject root, Object view, Point offset)"
+        errorLine2="                                                                                       ~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/BaseViewHierarchyPlugin.java"
+            line="43"
+            column="88"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  boolean accept(Object obj);"
+        errorLine2="                 ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/HierarchyPlugin.java"
+            line="32"
+            column="18"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  void putHierarchy(LayoutHierarchyDumper dumper, JSONObject node, Object obj, Point offset)"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/HierarchyPlugin.java"
+            line="35"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  void putHierarchy(LayoutHierarchyDumper dumper, JSONObject node, Object obj, Point offset)"
+        errorLine2="                                                  ~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/HierarchyPlugin.java"
+            line="35"
+            column="51"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  void putHierarchy(LayoutHierarchyDumper dumper, JSONObject node, Object obj, Point offset)"
+        errorLine2="                                                                   ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/HierarchyPlugin.java"
+            line="35"
+            column="68"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  void putHierarchy(LayoutHierarchyDumper dumper, JSONObject node, Object obj, Point offset)"
+        errorLine2="                                                                               ~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/HierarchyPlugin.java"
+            line="35"
+            column="80"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public static void addGlobalAttributePlugin(AttributePlugin plugin) {"
+        errorLine2="                                              ~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/LayoutHierarchyDumper.java"
+            line="36"
+            column="47"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public static void removeGlobalAttributePlugin(AttributePlugin plugin) {"
+        errorLine2="                                                 ~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/LayoutHierarchyDumper.java"
+            line="40"
+            column="50"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public static void addGlobalHierarchyPlugin(HierarchyPlugin plugin) {"
+        errorLine2="                                              ~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/LayoutHierarchyDumper.java"
+            line="44"
+            column="47"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public static void removeGlobalHierarchyPlugin(HierarchyPlugin plugin) {"
+        errorLine2="                                                 ~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/LayoutHierarchyDumper.java"
+            line="48"
+            column="50"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public static LayoutHierarchyDumper create() {"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/LayoutHierarchyDumper.java"
+            line="52"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public static LayoutHierarchyDumper createWith("
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/LayoutHierarchyDumper.java"
+            line="57"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="      List&lt;HierarchyPlugin> hierarchyPlugins, List&lt;AttributePlugin> attributePlugins) {"
+        errorLine2="      ~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/LayoutHierarchyDumper.java"
+            line="58"
+            column="7"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="      List&lt;HierarchyPlugin> hierarchyPlugins, List&lt;AttributePlugin> attributePlugins) {"
+        errorLine2="                                              ~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/LayoutHierarchyDumper.java"
+            line="58"
+            column="47"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public static LayoutHierarchyDumper createWithOnly("
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/LayoutHierarchyDumper.java"
+            line="72"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="      List&lt;HierarchyPlugin> hierarchyPlugins, List&lt;AttributePlugin> attributePlugins) {"
+        errorLine2="      ~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/LayoutHierarchyDumper.java"
+            line="73"
+            column="7"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="      List&lt;HierarchyPlugin> hierarchyPlugins, List&lt;AttributePlugin> attributePlugins) {"
+        errorLine2="                                              ~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/LayoutHierarchyDumper.java"
+            line="73"
+            column="47"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public JSONObject dumpAttributes(Object obj, Point offset) throws JSONException {"
+        errorLine2="         ~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/LayoutHierarchyDumper.java"
+            line="89"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public JSONObject dumpAttributes(Object obj, Point offset) throws JSONException {"
+        errorLine2="                                   ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/LayoutHierarchyDumper.java"
+            line="89"
+            column="36"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public JSONObject dumpAttributes(Object obj, Point offset) throws JSONException {"
+        errorLine2="                                               ~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/LayoutHierarchyDumper.java"
+            line="89"
+            column="48"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public JSONObject dumpHierarchy(View view) throws JSONException {"
+        errorLine2="         ~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/LayoutHierarchyDumper.java"
+            line="99"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public JSONObject dumpHierarchy(View view) throws JSONException {"
+        errorLine2="                                  ~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/LayoutHierarchyDumper.java"
+            line="99"
+            column="35"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public JSONObject dumpHierarchy(Object obj, Point offset) throws JSONException {"
+        errorLine2="         ~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/LayoutHierarchyDumper.java"
+            line="104"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public JSONObject dumpHierarchy(Object obj, Point offset) throws JSONException {"
+        errorLine2="                                  ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/LayoutHierarchyDumper.java"
+            line="104"
+            column="35"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public JSONObject dumpHierarchy(Object obj, Point offset) throws JSONException {"
+        errorLine2="                                              ~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/LayoutHierarchyDumper.java"
+            line="104"
+            column="47"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public static int getViewLeft(View view) {"
+        errorLine2="                                ~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/LayoutHierarchyDumper.java"
+            line="117"
+            column="33"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public static int getViewTop(View view) {"
+        errorLine2="                               ~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/layouthierarchy/LayoutHierarchyDumper.java"
+            line="124"
+            column="32"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  RecordBuilder setName(String name);"
+        errorLine2="  ~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/RecordBuilder.java"
+            line="28"
+            column="3"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  RecordBuilder setName(String name);"
+        errorLine2="                        ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/RecordBuilder.java"
+            line="28"
+            column="25"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  RecordBuilder setDescription(String description);"
+        errorLine2="  ~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/RecordBuilder.java"
+            line="36"
+            column="3"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  RecordBuilder setDescription(String description);"
+        errorLine2="                               ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/RecordBuilder.java"
+            line="36"
+            column="32"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  RecordBuilder addExtra(String key, String value);"
+        errorLine2="  ~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/RecordBuilder.java"
+            line="44"
+            column="3"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  RecordBuilder addExtra(String key, String value);"
+        errorLine2="                         ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/RecordBuilder.java"
+            line="44"
+            column="26"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  RecordBuilder addExtra(String key, String value);"
+        errorLine2="                                     ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/RecordBuilder.java"
+            line="44"
+            column="38"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  RecordBuilder setGroup(String groupName);"
+        errorLine2="  ~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/RecordBuilder.java"
+            line="47"
+            column="3"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  RecordBuilder setGroup(String groupName);"
+        errorLine2="                         ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/RecordBuilder.java"
+            line="47"
+            column="26"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  RecordBuilder setIncludeAccessibilityInfo(boolean includeAccessibilityInfo);"
+        errorLine2="  ~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/RecordBuilder.java"
+            line="55"
+            column="3"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  Bitmap getBitmap();"
+        errorLine2="  ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/RecordBuilder.java"
+            line="62"
+            column="3"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  RecordBuilder setMaxPixels(long maxPixels);"
+        errorLine2="  ~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/RecordBuilder.java"
+            line="71"
+            column="3"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public String getDescription() {"
+        errorLine2="         ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/RecordBuilderImpl.java"
+            line="53"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public RecordBuilderImpl setDescription(String description) {"
+        errorLine2="         ~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/RecordBuilderImpl.java"
+            line="59"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public RecordBuilderImpl setDescription(String description) {"
+        errorLine2="                                          ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/RecordBuilderImpl.java"
+            line="59"
+            column="43"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public String getName() {"
+        errorLine2="         ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/RecordBuilderImpl.java"
+            line="64"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public RecordBuilderImpl setName(String name) {"
+        errorLine2="         ~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/RecordBuilderImpl.java"
+            line="73"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public RecordBuilderImpl setName(String name) {"
+        errorLine2="                                   ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/RecordBuilderImpl.java"
+            line="73"
+            column="36"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public String getTestName() {"
+        errorLine2="         ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/RecordBuilderImpl.java"
+            line="89"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public RecordBuilderImpl setTestName(String testName) {"
+        errorLine2="         ~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/RecordBuilderImpl.java"
+            line="97"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public RecordBuilderImpl setTestName(String testName) {"
+        errorLine2="                                       ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/RecordBuilderImpl.java"
+            line="97"
+            column="40"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public String getTestClass() {"
+        errorLine2="         ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/RecordBuilderImpl.java"
+            line="102"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public RecordBuilderImpl setTestClass(String testClass) {"
+        errorLine2="         ~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/RecordBuilderImpl.java"
+            line="110"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public RecordBuilderImpl setTestClass(String testClass) {"
+        errorLine2="                                        ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/RecordBuilderImpl.java"
+            line="110"
+            column="41"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public Bitmap getBitmap() {"
+        errorLine2="         ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/RecordBuilderImpl.java"
+            line="117"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public RecordBuilderImpl setMaxPixels(long maxPixels) {"
+        errorLine2="         ~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/RecordBuilderImpl.java"
+            line="123"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public String getError() {"
+        errorLine2="         ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/RecordBuilderImpl.java"
+            line="142"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public View getView() {"
+        errorLine2="         ~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/RecordBuilderImpl.java"
+            line="172"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public Tiling getTiling() {"
+        errorLine2="         ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/RecordBuilderImpl.java"
+            line="181"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public RecordBuilderImpl addExtra(String key, String value) {"
+        errorLine2="         ~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/RecordBuilderImpl.java"
+            line="191"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public RecordBuilderImpl addExtra(String key, String value) {"
+        errorLine2="                                    ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/RecordBuilderImpl.java"
+            line="191"
+            column="37"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public RecordBuilderImpl addExtra(String key, String value) {"
+        errorLine2="                                                ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/RecordBuilderImpl.java"
+            line="191"
+            column="49"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public Map&lt;String, String> getExtras() {"
+        errorLine2="         ~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/RecordBuilderImpl.java"
+            line="196"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public String getGroup() {"
+        errorLine2="         ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/RecordBuilderImpl.java"
+            line="200"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public RecordBuilderImpl setGroup(String groupName) {"
+        errorLine2="         ~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/RecordBuilderImpl.java"
+            line="205"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public RecordBuilderImpl setGroup(String groupName) {"
+        errorLine2="                                    ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/RecordBuilderImpl.java"
+            line="205"
+            column="37"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public RecordBuilderImpl setIncludeAccessibilityInfo(boolean includeAccessibilityInfo) {"
+        errorLine2="         ~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/RecordBuilderImpl.java"
+            line="212"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public Instrumentation instrumentation;"
+        errorLine2="         ~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/Registry.java"
+            line="25"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public Bundle arguments;"
+        errorLine2="         ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/Registry.java"
+            line="26"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public static Registry getRegistry() {"
+        errorLine2="                ~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/Registry.java"
+            line="30"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public static RecordBuilder snap(View measuredView) {"
+        errorLine2="                ~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/Screenshot.java"
+            line="38"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public static RecordBuilder snap(View measuredView) {"
+        errorLine2="                                   ~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/Screenshot.java"
+            line="38"
+            column="36"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public static RecordBuilder snapActivity(Activity activity) {"
+        errorLine2="                ~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/Screenshot.java"
+            line="48"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public static RecordBuilder snapActivity(Activity activity) {"
+        errorLine2="                                           ~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/Screenshot.java"
+            line="48"
+            column="44"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public static ScreenshotImpl getInstance() {"
+        errorLine2="                ~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/ScreenshotImpl.java"
+            line="82"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public RecordBuilderImpl snapActivity(final Activity activity) {"
+        errorLine2="         ~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/ScreenshotImpl.java"
+            line="126"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public RecordBuilderImpl snapActivity(final Activity activity) {"
+        errorLine2="                                              ~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/ScreenshotImpl.java"
+            line="126"
+            column="47"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public RecordBuilderImpl snap(final View measuredView) {"
+        errorLine2="         ~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/ScreenshotImpl.java"
+            line="146"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public RecordBuilderImpl snap(final View measuredView) {"
+        errorLine2="                                      ~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/ScreenshotImpl.java"
+            line="146"
+            column="39"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public void record(RecordBuilderImpl recordBuilder) {"
+        errorLine2="                     ~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/ScreenshotImpl.java"
+            line="270"
+            column="22"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public static void onCreate(Instrumentation instrumentation, Bundle arguments) {"
+        errorLine2="                              ~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/ScreenshotRunner.java"
+            line="40"
+            column="31"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public static void onCreate(Instrumentation instrumentation, Bundle arguments) {"
+        errorLine2="                                                               ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/ScreenshotRunner.java"
+            line="40"
+            column="64"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public static String getTestClass() {"
+        errorLine2="                ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/TestNameDetector.java"
+            line="36"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public static String getTestName() {"
+        errorLine2="                ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/TestNameDetector.java"
+            line="48"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public static Tiling singleTile(String name) {"
+        errorLine2="                ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/Tiling.java"
+            line="35"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public static Tiling singleTile(String name) {"
+        errorLine2="                                  ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/Tiling.java"
+            line="35"
+            column="35"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public String getAt(int x, int y) {"
+        errorLine2="         ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/Tiling.java"
+            line="49"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public void setAt(int x, int y, String name) {"
+        errorLine2="                                  ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/internal/Tiling.java"
+            line="53"
+            column="35"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public static ViewHelpers setupView(View view) {"
+        errorLine2="                ~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/ViewHelpers.java"
+            line="57"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public static ViewHelpers setupView(View view) {"
+        errorLine2="                                      ~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/ViewHelpers.java"
+            line="57"
+            column="39"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public AfterLayout layout() {"
+        errorLine2="         ~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/ViewHelpers.java"
+            line="67"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public ViewHelpers setExactHeightPx(int px) {"
+        errorLine2="         ~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/ViewHelpers.java"
+            line="109"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public ViewHelpers guessListViewHeight() {"
+        errorLine2="         ~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/ViewHelpers.java"
+            line="115"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public ViewHelpers setExactWidthPx(int px) {"
+        errorLine2="         ~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/ViewHelpers.java"
+            line="131"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public ViewHelpers setExactWidthDp(int dp) {"
+        errorLine2="         ~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/ViewHelpers.java"
+            line="137"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public ViewHelpers setExactHeightDp(int dp) {"
+        errorLine2="         ~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/ViewHelpers.java"
+            line="143"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public ViewHelpers setMaxHeightPx(int px) {"
+        errorLine2="         ~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/ViewHelpers.java"
+            line="149"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public ViewHelpers setMaxHeightDp(int dp) {"
+        errorLine2="         ~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/ViewHelpers.java"
+            line="155"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public ViewHelpers setMaxWidthPx(int px) {"
+        errorLine2="         ~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/ViewHelpers.java"
+            line="161"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public ViewHelpers setMaxWidthDp(int dp) {"
+        errorLine2="         ~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/ViewHelpers.java"
+            line="167"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="    public Bitmap draw() {"
+        errorLine2="           ~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/ViewHelpers.java"
+            line="215"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public static Detacher dispatchAttach(View view) {"
+        errorLine2="                ~~~~~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/WindowAttachment.java"
+            line="69"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public static Detacher dispatchAttach(View view) {"
+        errorLine2="                                        ~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/WindowAttachment.java"
+            line="69"
+            column="41"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public static void setAttachInfo(View view) {"
+        errorLine2="                                   ~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/WindowAttachment.java"
+            line="115"
+            column="36"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations"
+        errorLine1="  public static @Nullable Object generateAttachInfo(View view) {"
+        errorLine2="                                                    ~~~~">
+        <location
+            file="src/main/java/com/facebook/testing/screenshot/WindowAttachment.java"
+            line="132"
+            column="53"/>
+    </issue>
+
+</issues>

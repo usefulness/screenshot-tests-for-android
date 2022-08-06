@@ -11,7 +11,7 @@ final GENERATED_BUILD_DIR =
         projectDir.absolutePath,
         "src/generated/kotlin/${GENERATED_PACKAGE_NAME.replace('.', '/')}")
 
-task generateBuildConfig {
+tasks.register("generateBuildConfig") {
   doLast {
     GENERATED_BUILD_DIR.deleteDir()
     GENERATED_BUILD_DIR.mkdirs()
