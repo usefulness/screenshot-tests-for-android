@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.KotlinCompile
+
 plugins {
   id("com.starter.library.kotlin")
   id("java-gradle-plugin")
@@ -27,10 +29,20 @@ task generateBuildConfig {
   }
 }
 
-dependencies {
-  compileOnly libs.agp.gradle
+tasks.withType(KotlinCompile).configureEach {
+  kotlinOptions {
+    apiVersion = "1.5"
+    languageVersion = "1.5"
+  }
+}
 
-  testImplementation libs.agp.gradle
+dependencies {
+  compileOnly(libs.agp.gradle)
+
+  testImplementation(libs.agp.gradle)
+  testImplementation(gradleTestKit())
+  testImplementation(libs.junit.jupiter)
+  testImplementation(libs.assertj.core)
 }
 
 compileKotlin {

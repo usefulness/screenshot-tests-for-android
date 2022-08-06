@@ -18,7 +18,7 @@ package com.facebook.testing.screenshot.internal;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import javax.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 /** Detect the test name and class that is being run currently. */
 public class TestNameDetector {

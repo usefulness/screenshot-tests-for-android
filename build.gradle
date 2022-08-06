@@ -6,7 +6,7 @@ plugins {
 }
 
 commonConfig {
-  javaFilesAllowed false
+  javaFilesAllowed true
   javaVersion JavaVersion.VERSION_1_8
 }
 
@@ -19,11 +19,6 @@ allprojects {
           useVersion kotlinVersion
         }
       }
-    }
-  }
-  tasks.withType(Test).configureEach {
-    doLast {
-      Thread.sleep(2000) // https://github.com/gradle/gradle/issues/16603
     }
   }
 
