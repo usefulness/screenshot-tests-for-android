@@ -22,6 +22,7 @@ import android.os.Looper;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.usefulness.testing.screenshot.MyActivity;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;

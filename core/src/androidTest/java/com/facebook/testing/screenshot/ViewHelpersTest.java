@@ -21,14 +21,12 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.facebook.testing.screenshot.test.R;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import androidx.test.InstrumentationRegistry;
 import androidx.test.core.app.ApplicationProvider;
+import com.usefulness.testing.screenshot.tests.test.R;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;

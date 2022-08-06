@@ -10,3 +10,7 @@ ij_kotlin_allow_trailing_comma_on_call_site = true
 [*.xml]
 indent_size = 2
 indent_style = space
+
+[*.gradle]
+indent_size = 2
+indent_style = space

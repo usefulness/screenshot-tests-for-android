@@ -16,9 +16,6 @@
 
 package com.facebook.testing.screenshot.layouthierarchy;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.text.TextUtils;
@@ -26,23 +23,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import androidx.test.InstrumentationRegistry;
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.runner.AndroidJUnit4;
 import com.facebook.testing.screenshot.ViewHelpers;
-import com.facebook.testing.screenshot.test.R;
-
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Queue;
-
+import com.usefulness.testing.screenshot.tests.test.R;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.util.*;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests {@link LayoutHierarchyDumper}
@@ -136,9 +131,8 @@ public class LayoutHierarchyDumperTest {
 
     @Before
     public void setUp() throws Exception {
-        mView =
-                LayoutInflater.from(InstrumentationRegistry.getTargetContext())
-                        .inflate(R.layout.testing_for_view_hierarchy, null, false);
+        mView = LayoutInflater.from(ApplicationProvider.getApplicationContext())
+                .inflate(R.layout.testing_for_view_hierarchy, null, false);
     }
 
     @Test
