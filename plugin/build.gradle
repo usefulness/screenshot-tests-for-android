@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinCompile
 plugins {
   id("com.starter.library.kotlin")
   id("java-gradle-plugin")
+  id("com.starter.publishing")
 }
 
 final GENERATED_PACKAGE_NAME = "com.facebook.testing.screenshot.generated"

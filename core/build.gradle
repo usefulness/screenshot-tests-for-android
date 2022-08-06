@@ -1,20 +1,34 @@
 plugins {
   id("com.starter.library.android")
+  id("com.starter.publishing")
 }
 
 android {
+  defaultConfig {
+    minSdk 23
+    testInstrumentationRunner "com.facebook.testing.screenshot.CustomScreenshotTestRunner"
+  }
+  publishing {
+    singleVariant("release")
+  }
   packagingOptions {
     exclude 'LICENSE.txt'
   }
-
   lint {
     baseline = file("lint-baseline.xml")
   }
+}
 
-  defaultConfig {
-    testInstrumentationRunner "com.facebook.testing.screenshot.CustomScreenshotTestRunner"
+androidComponents {
+  beforeVariants(selector().withBuildType("release")) { builder ->
+    builder.enable = true
   }
 }
+
+tasks.withType(JavaCompile).configureEach {
+  options.release.set(JavaVersion.VERSION_1_8.majorVersion.toInteger())
+}
+
 
 tasks.withType(Test).configureEach {
   useJUnitPlatform()
