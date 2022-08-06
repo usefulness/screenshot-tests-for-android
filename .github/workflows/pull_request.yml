@@ -30,7 +30,7 @@ jobs:
 
       - uses: gradle/gradle-build-action@v2
 
-      - run: ./gradlew projectCodestyle
+      - run: ./gradlew projectCodestyle -x checkstyle
 
       - run: ./gradlew assemble
 

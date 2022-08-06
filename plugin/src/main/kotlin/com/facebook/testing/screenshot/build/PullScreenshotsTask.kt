@@ -24,102 +24,103 @@ import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
 
 open class PullScreenshotsTask : ScreenshotTask() {
-  companion object {
-    fun taskName(variant: TestVariant) = "pull${variant.name.capitalize()}Screenshots"
+    companion object {
+        fun taskName(variant: TestVariant) = "pull${variant.name.capitalize()}Screenshots"
 
-    fun getReportDir(project: Project, variant: TestVariant): File =
-        File(project.buildDir, "screenshots" + variant.name.capitalize())
-  }
-
-  private lateinit var apkPath: File
-
-  @Input protected var verify = false
-
-  @Input protected var record = false
-
-  @Input protected var bundleResults = false
-
-  @Input protected lateinit var testRunId: String
-
-  init {
-    description = "Pull screenshots from your device"
-    group = ScreenshotsPlugin.GROUP
-  }
-
-  override fun init(variant: TestVariant, extension: ScreenshotsPluginExtension) {
-    super.init(variant, extension)
-    val output =
-        variant.outputs.find { it is ApkVariantOutput } as? ApkVariantOutput
-            ?: throw IllegalArgumentException("Can't find APK output")
-    val packageTask =
-        variant.packageApplicationProvider.orNull
-            ?: throw IllegalArgumentException("Can't find package application provider")
-
-    apkPath = File(packageTask.outputDirectory.asFile.get(), output.outputFileName)
-    bundleResults = extension.bundleResults
-    testRunId = extension.testRunId
-  }
-
-  @TaskAction
-  fun pullScreenshots() {
-    val codeSource = ScreenshotsPlugin::class.java.protectionDomain.codeSource
-    val jarFile = File(codeSource.location.toURI().path)
-    val isVerifyOnly = verify && extension.referenceDir != null
-
-    val outputDir =
-        if (isVerifyOnly) {
-          File(extension.referenceDir)
-        } else {
-          getReportDir(project, variant)
-        }
-
-    assert(if (isVerifyOnly) outputDir.exists() else !outputDir.exists())
-
-    project.exec {
-      it.executable = extension.pythonExecutable
-      it.environment("PYTHONPATH", jarFile)
-
-      it.args =
-          mutableListOf(
-                  "-m",
-                  "android_screenshot_tests.pull_screenshots",
-                  "--apk",
-                  apkPath.absolutePath,
-                  "--test-run-id",
-                  testRunId,
-                  "--temp-dir",
-                  outputDir.absolutePath)
-              .apply {
-                if (verify) {
-                  add("--verify")
-                } else if (record) {
-                  add("--record")
-                }
-
-                if (verify || record) {
-                  add(extension.recordDir)
-                }
-
-                if (verify && extension.failureDir != null) {
-                  add("--failure-dir")
-                  add("${extension.failureDir}")
-                }
-
-                if (extension.multipleDevices) {
-                  add("--multiple-devices")
-                  add("${extension.multipleDevices}")
-                }
-
-                if (isVerifyOnly) {
-                  add("--no-pull")
-                }
-
-                if (bundleResults) {
-                  add("--bundle-results")
-                }
-              }
-
-      println(it.args)
+        fun getReportDir(project: Project, variant: TestVariant): File =
+            File(project.buildDir, "screenshots" + variant.name.capitalize())
     }
-  }
+
+    private lateinit var apkPath: File
+
+    @Input protected var verify = false
+
+    @Input protected var record = false
+
+    @Input protected var bundleResults = false
+
+    @Input protected lateinit var testRunId: String
+
+    init {
+        description = "Pull screenshots from your device"
+        group = ScreenshotsPlugin.GROUP
+    }
+
+    override fun init(variant: TestVariant, extension: ScreenshotsPluginExtension) {
+        super.init(variant, extension)
+        val output =
+            variant.outputs.find { it is ApkVariantOutput } as? ApkVariantOutput
+                ?: throw IllegalArgumentException("Can't find APK output")
+        val packageTask =
+            variant.packageApplicationProvider.orNull
+                ?: throw IllegalArgumentException("Can't find package application provider")
+
+        apkPath = File(packageTask.outputDirectory.asFile.get(), output.outputFileName)
+        bundleResults = extension.bundleResults
+        testRunId = extension.testRunId
+    }
+
+    @TaskAction
+    fun pullScreenshots() {
+        val codeSource = ScreenshotsPlugin::class.java.protectionDomain.codeSource
+        val jarFile = File(codeSource.location.toURI().path)
+        val isVerifyOnly = verify && extension.referenceDir != null
+
+        val outputDir =
+            if (isVerifyOnly) {
+                File(extension.referenceDir)
+            } else {
+                getReportDir(project, variant)
+            }
+
+        assert(if (isVerifyOnly) outputDir.exists() else !outputDir.exists())
+
+        project.exec {
+            it.executable = extension.pythonExecutable
+            it.environment("PYTHONPATH", jarFile)
+
+            it.args =
+                mutableListOf(
+                    "-m",
+                    "android_screenshot_tests.pull_screenshots",
+                    "--apk",
+                    apkPath.absolutePath,
+                    "--test-run-id",
+                    testRunId,
+                    "--temp-dir",
+                    outputDir.absolutePath,
+                )
+                    .apply {
+                        if (verify) {
+                            add("--verify")
+                        } else if (record) {
+                            add("--record")
+                        }
+
+                        if (verify || record) {
+                            add(extension.recordDir)
+                        }
+
+                        if (verify && extension.failureDir != null) {
+                            add("--failure-dir")
+                            add("${extension.failureDir}")
+                        }
+
+                        if (extension.multipleDevices) {
+                            add("--multiple-devices")
+                            add("${extension.multipleDevices}")
+                        }
+
+                        if (isVerifyOnly) {
+                            add("--no-pull")
+                        }
+
+                        if (bundleResults) {
+                            add("--bundle-results")
+                        }
+                    }
+
+            println(it.args)
+        }
+    }
 }
