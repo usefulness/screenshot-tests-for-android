@@ -26,12 +26,16 @@ import org.json.JSONObject;
  * then you would create a plugin for it.
  */
 public interface HierarchyPlugin {
-  String KEY_CHILDREN = "children";
+    String KEY_CHILDREN = "children";
 
-  /** Determines whether this plugin operates on the given type */
-  boolean accept(Object obj);
+    /**
+     * Determines whether this plugin operates on the given type
+     */
+    boolean accept(Object obj);
 
-  /** Constructs the hierarchy of the given type into a {@link org.json.JSONObject} */
-  void putHierarchy(LayoutHierarchyDumper dumper, JSONObject node, Object obj, Point offset)
-      throws JSONException;
+    /**
+     * Constructs the hierarchy of the given type into a {@link org.json.JSONObject}
+     */
+    void putHierarchy(LayoutHierarchyDumper dumper, JSONObject node, Object obj, Point offset)
+            throws JSONException;
 }

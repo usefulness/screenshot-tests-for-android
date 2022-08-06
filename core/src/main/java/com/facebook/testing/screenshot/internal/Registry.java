@@ -19,23 +19,26 @@ package com.facebook.testing.screenshot.internal;
 import android.app.Instrumentation;
 import android.os.Bundle;
 
-/** Stores some of the static state. We bundle this into a class for easy cleanup. */
+/**
+ * Stores some of the static state. We bundle this into a class for easy cleanup.
+ */
 public class Registry {
-  private static Registry sRegistry;
-  public Instrumentation instrumentation;
-  public Bundle arguments;
+    private static Registry sRegistry;
+    public Instrumentation instrumentation;
+    public Bundle arguments;
 
-  Registry() {}
-
-  public static Registry getRegistry() {
-    if (sRegistry == null) {
-      sRegistry = new Registry();
+    Registry() {
     }
 
-    return sRegistry;
-  }
+    public static Registry getRegistry() {
+        if (sRegistry == null) {
+            sRegistry = new Registry();
+        }
 
-  public static void clear() {
-    sRegistry = null;
-  }
+        return sRegistry;
+    }
+
+    public static void clear() {
+        sRegistry = null;
+    }
 }

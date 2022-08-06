@@ -20,27 +20,29 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-/** Tests {@link TestNameDetector} (for JUnit4 style tests) */
+/**
+ * Tests {@link TestNameDetector} (for JUnit4 style tests)
+ */
 public class TestNameDetectorForJUnit4Test {
-  @Test
-  public void testTestNameIsDetectedOnNonUiThread() throws Throwable {
-    assertEquals("testTestNameIsDetectedOnNonUiThread", TestNameDetector.getTestName());
-    assertEquals(
-        "com.facebook.testing.screenshot.internal.TestNameDetectorForJUnit4Test",
-        TestNameDetector.getTestClass());
-  }
+    @Test
+    public void testTestNameIsDetectedOnNonUiThread() throws Throwable {
+        assertEquals("testTestNameIsDetectedOnNonUiThread", TestNameDetector.getTestName());
+        assertEquals(
+                "com.facebook.testing.screenshot.internal.TestNameDetectorForJUnit4Test",
+                TestNameDetector.getTestClass());
+    }
 
-  @Test
-  public void testDelegated() throws Throwable {
-    delegate(true);
-    delegatePrivate();
-  }
+    @Test
+    public void testDelegated() throws Throwable {
+        delegate(true);
+        delegatePrivate();
+    }
 
-  public void delegate(boolean foobar) {
-    assertEquals("testDelegated", TestNameDetector.getTestName());
-  }
+    public void delegate(boolean foobar) {
+        assertEquals("testDelegated", TestNameDetector.getTestName());
+    }
 
-  private void delegatePrivate() {
-    assertEquals("testDelegated", TestNameDetector.getTestName());
-  }
+    private void delegatePrivate() {
+        assertEquals("testDelegated", TestNameDetector.getTestName());
+    }
 }

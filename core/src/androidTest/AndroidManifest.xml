@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest
   xmlns:android="http://schemas.android.com/apk/res/android"
-  package="com.usefulness.testing.screenshot.tests">
+  package="com.usefulness.testing.screenshot.tests"
+  >
 
   <uses-permission android:name="android.permission.DISABLE_KEYGUARD"/>
   <uses-permission android:name="android.permission.SET_ANIMATION_SCALE"/>

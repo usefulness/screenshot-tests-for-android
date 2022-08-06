@@ -28,146 +28,149 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-/** Dumps information about the accessibility hierarchy into a JSON object */
+/**
+ * Dumps information about the accessibility hierarchy into a JSON object
+ */
 public final class AccessibilityHierarchyDumper {
 
-  AccessibilityHierarchyDumper() {}
-
-  public static JSONObject dumpHierarchy(AccessibilityUtil.AXTreeNode axTree) throws JSONException {
-    JSONObject root = new JSONObject();
-    if (axTree == null) {
-      return root;
+    AccessibilityHierarchyDumper() {
     }
 
-    View view = axTree.getView();
-    AccessibilityNodeInfoCompat nodeInfo = axTree.getNodeInfo();
-
-    root.put("class", view.getClass().getName());
-
-    if (nodeInfo != null) {
-      if (nodeInfo.getActionList().size() == 0) {
-        root.put("actionList", JSONObject.NULL);
-      } else {
-        JSONArray actionList = new JSONArray();
-        for (AccessibilityActionCompat action : nodeInfo.getActionList()) {
-          actionList.put(action.getId());
+    public static JSONObject dumpHierarchy(AccessibilityUtil.AXTreeNode axTree) throws JSONException {
+        JSONObject root = new JSONObject();
+        if (axTree == null) {
+            return root;
         }
-        root.put("actionList", actionList);
-      }
 
-      Rect tempRect = new Rect();
-      nodeInfo.getBoundsInParent(tempRect);
-      JSONObject parentBoundsObj = new JSONObject();
-      parentBoundsObj.put("left", tempRect.left);
-      parentBoundsObj.put("right", tempRect.right);
-      parentBoundsObj.put("top", tempRect.top);
-      parentBoundsObj.put("bottom", tempRect.bottom);
-      root.put("boundsInParent", parentBoundsObj);
+        View view = axTree.getView();
+        AccessibilityNodeInfoCompat nodeInfo = axTree.getNodeInfo();
 
-      nodeInfo.getBoundsInScreen(tempRect);
-      JSONObject screenBoundsObj = new JSONObject();
-      screenBoundsObj.put("left", tempRect.left);
-      screenBoundsObj.put("right", tempRect.right);
-      screenBoundsObj.put("top", tempRect.top);
-      screenBoundsObj.put("bottom", tempRect.bottom);
-      root.put("boundsInScreen", screenBoundsObj);
+        root.put("class", view.getClass().getName());
 
-      root.put("canOpenPopup", nodeInfo.canOpenPopup());
-      root.put("childCount", nodeInfo.getChildCount());
-      root.put("className", nodeInfo.getClassName());
+        if (nodeInfo != null) {
+            if (nodeInfo.getActionList().size() == 0) {
+                root.put("actionList", JSONObject.NULL);
+            } else {
+                JSONArray actionList = new JSONArray();
+                for (AccessibilityActionCompat action : nodeInfo.getActionList()) {
+                    actionList.put(action.getId());
+                }
+                root.put("actionList", actionList);
+            }
 
-      if (nodeInfo.getCollectionInfo() == null) {
-        root.put("collectionInfo", JSONObject.NULL);
-      } else {
-        JSONObject collectionInfoObj = new JSONObject();
-        CollectionInfoCompat collectionInfo = nodeInfo.getCollectionInfo();
-        collectionInfoObj.put("columnCount", collectionInfo.getColumnCount());
-        collectionInfoObj.put("rowCount", collectionInfo.getRowCount());
-        collectionInfoObj.put("selectionMode", collectionInfo.getSelectionMode());
-        collectionInfoObj.put("isHierarchical", collectionInfo.isHierarchical());
-        root.put("collectionInfo", collectionInfoObj);
-      }
+            Rect tempRect = new Rect();
+            nodeInfo.getBoundsInParent(tempRect);
+            JSONObject parentBoundsObj = new JSONObject();
+            parentBoundsObj.put("left", tempRect.left);
+            parentBoundsObj.put("right", tempRect.right);
+            parentBoundsObj.put("top", tempRect.top);
+            parentBoundsObj.put("bottom", tempRect.bottom);
+            root.put("boundsInParent", parentBoundsObj);
 
-      if (nodeInfo.getCollectionItemInfo() == null) {
-        root.put("collectionItemInfo", JSONObject.NULL);
-      } else {
-        JSONObject collectionItemInfoObj = new JSONObject();
-        CollectionItemInfoCompat collectionItemInfo = nodeInfo.getCollectionItemInfo();
-        collectionItemInfoObj.put("columnIndex", collectionItemInfo.getColumnIndex());
-        collectionItemInfoObj.put("columnSpan", collectionItemInfo.getColumnSpan());
-        collectionItemInfoObj.put("rowIndex", collectionItemInfo.getRowIndex());
-        collectionItemInfoObj.put("rowSpan", collectionItemInfo.getRowSpan());
-        collectionItemInfoObj.put("isHeading", collectionItemInfo.isHeading());
-        collectionItemInfoObj.put("isSelected", collectionItemInfo.isSelected());
-        root.put("collectionItemInfo", collectionItemInfoObj);
-      }
+            nodeInfo.getBoundsInScreen(tempRect);
+            JSONObject screenBoundsObj = new JSONObject();
+            screenBoundsObj.put("left", tempRect.left);
+            screenBoundsObj.put("right", tempRect.right);
+            screenBoundsObj.put("top", tempRect.top);
+            screenBoundsObj.put("bottom", tempRect.bottom);
+            root.put("boundsInScreen", screenBoundsObj);
 
-      root.put("contentDescription", jsonNullOr(nodeInfo.getContentDescription()));
-      root.put("error", jsonNullOr(nodeInfo.getError()));
+            root.put("canOpenPopup", nodeInfo.canOpenPopup());
+            root.put("childCount", nodeInfo.getChildCount());
+            root.put("className", nodeInfo.getClassName());
 
-      if (nodeInfo.getExtras() == null) {
-        root.put("extras", JSONObject.NULL);
-      } else {
-        Bundle extras = nodeInfo.getExtras();
-        root.put("extras", extras.toString());
-      }
+            if (nodeInfo.getCollectionInfo() == null) {
+                root.put("collectionInfo", JSONObject.NULL);
+            } else {
+                JSONObject collectionInfoObj = new JSONObject();
+                CollectionInfoCompat collectionInfo = nodeInfo.getCollectionInfo();
+                collectionInfoObj.put("columnCount", collectionInfo.getColumnCount());
+                collectionInfoObj.put("rowCount", collectionInfo.getRowCount());
+                collectionInfoObj.put("selectionMode", collectionInfo.getSelectionMode());
+                collectionInfoObj.put("isHierarchical", collectionInfo.isHierarchical());
+                root.put("collectionInfo", collectionInfoObj);
+            }
 
-      root.put("inputType", nodeInfo.getInputType());
-      root.put("isCheckable", nodeInfo.isCheckable());
-      root.put("isChecked", nodeInfo.isChecked());
-      root.put("isClickable", nodeInfo.isClickable());
-      root.put("isContentInvalid", nodeInfo.isContentInvalid());
-      root.put("isDismissable", nodeInfo.isDismissable());
-      root.put("isEditable", nodeInfo.isEditable());
-      root.put("isEnabled", nodeInfo.isEnabled());
-      root.put("isFocusable", nodeInfo.isFocusable());
-      root.put("isImportantForAccessibility", nodeInfo.isImportantForAccessibility());
-      root.put("isLongClickable", nodeInfo.isLongClickable());
-      root.put("isMultiLine", nodeInfo.isMultiLine());
-      root.put("isPassword", nodeInfo.isPassword());
-      root.put("isScrollable", nodeInfo.isScrollable());
-      root.put("isSelected", nodeInfo.isSelected());
-      root.put("isVisibleToUser", nodeInfo.isVisibleToUser());
-      root.put("liveRegion", nodeInfo.getLiveRegion());
-      root.put("maxTextLength", nodeInfo.getMaxTextLength());
-      root.put("movementGranularities", nodeInfo.getMovementGranularities());
+            if (nodeInfo.getCollectionItemInfo() == null) {
+                root.put("collectionItemInfo", JSONObject.NULL);
+            } else {
+                JSONObject collectionItemInfoObj = new JSONObject();
+                CollectionItemInfoCompat collectionItemInfo = nodeInfo.getCollectionItemInfo();
+                collectionItemInfoObj.put("columnIndex", collectionItemInfo.getColumnIndex());
+                collectionItemInfoObj.put("columnSpan", collectionItemInfo.getColumnSpan());
+                collectionItemInfoObj.put("rowIndex", collectionItemInfo.getRowIndex());
+                collectionItemInfoObj.put("rowSpan", collectionItemInfo.getRowSpan());
+                collectionItemInfoObj.put("isHeading", collectionItemInfo.isHeading());
+                collectionItemInfoObj.put("isSelected", collectionItemInfo.isSelected());
+                root.put("collectionItemInfo", collectionItemInfoObj);
+            }
 
-      if (nodeInfo.getRangeInfo() == null) {
-        root.put("rangeInfo", JSONObject.NULL);
-      } else {
-        JSONObject rangeInfoObj = new JSONObject();
-        RangeInfoCompat rangeInfo = nodeInfo.getRangeInfo();
-        rangeInfoObj.put("current", rangeInfo.getCurrent());
-        rangeInfoObj.put("max", rangeInfo.getMax());
-        rangeInfoObj.put("min", rangeInfo.getMin());
-        rangeInfoObj.put("type", rangeInfo.getType());
-        root.put("rangeInfo", rangeInfoObj);
-      }
+            root.put("contentDescription", jsonNullOr(nodeInfo.getContentDescription()));
+            root.put("error", jsonNullOr(nodeInfo.getError()));
 
-      root.put("text", jsonNullOr(nodeInfo.getText()));
+            if (nodeInfo.getExtras() == null) {
+                root.put("extras", JSONObject.NULL);
+            } else {
+                Bundle extras = nodeInfo.getExtras();
+                root.put("extras", extras.toString());
+            }
 
-      nodeInfo.recycle();
+            root.put("inputType", nodeInfo.getInputType());
+            root.put("isCheckable", nodeInfo.isCheckable());
+            root.put("isChecked", nodeInfo.isChecked());
+            root.put("isClickable", nodeInfo.isClickable());
+            root.put("isContentInvalid", nodeInfo.isContentInvalid());
+            root.put("isDismissable", nodeInfo.isDismissable());
+            root.put("isEditable", nodeInfo.isEditable());
+            root.put("isEnabled", nodeInfo.isEnabled());
+            root.put("isFocusable", nodeInfo.isFocusable());
+            root.put("isImportantForAccessibility", nodeInfo.isImportantForAccessibility());
+            root.put("isLongClickable", nodeInfo.isLongClickable());
+            root.put("isMultiLine", nodeInfo.isMultiLine());
+            root.put("isPassword", nodeInfo.isPassword());
+            root.put("isScrollable", nodeInfo.isScrollable());
+            root.put("isSelected", nodeInfo.isSelected());
+            root.put("isVisibleToUser", nodeInfo.isVisibleToUser());
+            root.put("liveRegion", nodeInfo.getLiveRegion());
+            root.put("maxTextLength", nodeInfo.getMaxTextLength());
+            root.put("movementGranularities", nodeInfo.getMovementGranularities());
+
+            if (nodeInfo.getRangeInfo() == null) {
+                root.put("rangeInfo", JSONObject.NULL);
+            } else {
+                JSONObject rangeInfoObj = new JSONObject();
+                RangeInfoCompat rangeInfo = nodeInfo.getRangeInfo();
+                rangeInfoObj.put("current", rangeInfo.getCurrent());
+                rangeInfoObj.put("max", rangeInfo.getMax());
+                rangeInfoObj.put("min", rangeInfo.getMin());
+                rangeInfoObj.put("type", rangeInfo.getType());
+                root.put("rangeInfo", rangeInfoObj);
+            }
+
+            root.put("text", jsonNullOr(nodeInfo.getText()));
+
+            nodeInfo.recycle();
+        }
+
+        if (axTree.getChildCount() > 0) {
+            JSONArray children = new JSONArray();
+            for (AccessibilityUtil.AXTreeNode child : axTree.getChildren()) {
+                JSONObject childSerialization = dumpHierarchy(child);
+                children.put(childSerialization);
+            }
+            root.put("children", children);
+        } else {
+            root.put("children", JSONObject.NULL);
+        }
+
+        return root;
     }
 
-    if (axTree.getChildCount() > 0) {
-      JSONArray children = new JSONArray();
-      for (AccessibilityUtil.AXTreeNode child : axTree.getChildren()) {
-        JSONObject childSerialization = dumpHierarchy(child);
-        children.put(childSerialization);
-      }
-      root.put("children", children);
-    } else {
-      root.put("children", JSONObject.NULL);
+    public static JSONObject dumpHierarchy(View view) throws JSONException {
+        return dumpHierarchy(AccessibilityUtil.generateAccessibilityTree(view, null));
     }
 
-    return root;
-  }
-
-  public static JSONObject dumpHierarchy(View view) throws JSONException {
-    return dumpHierarchy(AccessibilityUtil.generateAccessibilityTree(view, null));
-  }
-
-  private static Object jsonNullOr(Object obj) {
-    return obj == null ? JSONObject.NULL : obj;
-  }
+    private static Object jsonNullOr(Object obj) {
+        return obj == null ? JSONObject.NULL : obj;
+    }
 }

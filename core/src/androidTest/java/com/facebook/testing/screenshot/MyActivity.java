@@ -18,13 +18,15 @@ package com.facebook.testing.screenshot;
 
 import android.app.Activity;
 
-/** A dummy activity */
+/**
+ * A dummy activity
+ */
 public class MyActivity extends Activity {
-  public boolean destroyed = false;
+    public boolean destroyed = false;
 
-  @Override
-  public void onDestroy() {
-    super.onDestroy();
-    destroyed = true;
-  }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        destroyed = true;
+    }
 }

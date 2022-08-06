@@ -56,7 +56,7 @@ open class ScreenshotsPluginExtension {
 class ScreenshotsPlugin : Plugin<Project> {
     companion object {
         const val GROUP = "Screenshot Test"
-        const val DEPENDENCY_GROUP = "com.facebook.testing.screenshot"
+        const val DEPENDENCY_GROUP = "com.github.usefulness.testing.screenshot"
         const val DEPENDENCY_CORE = "core"
     }
 
@@ -75,19 +75,16 @@ class ScreenshotsPlugin : Plugin<Project> {
             }
         }
         val androidExtension = getProjectExtension(project)
-        androidExtension.testVariants.all { generateTasksFor(project, it) }
-        androidExtension.defaultConfig.testInstrumentationRunnerArguments["SCREENSHOT_TESTS_RUN_ID"] =
-            screenshotExtensions.testRunId
+        androidExtension.testVariants.configureEach { generateTasksFor(project, it) }
+        androidExtension.defaultConfig.testInstrumentationRunnerArguments["SCREENSHOT_TESTS_RUN_ID"] = screenshotExtensions.testRunId
     }
 
     private fun getProjectExtension(project: Project): TestedExtension {
         val extensions = project.extensions
         val plugins = project.plugins
         return when {
-            plugins.hasPlugin("com.android.application") ->
-                extensions.findByType(AppExtension::class.java)!!
-            plugins.hasPlugin("com.android.library") ->
-                extensions.findByType(LibraryExtension::class.java)!!
+            plugins.hasPlugin("com.android.application") -> extensions.findByType(AppExtension::class.java)!!
+            plugins.hasPlugin("com.android.library") -> extensions.findByType(LibraryExtension::class.java)!!
             else -> throw IllegalArgumentException("Screenshot Test plugin requires Android's plugin")
         }
     }

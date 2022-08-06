@@ -23,25 +23,26 @@ import androidx.test.InstrumentationRegistry;
 import androidx.test.core.app.ApplicationProvider;
 
 import java.io.File;
+
 import org.junit.After;
 import org.junit.Test;
 
 public class ScreenshotDirectoriesTest {
-  File mDir;
+    File mDir;
 
-  @After
-  public void teardown() {
-    if (mDir != null) {
-      mDir.delete();
+    @After
+    public void teardown() {
+        if (mDir != null) {
+            mDir.delete();
+        }
     }
-  }
 
-  @Test
-  public void testUsesSdcard() {
-    Context context = ApplicationProvider.getApplicationContext();
-    ScreenshotDirectories dirs = new ScreenshotDirectories(context);
+    @Test
+    public void testUsesSdcard() {
+        Context context = ApplicationProvider.getApplicationContext();
+        ScreenshotDirectories dirs = new ScreenshotDirectories(context);
 
-    mDir = dirs.get("foobar");
-    assertTrue(mDir.exists());
-  }
+        mDir = dirs.get("foobar");
+        assertTrue(mDir.exists());
+    }
 }

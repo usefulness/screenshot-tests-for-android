@@ -35,7 +35,6 @@ try:
 except ImportError:
     from queue import Queue
 
-
 OLD_ROOT_SCREENSHOT_DIR = "/data/data/"
 KEY_VIEW_HIERARCHY = "viewHierarchy"
 KEY_AX_HIERARCHY = "axHierarchy"
@@ -68,11 +67,11 @@ def sort_screenshots(screenshots):
 
 
 def show_old_result(
-    test_name,
-    html,
-    new_screenshot,
-    test_img_api,
-    old_imgs_data,
+        test_name,
+        html,
+        new_screenshot,
+        test_img_api,
+        old_imgs_data,
 ):
     try:
         old_screenshot_url = get_old_screenshot_url(
@@ -99,10 +98,10 @@ def get_old_screenshot_url(test_name, test_img_api, old_imgs_data):
 
 
 def generate_html(
-    output_dir,
-    test_img_api=None,
-    old_imgs_data=None,
-    diff=False,
+        output_dir,
+        test_img_api=None,
+        old_imgs_data=None,
+        diff=False,
 ):
     # Take in:
     # output_dir a directory with imgs and data outputted by the just-run test,
@@ -163,7 +162,7 @@ def generate_html(
                         str = str + "*****" + key + "*****\n\n" + value + "\n\n\n"
                 if str != "":
                     extra_html = (
-                        '<button class="extra" data="%s">Extra info</button>' % str
+                            '<button class="extra" data="%s">Extra info</button>' % str
                     )
                     html.write(extra_html.encode("utf-8").strip())
 
@@ -498,12 +497,12 @@ def pull_all(package, dir, test_run_id, adb_puller):
 
 
 def pull_filtered(
-    package,
-    dir,
-    adb_puller,
-    test_run_id,
-    filter_name_regex=None,
-    bundle_results=False,
+        package,
+        dir,
+        adb_puller,
+        test_run_id,
+        filter_name_regex=None,
+        bundle_results=False,
 ):
     device_dir = pull_metadata(package, dir, adb_puller=adb_puller)
     _validate_metadata(dir)
@@ -546,22 +545,22 @@ def _validate_metadata(dir):
 
 
 def pull_screenshots(
-    process,
-    adb_puller,
-    device_name_calculator=None,
-    perform_pull=True,
-    bundle_results=False,
-    temp_dir=None,
-    filter_name_regex=None,
-    record=None,
-    verify=None,
-    test_run_id=None,
-    opt_generate_png=None,
-    test_img_api=None,
-    old_imgs_data=None,
-    failure_dir=None,
-    diff=False,
-    open_html=False,
+        process,
+        adb_puller,
+        device_name_calculator=None,
+        perform_pull=True,
+        bundle_results=False,
+        temp_dir=None,
+        filter_name_regex=None,
+        record=None,
+        verify=None,
+        test_run_id=None,
+        opt_generate_png=None,
+        test_img_api=None,
+        old_imgs_data=None,
+        failure_dir=None,
+        diff=False,
+        open_html=False,
 ):
     if not perform_pull and temp_dir is None:
         raise RuntimeError(

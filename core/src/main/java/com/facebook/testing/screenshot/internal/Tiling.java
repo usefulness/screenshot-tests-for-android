@@ -21,36 +21,38 @@ package com.facebook.testing.screenshot.internal;
  * AlbumImpl}
  */
 public class Tiling {
-  private int mWidth;
-  private int mHeight;
-  private String[][] mContents;
+    private int mWidth;
+    private int mHeight;
+    private String[][] mContents;
 
-  public Tiling(int width, int height) {
-    mWidth = width;
-    mHeight = height;
-    mContents = new String[width][height];
-  }
+    public Tiling(int width, int height) {
+        mWidth = width;
+        mHeight = height;
+        mContents = new String[width][height];
+    }
 
-  /** Convenience factory method for tests */
-  public static Tiling singleTile(String name) {
-    Tiling ret = new Tiling(1, 1);
-    ret.setAt(0, 0, name);
-    return ret;
-  }
+    /**
+     * Convenience factory method for tests
+     */
+    public static Tiling singleTile(String name) {
+        Tiling ret = new Tiling(1, 1);
+        ret.setAt(0, 0, name);
+        return ret;
+    }
 
-  public int getHeight() {
-    return mHeight;
-  }
+    public int getHeight() {
+        return mHeight;
+    }
 
-  public int getWidth() {
-    return mWidth;
-  }
+    public int getWidth() {
+        return mWidth;
+    }
 
-  public String getAt(int x, int y) {
-    return mContents[x][y];
-  }
+    public String getAt(int x, int y) {
+        return mContents[x][y];
+    }
 
-  public void setAt(int x, int y, String name) {
-    mContents[x][y] = name;
-  }
+    public void setAt(int x, int y, String name) {
+        mContents[x][y] = name;
+    }
 }

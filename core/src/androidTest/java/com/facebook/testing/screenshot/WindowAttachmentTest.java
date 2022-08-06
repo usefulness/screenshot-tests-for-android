@@ -40,148 +40,150 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-/** Tests {@link WindowAttachment} */
+/**
+ * Tests {@link WindowAttachment}
+ */
 @RunWith(AndroidJUnit4.class)
 public class WindowAttachmentTest {
 
-  private Context mContext;
-  private int mAttachedCalled = 0;
-  private int mDetachedCalled = 0;
-  private KeyguardManager.KeyguardLock mLock;
+    private Context mContext;
+    private int mAttachedCalled = 0;
+    private int mDetachedCalled = 0;
+    private KeyguardManager.KeyguardLock mLock;
 
-  @Rule
-  public ActivityTestRule<MyActivity> activityTestRule = new ActivityTestRule<>(MyActivity.class);
+    @Rule
+    public ActivityTestRule<MyActivity> activityTestRule = new ActivityTestRule<>(MyActivity.class);
 
-  @Before
-  public void setUp() {
-    mContext = ApplicationProvider.getApplicationContext();
-    KeyguardManager km = (KeyguardManager) mContext.getSystemService(Context.KEYGUARD_SERVICE);
-    mLock = km.newKeyguardLock("SelectAtTagActivityTest");
-    mLock.disableKeyguard();
-  }
-
-  @After
-  public void tearDown() throws Exception {
-    mLock.reenableKeyguard();
-  }
-
-  @Test
-  public void testCalled() throws Throwable {
-    MyView view = new MyView(mContext);
-    WindowAttachment.Detacher detacher = WindowAttachment.dispatchAttach(view);
-    assertEquals(1, mAttachedCalled);
-    assertEquals(0, mDetachedCalled);
-
-    detacher.detach();
-    assertEquals(1, mDetachedCalled);
-  }
-
-  @Test
-  public void testCalledForViewGroup() throws Throwable {
-    Parent view = new Parent(mContext);
-    WindowAttachment.Detacher detacher = WindowAttachment.dispatchAttach(view);
-    assertEquals(1, mAttachedCalled);
-    assertEquals(0, mDetachedCalled);
-
-    detacher.detach();
-    assertEquals(1, mDetachedCalled);
-  }
-
-  @Test
-  public void testForNested() throws Throwable {
-    Parent view = new Parent(mContext);
-    MyView child = new MyView(mContext);
-    view.addView(child);
-
-    WindowAttachment.Detacher detacher = WindowAttachment.dispatchAttach(view);
-    assertEquals(2, mAttachedCalled);
-    assertEquals(0, mDetachedCalled);
-
-    detacher.detach();
-    assertEquals(2, mDetachedCalled);
-  }
-
-  @Test
-  @Ignore("For some reason it is flaky, will investigate")
-  public void testAReallyAttachedViewIsntAttachedAgain() {
-    final View[] view = new View[1];
-
-    activityTestRule.getActivity();
-    InstrumentationRegistry.getInstrumentation()
-        .runOnMainSync(
-            () -> {
-              view[0] = new MyView(activityTestRule.getActivity());
-              activityTestRule.getActivity().setContentView(view[0]);
-            });
-
-    InstrumentationRegistry.getInstrumentation().waitForIdleSync();
-
-    // Call some express method to make sure we're ready:
-    Espresso.onView(withId(android.R.id.content)).perform(click());
-    Espresso.onIdle();
-
-    mAttachedCalled = 0;
-    mDetachedCalled = 0;
-
-    WindowAttachment.Detacher detacher = WindowAttachment.dispatchAttach(view[0]);
-    detacher.detach();
-
-    assertEquals(0, mAttachedCalled);
-    assertEquals(0, mDetachedCalled);
-  }
-
-  @Test
-  public void testSetAttachInfo() {
-    final MyView view = new MyView(mContext);
-    InstrumentationRegistry.getInstrumentation()
-        .runOnMainSync(() -> WindowAttachment.setAttachInfo(view));
-
-    assertNotNull(view.getWindowToken());
-  }
-
-  public class MyView extends View {
-    public MyView(Context context) {
-      super(context);
-      try {
-        Looper.prepare();
-      } catch (Throwable t) {
-
-      }
+    @Before
+    public void setUp() {
+        mContext = ApplicationProvider.getApplicationContext();
+        KeyguardManager km = (KeyguardManager) mContext.getSystemService(Context.KEYGUARD_SERVICE);
+        mLock = km.newKeyguardLock("SelectAtTagActivityTest");
+        mLock.disableKeyguard();
     }
 
-    @Override
-    protected void onAttachedToWindow() {
-      super.onAttachedToWindow();
-      mAttachedCalled++;
+    @After
+    public void tearDown() throws Exception {
+        mLock.reenableKeyguard();
     }
 
-    @Override
-    protected void onDetachedFromWindow() {
-      super.onDetachedFromWindow();
-      mDetachedCalled++;
-    }
-  }
+    @Test
+    public void testCalled() throws Throwable {
+        MyView view = new MyView(mContext);
+        WindowAttachment.Detacher detacher = WindowAttachment.dispatchAttach(view);
+        assertEquals(1, mAttachedCalled);
+        assertEquals(0, mDetachedCalled);
 
-  public class Parent extends LinearLayout {
-    public Parent(Context context) {
-      super(context);
-      try {
-        Looper.prepare();
-      } catch (Throwable t) {
-
-      }
+        detacher.detach();
+        assertEquals(1, mDetachedCalled);
     }
 
-    @Override
-    protected void onAttachedToWindow() {
-      super.onAttachedToWindow();
-      mAttachedCalled++;
+    @Test
+    public void testCalledForViewGroup() throws Throwable {
+        Parent view = new Parent(mContext);
+        WindowAttachment.Detacher detacher = WindowAttachment.dispatchAttach(view);
+        assertEquals(1, mAttachedCalled);
+        assertEquals(0, mDetachedCalled);
+
+        detacher.detach();
+        assertEquals(1, mDetachedCalled);
     }
 
-    @Override
-    protected void onDetachedFromWindow() {
-      super.onDetachedFromWindow();
-      mDetachedCalled++;
+    @Test
+    public void testForNested() throws Throwable {
+        Parent view = new Parent(mContext);
+        MyView child = new MyView(mContext);
+        view.addView(child);
+
+        WindowAttachment.Detacher detacher = WindowAttachment.dispatchAttach(view);
+        assertEquals(2, mAttachedCalled);
+        assertEquals(0, mDetachedCalled);
+
+        detacher.detach();
+        assertEquals(2, mDetachedCalled);
     }
-  }
+
+    @Test
+    @Ignore("For some reason it is flaky, will investigate")
+    public void testAReallyAttachedViewIsntAttachedAgain() {
+        final View[] view = new View[1];
+
+        activityTestRule.getActivity();
+        InstrumentationRegistry.getInstrumentation()
+                .runOnMainSync(
+                        () -> {
+                            view[0] = new MyView(activityTestRule.getActivity());
+                            activityTestRule.getActivity().setContentView(view[0]);
+                        });
+
+        InstrumentationRegistry.getInstrumentation().waitForIdleSync();
+
+        // Call some express method to make sure we're ready:
+        Espresso.onView(withId(android.R.id.content)).perform(click());
+        Espresso.onIdle();
+
+        mAttachedCalled = 0;
+        mDetachedCalled = 0;
+
+        WindowAttachment.Detacher detacher = WindowAttachment.dispatchAttach(view[0]);
+        detacher.detach();
+
+        assertEquals(0, mAttachedCalled);
+        assertEquals(0, mDetachedCalled);
+    }
+
+    @Test
+    public void testSetAttachInfo() {
+        final MyView view = new MyView(mContext);
+        InstrumentationRegistry.getInstrumentation()
+                .runOnMainSync(() -> WindowAttachment.setAttachInfo(view));
+
+        assertNotNull(view.getWindowToken());
+    }
+
+    public class MyView extends View {
+        public MyView(Context context) {
+            super(context);
+            try {
+                Looper.prepare();
+            } catch (Throwable t) {
+
+            }
+        }
+
+        @Override
+        protected void onAttachedToWindow() {
+            super.onAttachedToWindow();
+            mAttachedCalled++;
+        }
+
+        @Override
+        protected void onDetachedFromWindow() {
+            super.onDetachedFromWindow();
+            mDetachedCalled++;
+        }
+    }
+
+    public class Parent extends LinearLayout {
+        public Parent(Context context) {
+            super(context);
+            try {
+                Looper.prepare();
+            } catch (Throwable t) {
+
+            }
+        }
+
+        @Override
+        protected void onAttachedToWindow() {
+            super.onAttachedToWindow();
+            mAttachedCalled++;
+        }
+
+        @Override
+        protected void onDetachedFromWindow() {
+            super.onDetachedFromWindow();
+            mDetachedCalled++;
+        }
+    }
 }

@@ -33,13 +33,17 @@ open class PullScreenshotsTask : ScreenshotTask() {
 
     private lateinit var apkPath: File
 
-    @Input protected var verify = false
+    @Input
+    protected var verify = false
 
-    @Input protected var record = false
+    @Input
+    protected var record = false
 
-    @Input protected var bundleResults = false
+    @Input
+    protected var bundleResults = false
 
-    @Input protected lateinit var testRunId: String
+    @Input
+    protected lateinit var testRunId: String
 
     init {
         description = "Pull screenshots from your device"
