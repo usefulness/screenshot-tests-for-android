@@ -18,17 +18,23 @@ package com.facebook.testing.screenshot.build
 
 import com.android.build.gradle.api.ApkVariantOutput
 import com.android.build.gradle.api.TestVariant
-import java.io.File
-import org.gradle.api.Project
+import com.usefulness.testing.screenshot.build.ScreenshotTask
+import org.gradle.api.file.ProjectLayout
+import org.gradle.api.model.ObjectFactory
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
+import java.io.File
+import javax.inject.Inject
 
-open class PullScreenshotsTask : ScreenshotTask() {
+open class PullScreenshotsTask @Inject constructor(
+    objectFactory: ObjectFactory,
+    private val layout: ProjectLayout,
+) : ScreenshotTask(objectFactory = objectFactory) {
     companion object {
-        fun taskName(variant: TestVariant) = "pull${variant.name.capitalize()}Screenshots"
+        fun taskName(variantName: String) = "pull${variantName.replaceFirstChar(Char::titlecase)}Screenshots"
 
-        fun getReportDir(project: Project, variant: TestVariant): File =
-            File(project.buildDir, "screenshots" + variant.name.capitalize())
+        fun ProjectLayout.getReportDir(variantName: String) =
+            buildDirectory.file("screenshots" + variantName.replaceFirstChar(Char::titlecase)).get().asFile
     }
 
     private lateinit var apkPath: File
@@ -39,12 +45,6 @@ open class PullScreenshotsTask : ScreenshotTask() {
     @Input
     protected var record = false
 
-    @Input
-    protected var bundleResults = false
-
-    @Input
-    protected lateinit var testRunId: String
-
     init {
         description = "Pull screenshots from your device"
         group = ScreenshotsPlugin.GROUP
@@ -52,77 +52,70 @@ open class PullScreenshotsTask : ScreenshotTask() {
 
     override fun init(variant: TestVariant, extension: ScreenshotsPluginExtension) {
         super.init(variant, extension)
-        val output =
-            variant.outputs.find { it is ApkVariantOutput } as? ApkVariantOutput
-                ?: throw IllegalArgumentException("Can't find APK output")
-        val packageTask =
-            variant.packageApplicationProvider.orNull
-                ?: throw IllegalArgumentException("Can't find package application provider")
+        val output = variant.outputs.find { it is ApkVariantOutput } as? ApkVariantOutput
+            ?: throw IllegalArgumentException("Can't find APK output")
+        val packageTask = variant.packageApplicationProvider.orNull
+            ?: throw IllegalArgumentException("Can't find package application provider")
 
         apkPath = File(packageTask.outputDirectory.asFile.get(), output.outputFileName)
-        bundleResults = extension.bundleResults
-        testRunId = extension.testRunId
     }
 
     @TaskAction
     fun pullScreenshots() {
         val codeSource = ScreenshotsPlugin::class.java.protectionDomain.codeSource
         val jarFile = File(codeSource.location.toURI().path)
-        val isVerifyOnly = verify && extension.referenceDir != null
+        val referenceDir = referenceDir.orNull?.let(::File)
+        val outputDir = if (verify && referenceDir != null) {
+            referenceDir
+        } else {
+            layout.getReportDir(variantName.get())
+        }
 
-        val outputDir =
-            if (isVerifyOnly) {
-                File(extension.referenceDir)
-            } else {
-                getReportDir(project, variant)
-            }
-
-        assert(if (isVerifyOnly) outputDir.exists() else !outputDir.exists())
+        assert(if (verify) outputDir.exists() else !outputDir.exists())
 
         project.exec {
-            it.executable = extension.pythonExecutable
+            it.executable = pythonExecutable.get()
             it.environment("PYTHONPATH", jarFile)
 
-            it.args =
-                mutableListOf(
-                    "-m",
-                    "android_screenshot_tests.pull_screenshots",
-                    "--apk",
-                    apkPath.absolutePath,
-                    "--test-run-id",
-                    testRunId,
-                    "--temp-dir",
-                    outputDir.absolutePath,
-                )
-                    .apply {
-                        if (verify) {
-                            add("--verify")
-                        } else if (record) {
-                            add("--record")
-                        }
-
-                        if (verify || record) {
-                            add(extension.recordDir)
-                        }
-
-                        if (verify && extension.failureDir != null) {
-                            add("--failure-dir")
-                            add("${extension.failureDir}")
-                        }
-
-                        if (extension.multipleDevices) {
-                            add("--multiple-devices")
-                            add("${extension.multipleDevices}")
-                        }
-
-                        if (isVerifyOnly) {
-                            add("--no-pull")
-                        }
-
-                        if (bundleResults) {
-                            add("--bundle-results")
-                        }
+            it.args = mutableListOf(
+                "-m",
+                "android_screenshot_tests.pull_screenshots",
+                "--apk",
+                apkPath.absolutePath,
+                "--test-run-id",
+                testRunId.get(),
+                "--temp-dir",
+                outputDir.absolutePath,
+            )
+                .apply {
+                    if (verify) {
+                        add("--verify")
+                    } else if (record) {
+                        add("--record")
                     }
+
+                    if (verify || record) {
+                        add(recordDir.get())
+                    }
+
+                    if (verify && failureDir.isPresent) {
+                        add("--failure-dir")
+                        add(failureDir.get())
+                    }
+
+                    if (multipleDevices.get()) {
+                        add("--multiple-devices")
+                        add("true")
+                    }
+
+                    if (verify) {
+                        add("--no-pull")
+                    }
+
+                    if (bundleResults.get()) {
+                        add("--bundle-results")
+                    }
+                }
 
             println(it.args)
         }
