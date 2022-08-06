@@ -1,67 +1,54 @@
-/*
- * Copyright (c) Meta Platforms, Inc. and affiliates.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-apply plugin: 'com.android.library'
-apply plugin: "com.vanniktech.maven.publish"
-
-group = 'com.facebook.testing.screenshot'
+plugins {
+  id("com.starter.library.android")
+  id("com.starter.publishing")
+}
 
 android {
-  compileSdkVersion versions.compileSdk
-
+  defaultConfig {
+    minSdk 23
+    testInstrumentationRunner "com.facebook.testing.screenshot.CustomScreenshotTestRunner"
+  }
+  publishing {
+    singleVariant("release")
+  }
   packagingOptions {
     exclude 'LICENSE.txt'
   }
-
-  defaultConfig {
-    minSdkVersion versions.minSdk
-    targetSdkVersion versions.targetSdk
-    testInstrumentationRunner "com.facebook.testing.screenshot.CustomScreenshotTestRunner"
-  }
-
-  lintOptions {
-    abortOnError false
-    disable 'InvalidPackage'
+  lint {
+    baseline = file("lint-baseline.xml")
   }
 }
 
-afterEvaluate {
-  generateReleaseBuildConfig.enabled = false
-}
-
-tasks.whenTaskAdded {
-  if (it.name == "androidJavadoc") {
-    it.configure {
-      exclude '**/BUCK'
-    }
+androidComponents {
+  beforeVariants(selector().withBuildType("release")) { builder ->
+    builder.enable = true
   }
 }
+
+tasks.withType(JavaCompile).configureEach {
+  options.release.set(JavaVersion.VERSION_1_8.majorVersion.toInteger())
+}
+
+
+tasks.withType(Test).configureEach {
+  useJUnitPlatform()
+  testLogging {
+    events "skipped", "failed"
+  }
+  doLast {
+    Thread.sleep(2000) // https://github.com/gradle/gradle/issues/16603
+  }
+}
+
+//afterEvaluate {
+//  generateReleaseBuildConfig.enabled = false
+//}
 
 dependencies {
-  compileOnly deps.jsr305
-
-  implementation deps.supportAppCompat
-  implementation deps.gson
-
-  androidTestImplementation deps.dexmaker
-  androidTestImplementation deps.dexmakerDx
-  androidTestImplementation deps.junit
-  androidTestImplementation deps.androidTestRules
-  androidTestImplementation deps.espresso
-  androidTestImplementation deps.mockito
-  androidTestImplementation deps.dexmakerMockito
-  androidTestImplementation deps.hamcrest
+  implementation("com.google.code.gson:gson:2.9.0")
+  implementation(libs.androidx.annotation)
+  implementation(libs.androidx.core)
+  implementation(libs.gson)
+  testImplementation(libs.junit.jupiter)
+  testImplementation(libs.assertj.core)
 }

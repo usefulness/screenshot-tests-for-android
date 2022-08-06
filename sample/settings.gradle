@@ -9,10 +9,6 @@ pluginManagement {
   }
 }
 
-plugins {
-  id "com.gradle.enterprise" version "3.10.3"
-}
-
 dependencyResolutionManagement {
   repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
   repositories {
@@ -21,6 +17,8 @@ dependencyResolutionManagement {
   }
 }
 
+rootProject.name = "com.github.usefulness.testing.screenshot.sample"
 
-rootProject.name = 'com.github.usefulness.testing.screenshot'
-include 'core', 'plugin'
+if (!hasProperty("useMavenLocal")) {
+  includeBuild "../.."
+}

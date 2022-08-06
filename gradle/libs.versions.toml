@@ -1,0 +1,24 @@
+[versions]
+gradle-starter = "0.49.0"
+gradle-kotlinter = "3.11.1"
+google-agp = "7.2.2"
+maven-kotlin = "1.7.10"
+maven-junit = "5.9.0"
+maven-assertj = "3.23.1"
+google-androidx-core = "1.8.0"
+google-androidx-annotation = "1.4.0"
+google-gson = "2.9.0"
+
+[libraries]
+starter-gradle = { module = "com.project.starter:android", version.ref = "gradle-starter" }
+agp-gradle = { module = "com.android.tools.build:gradle", version.ref = "google-agp" }
+junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "maven-junit" }
+assertj-core = { module = "org.assertj:assertj-core", version.ref = "maven-assertj" }
+kotlin-gradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "maven-kotlin" }
+androidx-core = { module = "androidx.core:core", version.ref = "google-androidx-core"}
+androidx-annotation = { module = "androidx.annotation:annotation", version.ref = "google-androidx-annotation"}
+gson = { module = "com.google.code.gson:gson", version.ref = "google-gson"}
+
+[plugins]
+jmailen-kotlinter = { id = "org.jmailen.kotlinter", version.ref = "gradle-kotlinter" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "maven-kotlin" }

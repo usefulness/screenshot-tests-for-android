@@ -1,0 +1,9 @@
+plugins {
+  id("com.starter.library.android")
+}
+
+
+screenshots {
+  multipleDevices true
+  pythonExecutable 'python3'
+}

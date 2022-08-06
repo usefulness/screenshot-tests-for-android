@@ -1,37 +1,10 @@
-/*
- * Copyright (c) Meta Platforms, Inc. and affiliates.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+import org.jetbrains.kotlin.gradle.dsl.KotlinCompile
 
-buildscript {
-  repositories {
-    mavenCentral()
-    google()
-    mavenLocal()
-    jcenter()
-  }
-  dependencies {
-    classpath plugs.kotlin
-    classpath plugs.publish
-    classpath plugs.dokka
-  }
+plugins {
+  id("com.starter.library.kotlin")
+  id("java-gradle-plugin")
+  id("com.starter.publishing")
 }
-
-apply plugin: 'groovy'
-apply plugin: 'kotlin'
-apply plugin: "java-gradle-plugin"
-apply plugin: 'com.vanniktech.maven.publish'
 
 final GENERATED_PACKAGE_NAME = "com.facebook.testing.screenshot.generated"
 final GENERATED_BUILD_DIR =
@@ -39,7 +12,7 @@ final GENERATED_BUILD_DIR =
         projectDir.absolutePath,
         "src/generated/kotlin/${GENERATED_PACKAGE_NAME.replace('.', '/')}")
 
-task generateBuildConfig {
+tasks.register("generateBuildConfig") {
   doLast {
     GENERATED_BUILD_DIR.deleteDir()
     GENERATED_BUILD_DIR.mkdirs()
@@ -57,17 +30,21 @@ task generateBuildConfig {
   }
 }
 
-dependencies {
-  implementation deps.kotlinStdlib
-  compileOnly plugs.agp
-  
-  testImplementation deps.junit
-  testImplementation plugs.agp
-  testImplementation deps.mockito
-  testImplementation deps.hamcrest
+tasks.withType(KotlinCompile).configureEach {
+  kotlinOptions {
+    apiVersion = "1.5"
+    languageVersion = "1.5"
+  }
 }
 
-group = 'com.facebook.testing.screenshot'
+dependencies {
+  compileOnly(libs.agp.gradle)
+
+  testImplementation(libs.agp.gradle)
+  testImplementation(gradleTestKit())
+  testImplementation(libs.junit.jupiter)
+  testImplementation(libs.assertj.core)
+}
 
 compileKotlin {
   dependsOn generateBuildConfig
@@ -104,5 +81,3 @@ task py3Tests(type: Exec) {
   workingDir file('./src/py')
   commandLine 'python3', '-m', 'unittest', 'discover'
 }
-
-

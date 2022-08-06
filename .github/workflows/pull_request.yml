@@ -1,0 +1,64 @@
+name: Build project
+
+on:
+  pull_request:
+
+jobs:
+  cancel-previous-workflows:
+    name: Cancel previous workflow runs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: styfle/cancel-workflow-action@0.10.0
+        with:
+          access_token: ${{ github.token }}
+
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: 17
+
+      - uses: gradle/wrapper-validation-action@v1
+
+      - uses: gradle/gradle-build-action@v2
+
+      - run: ./gradlew projectCodestyle -x checkstyle
+
+      - run: ./gradlew assemble
+
+      - run: ./gradlew validatePlugins
+
+      - run: ./gradlew projectCoverage
+
+      - uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Upload test results
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results
+          path: "${{ github.workspace }}/**/build/reports/tests"
+
+      - name: Upload jacoco report
+        uses: actions/upload-artifact@v3
+        with:
+          name: jacoco-report
+          path: "${{ github.workspace }}/**/build/reports/jacoco"
+
+      - run: ./gradlew projectLint
+
+      - uses: actions/upload-artifact@v3
+        if: ${{ always() }}
+        with:
+          name: lint-results
+          path: '${{ github.workspace }}/**/build/**/reports/lint-results-*.html'
