@@ -26,7 +26,8 @@ open class RunScreenshotTestTask @Inject constructor(
     objectFactory: ObjectFactory,
     layout: ProjectLayout,
     execOperations: ExecOperations,
-) : PullScreenshotsTask(objectFactory = objectFactory, layout = layout, execOperations) {
+) : PullScreenshotsTask(objectFactory = objectFactory, projectLayout = layout, execOperations = execOperations) {
+
     companion object {
         fun taskName(variantName: String) = "run${variantName.replaceFirstChar(Char::titlecase)}ScreenshotTest"
     }

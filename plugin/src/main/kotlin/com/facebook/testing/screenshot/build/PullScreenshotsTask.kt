@@ -29,9 +29,9 @@ import javax.inject.Inject
 
 open class PullScreenshotsTask @Inject constructor(
     objectFactory: ObjectFactory,
-    private val layout: ProjectLayout,
+    private val projectLayout: ProjectLayout,
     private val execOperations: ExecOperations,
-) : ScreenshotTask(objectFactory = objectFactory) {
+) : ScreenshotTask(objectFactory = objectFactory, projectLayout = projectLayout) {
     companion object {
         fun taskName(variantName: String) = "pull${variantName.replaceFirstChar(Char::titlecase)}Screenshots"
 
@@ -70,16 +70,16 @@ open class PullScreenshotsTask @Inject constructor(
         val outputDir = if (verify && referenceDir != null) {
             referenceDir
         } else {
-            layout.getReportDir(variantName.get())
+            projectLayout.getReportDir(variantName.get())
         }
 
         assert(if (verify) outputDir.exists() else !outputDir.exists())
 
-        execOperations.exec {
-            it.executable = pythonExecutable.get()
-            it.environment("PYTHONPATH", jarFile)
+        execOperations.exec { exec ->
+            exec.executable = pythonExecutable.get()
+            exec.environment("PYTHONPATH", jarFile)
 
-            it.args = mutableListOf(
+            exec.args = mutableListOf(
                 "-m",
                 "android_screenshot_tests.pull_screenshots",
                 "--apk",
@@ -101,6 +101,7 @@ open class PullScreenshotsTask @Inject constructor(
                     }
 
                     if (verify && failureDir.isPresent) {
+                        failureOutput.get().asFile.deleteRecursively()
                         add("--failure-dir")
                         add(failureDir.get())
                     }
@@ -110,7 +111,7 @@ open class PullScreenshotsTask @Inject constructor(
                         add("true")
                     }
 
-                    if (verify) {
+                    if (verify && referenceDir != null) {
                         add("--no-pull")
                     }
 
@@ -119,7 +120,7 @@ open class PullScreenshotsTask @Inject constructor(
                     }
                 }
 
-            println(it.args)
+            println(exec.args)
         }
     }
 }

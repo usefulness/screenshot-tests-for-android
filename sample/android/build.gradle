@@ -12,8 +12,8 @@ android {
     }
 }
 screenshots {
-    multipleDevices true
     pythonExecutable 'python3'
+    failureDir "$buildDir/reports/failedScreenshots"
 }
 
 dependencies {

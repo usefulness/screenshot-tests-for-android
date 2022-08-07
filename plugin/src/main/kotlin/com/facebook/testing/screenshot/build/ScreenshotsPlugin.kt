@@ -50,7 +50,7 @@ open class ScreenshotsPluginExtension {
     /** Whether to tar the screenshots in an archive file to transfer */
     var bundleResults = false
 
-    var testRunId: String = UUID.randomUUID().toString()
+    internal var testRunId: String = UUID.randomUUID().toString()
 }
 
 class ScreenshotsPlugin : Plugin<Project> {

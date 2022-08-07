@@ -26,7 +26,7 @@ import javax.inject.Inject
 open class CleanScreenshotsTask @Inject constructor(
     objectFactory: ObjectFactory,
     private val projectLayout: ProjectLayout,
-) : ScreenshotTask(objectFactory) {
+) : ScreenshotTask(objectFactory = objectFactory, projectLayout = projectLayout) {
 
     companion object {
         fun taskName(variantName: String) = "clean${variantName.replaceFirstChar(Char::titlecase)}Screenshots"
