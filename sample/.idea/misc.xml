@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="../core/src/androidTest/res/layout/testing_for_view_hierarchy.xml" value="0.27760416666666665" />
+        <entry key="../core/src/androidTest/res/layout/testing_simple_textview.xml" value="0.27760416666666665" />
+        <entry key="android/src/main/res/drawable/ic_launcher_background.xml" value="0.242" />
+        <entry key="android/src/main/res/layout/activity_main.xml" value="0.40217391304347827" />
+        <entry key="android/src/main/res/menu/menu_main.xml" value="0.4484375" />
+        <entry key="android/src/main/res/mipmap-anydpi/ic_launcher.xml" value="0.242" />
+      </map>
+    </option>
+  </component>
   <component name="ExternalStorageConfigurationManager" enabled="true" />
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_6" project-jdk-name="17" project-jdk-type="JavaSDK" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_17_PREVIEW" project-jdk-name="17" project-jdk-type="JavaSDK" />
 </project>

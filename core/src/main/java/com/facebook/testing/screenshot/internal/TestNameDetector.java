@@ -18,83 +18,62 @@ package com.facebook.testing.screenshot.internal;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+
 import androidx.annotation.Nullable;
+import kotlin.Pair;
 
-/** Detect the test name and class that is being run currently. */
+/**
+ * Detect the test name and class that is being run currently.
+ */
 public class TestNameDetector {
-  private static final String JUNIT_TEST_CASE = "junit.framework.TestCase";
-  private static final String JUNIT_RUN_WITH = "org.junit.runner.RunWith";
-  private static final String JUNIT_TEST = "org.junit.Test";
-  private static final String UNKNOWN = "unknown";
+    private static final String JUNIT_TEST_CASE = "junit.framework.TestCase";
+    private static final String JUNIT_RUN_WITH = "org.junit.runner.RunWith";
+    private static final String JUNIT_TEST = "org.junit.Test";
+    private static final String UNKNOWN = "unknown";
 
-  private TestNameDetector() {}
-
-  /**
-   * Get the current test class in a standard JUnit3 or JUnit4 test, or "unknown" if we couldn't
-   * detect it.
-   */
-  public static String getTestClass() {
-    StackTraceElement element = getFirstTestElement(new Throwable().getStackTrace());
-    if (element == null) {
-      return UNKNOWN;
+    private TestNameDetector() {
     }
-    return element.getClassName();
-  }
 
-  /**
-   * Get the current test name in a standard JUnit3 or JUnit4 test, or "unknown" if we couldn't
-   * detect it.
-   */
-  public static String getTestName() {
-    StackTraceElement[] stack = new Throwable().getStackTrace();
-    StackTraceElement testElement = getFirstTestElement(stack);
-    if (testElement == null) {
-      return UNKNOWN;
-    }
-    String methodName = testElement.getMethodName();
-    for (StackTraceElement element : stack) {
-      if (testElement.getClassName().equals(element.getClassName())) {
-        methodName = element.getMethodName();
-      }
-    }
-    return methodName;
-  }
-
-  private static @Nullable StackTraceElement getFirstTestElement(StackTraceElement[] stack) {
-    for (StackTraceElement element : stack) {
-      try {
-        Class<?> clazz = Class.forName(element.getClassName());
-        Method method = clazz.getMethod(element.getMethodName());
-        if (isTestClass(clazz) || isTestMethod(method)) {
-          return element;
+    public static @Nullable Pair<String, String> getTestMethodInfo() {
+        StackTraceElement[] stackTrace = new Throwable().getStackTrace();
+        for (StackTraceElement element : stackTrace) {
+            try {
+                String className = element.getClassName();
+                int classSyntheticStart = className.indexOf("$");
+                if (classSyntheticStart >= 0) {
+                    className = className.substring(0, classSyntheticStart);
+                }
+                Class<?> clazz = Class.forName(className);
+                String methodName = element.getMethodName();
+                int methodSyntheticStart = methodName.indexOf("$");
+                if (methodSyntheticStart >= 0) {
+                    methodName = methodName.substring(0, methodSyntheticStart);
+                }
+                Method method = clazz.getMethod(methodName);
+                if (isTestMethod(method)) {
+                    return new Pair<>(className, methodName);
+                }
+            } catch (NoSuchMethodException ignored) {
+                // Not actionable, move onto the next element
+            } catch (ClassNotFoundException ignored) {
+                // Not actionable, move onto the next element
+            }
         }
-      } catch (NoSuchMethodException ignored) {
-        // Not actionable, move onto the next element
-      } catch (ClassNotFoundException ignored) {
-        // Not actionable, move onto the next element
-      }
+
+        return null;
     }
-    return null;
-  }
 
-  private static boolean isTestClass(Class<?> clazz) {
-    return clazz != null
-        && (JUNIT_TEST_CASE.equals(clazz.getCanonicalName())
-            || hasAnnotation(clazz.getAnnotations(), JUNIT_RUN_WITH)
-            || isTestClass(clazz.getSuperclass()));
-  }
-
-  private static boolean isTestMethod(Method method) {
-    return hasAnnotation(method.getAnnotations(), JUNIT_TEST);
-  }
-
-  private static boolean hasAnnotation(Annotation[] annotations, String annotationCanonicalName) {
-    for (Annotation annotation : annotations) {
-      if (annotationCanonicalName.equalsIgnoreCase(
-          annotation.annotationType().getCanonicalName())) {
-        return true;
-      }
+    private static boolean isTestMethod(Method method) {
+        return hasAnnotation(method.getAnnotations(), JUNIT_TEST);
     }
-    return false;
-  }
+
+    private static boolean hasAnnotation(Annotation[] annotations, String annotationCanonicalName) {
+        for (Annotation annotation : annotations) {
+            if (annotationCanonicalName.equalsIgnoreCase(
+                    annotation.annotationType().getCanonicalName())) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

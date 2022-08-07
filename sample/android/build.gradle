@@ -1,9 +1,30 @@
 plugins {
-  id("com.starter.library.android")
-  id("com.github.usefulness.testing.screenshots")
+    id("com.starter.application.android")
+    id("com.github.usefulness.testing.screenshot")
 }
 
+android {
+    defaultConfig {
+        minSdk 26
+        applicationId = "com.github.usefulness.testing.screenshot.sample"
+        namespace = "com.github.usefulness.testing.screenshot.sample"
+        testInstrumentationRunner = "com.github.usefulnes.testing.screenshot.sample.CustomScreenshotTestRunner"
+    }
+}
 screenshots {
-  multipleDevices true
-  pythonExecutable 'python3'
+    pythonExecutable "python3"
+    failureDir "$buildDir/reports/failedScreenshots"
+}
+
+dependencies {
+    implementation(libs.appcompat.core)
+    implementation(libs.material.core)
+    implementation(libs.coordinatorlayout.core)
+
+    androidTestImplementation(libs.assertj.core)
+    androidTestImplementation(libs.espresso.core)
+    androidTestImplementation(libs.androidtest.core)
+    androidTestImplementation(libs.androidtest.runner)
+    androidTestImplementation(libs.androidtest.rules)
+    androidTestImplementation(libs.androidtest.junitext)
 }

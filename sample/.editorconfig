@@ -1,0 +1,11 @@
+root = true
+
+[*]
+indent_size = 4
+
+[*.{kt, kts}]
+max_line_length = 140
+insert_final_newline = true
+indent_style = space
+ij_kotlin_allow_trailing_comma = true
+ij_kotlin_allow_trailing_comma_on_call_site = true

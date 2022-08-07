@@ -139,6 +139,8 @@ class Recorder:
             reason = ""
             for expected, actual in failures:
                 reason = reason + "\nImage %s is not same as %s" % (expected, actual)
+            if self._failure_output:
+                reason = reason + "\n\nView failed screenshots: %s" % self._failure_output
             raise VerifyError(reason)
 
         shutil.rmtree(self._output)

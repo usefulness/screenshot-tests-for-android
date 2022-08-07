@@ -24,29 +24,29 @@ import androidx.annotation.NonNull;
 
 public abstract class AbstractAttributePlugin implements AttributePlugin {
 
-  @NonNull
-  protected String prefix(String name) {
-    String prefix = namespace();
-    if (TextUtils.isEmpty(prefix)) {
-      return name;
+    @NonNull
+    protected String prefix(String name) {
+        String prefix = namespace();
+        if (TextUtils.isEmpty(prefix)) {
+            return name;
+        }
+        return prefix + ":" + name;
     }
-    return prefix + ":" + name;
-  }
 
-  protected void put(JSONObject node, String key, String value) throws JSONException {
-    node.put(prefix(key), value);
-  }
+    protected void put(JSONObject node, String key, String value) throws JSONException {
+        node.put(prefix(key), value);
+    }
 
-  protected void putPlain(JSONObject node, String key, String value) throws JSONException {
-    node.put(key, value);
-  }
+    protected void putPlain(JSONObject node, String key, String value) throws JSONException {
+        node.put(key, value);
+    }
 
-  protected void putRequired(JSONObject node, String name, int left, int top, int width, int height)
-      throws JSONException {
-    node.put(KEY_CLASS, name);
-    node.put(KEY_LEFT, left);
-    node.put(KEY_TOP, top);
-    node.put(KEY_WIDTH, width);
-    node.put(KEY_HEIGHT, height);
-  }
+    protected void putRequired(JSONObject node, String name, int left, int top, int width, int height)
+            throws JSONException {
+        node.put(KEY_CLASS, name);
+        node.put(KEY_LEFT, left);
+        node.put(KEY_TOP, top);
+        node.put(KEY_WIDTH, width);
+        node.put(KEY_HEIGHT, height);
+    }
 }

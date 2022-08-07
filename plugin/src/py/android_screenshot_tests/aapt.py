@@ -34,7 +34,7 @@ def parse_package_line(line):
 
     for word in line.split():
         if word.startswith("name='"):
-            return word[len("name='") : -1]
+            return word[len("name='"): -1]
 
 
 def get_aapt_bin():

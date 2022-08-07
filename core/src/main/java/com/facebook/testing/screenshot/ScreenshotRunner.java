@@ -27,32 +27,34 @@ import com.facebook.testing.screenshot.internal.ScreenshotImpl;
  */
 public abstract class ScreenshotRunner {
 
-  /** These strings can be used as Keys to Bundle Arguments. */
-  public static final String SDCARD_DIRECTORY = "sdcard_directory";
+    /**
+     * These strings can be used as Keys to Bundle Arguments.
+     */
+    public static final String SDCARD_DIRECTORY = "sdcard_directory";
 
-  public static final String SCREENSHOT_TESTS_RUN_ID = "SCREENSHOT_TESTS_RUN_ID";
+    public static final String SCREENSHOT_TESTS_RUN_ID = "SCREENSHOT_TESTS_RUN_ID";
 
-  /**
-   * Call this exactly once in your process before any screenshots are generated.
-   *
-   * <p>Typically this will be in {@code AndroidJUnitRunner#onCreate()}
-   */
-  public static void onCreate(Instrumentation instrumentation, Bundle arguments) {
-    Registry registry = Registry.getRegistry();
-    registry.instrumentation = instrumentation;
-    registry.arguments = arguments;
-  }
-
-  /**
-   * Call this exactly once after all your tests have run.
-   *
-   * <p>Typically this can be in {@code AndroidJUnitRunner#finish()}
-   */
-  public static void onDestroy() {
-    if (ScreenshotImpl.hasBeenCreated()) {
-      ScreenshotImpl.getInstance().flush();
+    /**
+     * Call this exactly once in your process before any screenshots are generated.
+     *
+     * <p>Typically this will be in {@code AndroidJUnitRunner#onCreate()}
+     */
+    public static void onCreate(Instrumentation instrumentation, Bundle arguments) {
+        Registry registry = Registry.getRegistry();
+        registry.instrumentation = instrumentation;
+        registry.arguments = arguments;
     }
 
-    Registry.clear();
-  }
+    /**
+     * Call this exactly once after all your tests have run.
+     *
+     * <p>Typically this can be in {@code AndroidJUnitRunner#finish()}
+     */
+    public static void onDestroy() {
+        if (ScreenshotImpl.hasBeenCreated()) {
+            ScreenshotImpl.getInstance().flush();
+        }
+
+        Registry.clear();
+    }
 }

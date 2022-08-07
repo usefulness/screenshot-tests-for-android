@@ -29,28 +29,30 @@ import com.facebook.testing.screenshot.internal.ScreenshotImpl;
  * instrumentation test.
  */
 public class Screenshot {
-  /**
-   * Take a snapshot of an already measured and layout-ed view. See adb-logcat for how to pull the
-   * screenshot.
-   *
-   * <p>This method is thread safe.
-   */
-  public static RecordBuilder snap(View measuredView) {
-    return ScreenshotImpl.getInstance().snap(measuredView);
-  }
+    /**
+     * Take a snapshot of an already measured and layout-ed view. See adb-logcat for how to pull the
+     * screenshot.
+     *
+     * <p>This method is thread safe.
+     */
+    public static RecordBuilder snap(View measuredView) {
+        return ScreenshotImpl.getInstance().snap(measuredView);
+    }
 
-  /**
-   * Take a snapshot of the activity and store it with the the testName. See the adb-logcat for how
-   * to pull the screenshot.
-   *
-   * <p>This method is thread safe.
-   */
-  public static RecordBuilder snapActivity(Activity activity) {
-    return ScreenshotImpl.getInstance().snapActivity(activity);
-  }
+    /**
+     * Take a snapshot of the activity and store it with the the testName. See the adb-logcat for how
+     * to pull the screenshot.
+     *
+     * <p>This method is thread safe.
+     */
+    public static RecordBuilder snapActivity(Activity activity) {
+        return ScreenshotImpl.getInstance().snapActivity(activity);
+    }
 
-  /** @return The largest amount of pixels we'll capture, otherwise an exception will be thrown. */
-  public static long getMaxPixels() {
-    return ScreenshotImpl.getMaxPixels();
-  }
+    /**
+     * @return The largest amount of pixels we'll capture, otherwise an exception will be thrown.
+     */
+    public static long getMaxPixels() {
+        return ScreenshotImpl.getMaxPixels();
+    }
 }

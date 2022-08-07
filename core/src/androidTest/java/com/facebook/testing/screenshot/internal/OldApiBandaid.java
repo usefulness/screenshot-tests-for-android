@@ -19,36 +19,39 @@ package com.facebook.testing.screenshot.internal;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/** This exists to help alleviate some API transition pain */
+/**
+ * This exists to help alleviate some API transition pain
+ */
 public class OldApiBandaid {
-  private OldApiBandaid() {}
+    private OldApiBandaid() {
+    }
 
-  public static void assertMatchesRegex(String expected, String actual) {
-    assertMatchesRegex(null, expected, actual);
-  }
+    public static void assertMatchesRegex(String expected, String actual) {
+        assertMatchesRegex(null, expected, actual);
+    }
 
-  public static void assertMatchesRegex(String message, String expected, String actual) {
-    if (actual == null) {
-      throw new IllegalStateException("Actual == null");
+    public static void assertMatchesRegex(String message, String expected, String actual) {
+        if (actual == null) {
+            throw new IllegalStateException("Actual == null");
+        }
+        Pattern pattern = Pattern.compile(expected);
+        Matcher matcher = pattern.matcher(actual);
+        if (!matcher.matches()) {
+            if (message != null) {
+                throw new IllegalStateException(message + " " + actual);
+            }
+            throw new IllegalStateException(actual + " does not match regex " + expected);
+        }
     }
-    Pattern pattern = Pattern.compile(expected);
-    Matcher matcher = pattern.matcher(actual);
-    if (!matcher.matches()) {
-      if (message != null) {
-        throw new IllegalStateException(message + " " + actual);
-      }
-      throw new IllegalStateException(actual + " does not match regex " + expected);
-    }
-  }
 
-  public static void assertContainsRegex(String expected, String actual) {
-    if (actual == null) {
-      throw new IllegalStateException("Actual == null");
+    public static void assertContainsRegex(String expected, String actual) {
+        if (actual == null) {
+            throw new IllegalStateException("Actual == null");
+        }
+        Pattern pattern = Pattern.compile(expected);
+        Matcher matcher = pattern.matcher(actual);
+        if (!matcher.find()) {
+            throw new IllegalStateException(actual + " does not contain regex " + expected);
+        }
     }
-    Pattern pattern = Pattern.compile(expected);
-    Matcher matcher = pattern.matcher(actual);
-    if (!matcher.find()) {
-      throw new IllegalStateException(actual + " does not contain regex " + expected);
-    }
-  }
 }

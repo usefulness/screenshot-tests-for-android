@@ -35,52 +35,52 @@ import androidx.test.platform.app.InstrumentationRegistry;
  */
 @RunWith(AndroidJUnit4.class)
 public class ScriptsFixtureTest {
-  private static final int HEIGHT = 100;
-  private static final int WIDTH = 200;
+    private static final int HEIGHT = 100;
+    private static final int WIDTH = 200;
 
-  private TextView mTextView;
+    private TextView mTextView;
 
-  @Before
-  public void setUp() {
-    mTextView = new TextView(ApplicationProvider.getApplicationContext());
-    mTextView.setText("foobar");
+    @Before
+    public void setUp() {
+        mTextView = new TextView(ApplicationProvider.getApplicationContext());
+        mTextView.setText("foobar");
 
-    // Unfortunately TextView needs a LayoutParams for onDraw
-    mTextView.setLayoutParams(
-        new FrameLayout.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        // Unfortunately TextView needs a LayoutParams for onDraw
+        mTextView.setLayoutParams(
+                new FrameLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
-    measureAndLayout();
-  }
-
-  @Test
-  public void testGetTextViewScreenshot() {
-    Screenshot.snap(mTextView).record();
-  }
-
-  @Test
-  public void testSecondScreenshot() {
-    mTextView.setText("foobar3");
-    measureAndLayout();
-    Screenshot.snap(mTextView).record();
-  }
-
-  private void measureAndLayout() {
-    final Throwable[] exceptions = new Throwable[1];
-    InstrumentationRegistry.getInstrumentation()
-        .runOnMainSync(() -> {
-          try {
-            mTextView.measure(
-                View.MeasureSpec.makeMeasureSpec(WIDTH, View.MeasureSpec.EXACTLY),
-                View.MeasureSpec.makeMeasureSpec(HEIGHT, View.MeasureSpec.EXACTLY));
-            mTextView.layout(
-                0, 0, mTextView.getMeasuredWidth(), mTextView.getMeasuredHeight());
-          } catch (Throwable throwable) {
-            exceptions[0] = throwable;
-          }
-        });
-    if (exceptions[0] != null) {
-      throw new RuntimeException(exceptions[0]);
+        measureAndLayout();
     }
-  }
+
+    @Test
+    public void testGetTextViewScreenshot() {
+        Screenshot.snap(mTextView).record();
+    }
+
+    @Test
+    public void testSecondScreenshot() {
+        mTextView.setText("foobar3");
+        measureAndLayout();
+        Screenshot.snap(mTextView).record();
+    }
+
+    private void measureAndLayout() {
+        final Throwable[] exceptions = new Throwable[1];
+        InstrumentationRegistry.getInstrumentation()
+                .runOnMainSync(() -> {
+                    try {
+                        mTextView.measure(
+                                View.MeasureSpec.makeMeasureSpec(WIDTH, View.MeasureSpec.EXACTLY),
+                                View.MeasureSpec.makeMeasureSpec(HEIGHT, View.MeasureSpec.EXACTLY));
+                        mTextView.layout(
+                                0, 0, mTextView.getMeasuredWidth(), mTextView.getMeasuredHeight());
+                    } catch (Throwable throwable) {
+                        exceptions[0] = throwable;
+                    }
+                });
+        if (exceptions[0] != null) {
+            throw new RuntimeException(exceptions[0]);
+        }
+    }
 }

@@ -24,40 +24,40 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class BaseViewHierarchyPlugin implements HierarchyPlugin {
-  private static BaseViewHierarchyPlugin INSTANCE = new BaseViewHierarchyPlugin();
+    private static BaseViewHierarchyPlugin INSTANCE = new BaseViewHierarchyPlugin();
 
-  public static BaseViewHierarchyPlugin getInstance() {
-    return INSTANCE;
-  }
-
-  private BaseViewHierarchyPlugin() {
-    // Stateless, no instances
-  }
-
-  @Override
-  public boolean accept(Object obj) {
-    return obj instanceof View;
-  }
-
-  @Override
-  public void putHierarchy(LayoutHierarchyDumper dumper, JSONObject root, Object view, Point offset)
-      throws JSONException {
-    if (!(view instanceof ViewGroup)) {
-      return;
+    public static BaseViewHierarchyPlugin getInstance() {
+        return INSTANCE;
     }
 
-    ViewGroup group = (ViewGroup) view;
-    final int offsetLeft = LayoutHierarchyDumper.getViewLeft(group);
-    final int offsetTop = LayoutHierarchyDumper.getViewTop(group);
-    offset.offset(offsetLeft, offsetTop);
-
-    JSONArray children = new JSONArray();
-    for (int i = 0, size = group.getChildCount(); i < size; ++i) {
-      View child = group.getChildAt(i);
-      children.put(dumper.dumpHierarchy(child, offset));
+    private BaseViewHierarchyPlugin() {
+        // Stateless, no instances
     }
 
-    root.put(KEY_CHILDREN, children);
-    offset.offset(-offsetLeft, -offsetTop);
-  }
+    @Override
+    public boolean accept(Object obj) {
+        return obj instanceof View;
+    }
+
+    @Override
+    public void putHierarchy(LayoutHierarchyDumper dumper, JSONObject root, Object view, Point offset)
+            throws JSONException {
+        if (!(view instanceof ViewGroup)) {
+            return;
+        }
+
+        ViewGroup group = (ViewGroup) view;
+        final int offsetLeft = LayoutHierarchyDumper.getViewLeft(group);
+        final int offsetTop = LayoutHierarchyDumper.getViewTop(group);
+        offset.offset(offsetLeft, offsetTop);
+
+        JSONArray children = new JSONArray();
+        for (int i = 0, size = group.getChildCount(); i < size; ++i) {
+            View child = group.getChildAt(i);
+            children.put(dumper.dumpHierarchy(child, offset));
+        }
+
+        root.put(KEY_CHILDREN, children);
+        offset.offset(-offsetLeft, -offsetTop);
+    }
 }

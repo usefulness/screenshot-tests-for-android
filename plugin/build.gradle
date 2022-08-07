@@ -7,11 +7,8 @@ plugins {
   id("com.gradle.plugin-publish") version("1.0.0-rc-1")
 }
 
-final GENERATED_PACKAGE_NAME = "com.facebook.testing.screenshot.generated"
-final GENERATED_BUILD_DIR =
-    new File(
-        projectDir.absolutePath,
-        "src/generated/kotlin/${GENERATED_PACKAGE_NAME.replace('.', '/')}")
+final GENERATED_PACKAGE_NAME = "com.github.usefulness.testing.screenshot.generated"
+final GENERATED_BUILD_DIR = new File(projectDir.absolutePath, "src/generated/kotlin/${GENERATED_PACKAGE_NAME.replace('.', '/')}")
 
 tasks.register("generateBuildConfig") {
   final version = project.version
@@ -24,7 +21,8 @@ tasks.register("generateBuildConfig") {
     BufferedWriter writer = configClass.newWriter()
     try {
       writer.writeLine("package $GENERATED_PACKAGE_NAME")
-      writer.writeLine("object $className { val VERSION = \"${version.toString()}\" }")
+      writer.writeLine("")
+      writer.writeLine("object $className { const val VERSION = \"${version.toString()}\" }")
       writer.flush()
     } finally {
       writer.close()
@@ -43,7 +41,7 @@ tasks.named("compileKotlin") {
   dependsOn("generateBuildConfig")
   sourceSets {
     main {
-      kotlin.srcDirs += 'src/generated'
+      kotlin.srcDirs += 'src/generated/kotlin'
       resources.srcDirs 'src/py'
       resources {
         exclude '**/*.pyc'

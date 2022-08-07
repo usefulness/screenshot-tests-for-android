@@ -25,18 +25,24 @@ import org.json.JSONObject;
  * type.
  */
 public interface AttributePlugin {
-  String KEY_CLASS = "class";
-  String KEY_LEFT = "left";
-  String KEY_TOP = "top";
-  String KEY_WIDTH = "width";
-  String KEY_HEIGHT = "height";
+    String KEY_CLASS = "class";
+    String KEY_LEFT = "left";
+    String KEY_TOP = "top";
+    String KEY_WIDTH = "width";
+    String KEY_HEIGHT = "height";
 
-  /** Determines whether this plugin operates on the given type */
-  boolean accept(Object obj);
+    /**
+     * Determines whether this plugin operates on the given type
+     */
+    boolean accept(Object obj);
 
-  /** Returns the namespace of the attributes this plugin inserts */
-  String namespace();
+    /**
+     * Returns the namespace of the attributes this plugin inserts
+     */
+    String namespace();
 
-  /** Puts all interesting attributes of the given object into the node */
-  void putAttributes(JSONObject node, Object obj, Point offset) throws JSONException;
+    /**
+     * Puts all interesting attributes of the given object into the node
+     */
+    void putAttributes(JSONObject node, Object obj, Point offset) throws JSONException;
 }

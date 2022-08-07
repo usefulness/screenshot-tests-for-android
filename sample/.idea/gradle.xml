@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="GradleMigrationSettings" migrationVersion="1" />
   <component name="GradleSettings">
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
         <compositeConfiguration>
           <compositeBuild compositeDefinitionSource="SCRIPT">
             <builds>
-              <build path="$PROJECT_DIR$/../.." name="sourcy">
+              <build path="$PROJECT_DIR$/.." name="com.github.usefulness.testing.screenshot">
                 <projects>
-                  <project path="$PROJECT_DIR$/../.." />
+                  <project path="$PROJECT_DIR$/.." />
+                  <project path="$PROJECT_DIR$/../core" />
+                  <project path="$PROJECT_DIR$/../plugin" />
                 </projects>
               </build>
             </builds>
@@ -20,8 +23,12 @@
         <option name="gradleJvm" value="#JAVA_HOME" />
         <option name="modules">
           <set>
-            <option value="$PROJECT_DIR$/../.." />
+            <option value="$PROJECT_DIR$/.." />
+            <option value="$PROJECT_DIR$/../buildSrc" />
+            <option value="$PROJECT_DIR$/../core" />
+            <option value="$PROJECT_DIR$/../plugin" />
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/android" />
           </set>
         </option>
       </GradleProjectSettings>

@@ -26,60 +26,61 @@ import org.json.JSONObject;
 
 public final class AccessibilityIssuesDumper {
 
-  AccessibilityIssuesDumper() {}
-
-  public static JSONArray dumpIssues(AccessibilityUtil.AXTreeNode axTree) throws JSONException {
-    JSONArray root = new JSONArray();
-
-    JSONObject focusableElementsWithoutFeedback =
-        findTalkbackFocusableElementsWithoutSpokenFeedback(axTree);
-    if (focusableElementsWithoutFeedback != null) {
-      root.put(focusableElementsWithoutFeedback);
+    AccessibilityIssuesDumper() {
     }
 
-    return root;
-  }
+    public static JSONArray dumpIssues(AccessibilityUtil.AXTreeNode axTree) throws JSONException {
+        JSONArray root = new JSONArray();
 
-  private static @Nullable JSONObject findTalkbackFocusableElementsWithoutSpokenFeedback(
-      AccessibilityUtil.AXTreeNode axTree) throws JSONException {
-    JSONObject evaluation = new JSONObject();
-    evaluation.put("id", "talkback_focusable_element_without_spoken_feedback");
-    evaluation.put("name", "Focusable Element Without Spoken Feedback");
-    evaluation.put(
-        "description",
-        "The element is focusable by screen readers such as Talkback, but has no text to "
-            + "announce.");
-
-    JSONArray elements = new JSONArray();
-    for (AccessibilityUtil.AXTreeNode axTreeNode : axTree.getAllNodes()) {
-      View view = axTreeNode.getView();
-      AccessibilityNodeInfoCompat nodeInfo = axTreeNode.getNodeInfo();
-      if (AccessibilityUtil.isTalkbackFocusable(view)
-          && !AccessibilityUtil.isSpeakingNode(nodeInfo, view)) {
-        JSONObject element = new JSONObject();
-        element.put("name", view.getClass().getSimpleName());
-        element.put("class", view.getClass().getName());
-        JSONObject elementPos = new JSONObject();
-        elementPos.put("left", view.getLeft());
-        elementPos.put("top", view.getTop());
-        elementPos.put("width", view.getWidth());
-        elementPos.put("height", view.getHeight());
-        element.put("position", elementPos);
-        JSONArray suggestions = new JSONArray();
-        suggestions.put("Add a contentDescription to the element.");
-        if (view instanceof ViewGroup) {
-          suggestions.put("Add a contentDescription or visible text to a child element.");
+        JSONObject focusableElementsWithoutFeedback =
+                findTalkbackFocusableElementsWithoutSpokenFeedback(axTree);
+        if (focusableElementsWithoutFeedback != null) {
+            root.put(focusableElementsWithoutFeedback);
         }
-        element.put("suggestions", suggestions);
-        elements.put(element);
-      }
+
+        return root;
     }
 
-    if (elements.length() > 0) {
-      evaluation.put("elements", elements);
-      return evaluation;
-    }
+    private static @Nullable JSONObject findTalkbackFocusableElementsWithoutSpokenFeedback(
+            AccessibilityUtil.AXTreeNode axTree) throws JSONException {
+        JSONObject evaluation = new JSONObject();
+        evaluation.put("id", "talkback_focusable_element_without_spoken_feedback");
+        evaluation.put("name", "Focusable Element Without Spoken Feedback");
+        evaluation.put(
+                "description",
+                "The element is focusable by screen readers such as Talkback, but has no text to "
+                        + "announce.");
 
-    return null;
-  }
+        JSONArray elements = new JSONArray();
+        for (AccessibilityUtil.AXTreeNode axTreeNode : axTree.getAllNodes()) {
+            View view = axTreeNode.getView();
+            AccessibilityNodeInfoCompat nodeInfo = axTreeNode.getNodeInfo();
+            if (AccessibilityUtil.isTalkbackFocusable(view)
+                    && !AccessibilityUtil.isSpeakingNode(nodeInfo, view)) {
+                JSONObject element = new JSONObject();
+                element.put("name", view.getClass().getSimpleName());
+                element.put("class", view.getClass().getName());
+                JSONObject elementPos = new JSONObject();
+                elementPos.put("left", view.getLeft());
+                elementPos.put("top", view.getTop());
+                elementPos.put("width", view.getWidth());
+                elementPos.put("height", view.getHeight());
+                element.put("position", elementPos);
+                JSONArray suggestions = new JSONArray();
+                suggestions.put("Add a contentDescription to the element.");
+                if (view instanceof ViewGroup) {
+                    suggestions.put("Add a contentDescription or visible text to a child element.");
+                }
+                element.put("suggestions", suggestions);
+                elements.put(element);
+            }
+        }
+
+        if (elements.length() > 0) {
+            evaluation.put("elements", elements);
+            return evaluation;
+        }
+
+        return null;
+    }
 }

@@ -21,37 +21,39 @@ import android.view.View;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-/** Dumps basic information that applies to all {@link View}s, like position and class */
+/**
+ * Dumps basic information that applies to all {@link View}s, like position and class
+ */
 public class BaseViewAttributePlugin extends AbstractAttributePlugin {
-  private static final BaseViewAttributePlugin INSTANCE = new BaseViewAttributePlugin();
+    private static final BaseViewAttributePlugin INSTANCE = new BaseViewAttributePlugin();
 
-  public static BaseViewAttributePlugin getInstance() {
-    return INSTANCE;
-  }
+    public static BaseViewAttributePlugin getInstance() {
+        return INSTANCE;
+    }
 
-  private BaseViewAttributePlugin() {
-    // Single instance
-  }
+    private BaseViewAttributePlugin() {
+        // Single instance
+    }
 
-  @Override
-  public boolean accept(Object obj) {
-    return obj instanceof View;
-  }
+    @Override
+    public boolean accept(Object obj) {
+        return obj instanceof View;
+    }
 
-  @Override
-  public String namespace() {
-    return "";
-  }
+    @Override
+    public String namespace() {
+        return "";
+    }
 
-  @Override
-  public void putAttributes(JSONObject node, Object obj, Point offset) throws JSONException {
-    final View view = (View) obj;
-    putRequired(
-        node,
-        view.getClass().getCanonicalName(),
-        offset.x + LayoutHierarchyDumper.getViewLeft(view),
-        offset.y + LayoutHierarchyDumper.getViewTop(view),
-        view.getWidth(),
-        view.getHeight());
-  }
+    @Override
+    public void putAttributes(JSONObject node, Object obj, Point offset) throws JSONException {
+        final View view = (View) obj;
+        putRequired(
+                node,
+                view.getClass().getCanonicalName(),
+                offset.x + LayoutHierarchyDumper.getViewLeft(view),
+                offset.y + LayoutHierarchyDumper.getViewTop(view),
+                view.getWidth(),
+                view.getHeight());
+    }
 }
