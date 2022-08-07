@@ -63,7 +63,7 @@ tasks.register("pyTests", Exec) {
 
 pluginBundle {
   website = "https://github.com/usefulness/screenshot-tests-for-android/"
-  vcsUrl = "git@github.com:usefulness/screenshot-tests-for-android.git"
+  vcsUrl = "https://github.com/usefulness/screenshot-tests-for-android.git"
   tags = ["android", "screenshots"]
 }
 

@@ -27,6 +27,15 @@ class PublishingPlugin : Plugin<Project> {
                             password = findConfig("GITHUB_TOKEN")
                         }
                     }
+                    maven { maven ->
+                        maven.name = "mavenCentral"
+                        maven.setUrl("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
+                        maven.mavenContent { it.releasesOnly() }
+                        with(maven.credentials) {
+                            username = findConfig("OSSRH_USERNAME")
+                            password = findConfig("OSSRH_PASSWORD")
+                        }
+                    }
                 }
                 with(publications) {
                     register("mavenJava", MavenPublication::class.java) {
