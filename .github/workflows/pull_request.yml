@@ -158,7 +158,8 @@ jobs:
             adb shell settings put global hidden_api_policy  1
             python -m pip show Pillow
             python3 -m pip show Pillow
-            cd sample && ./gradlew verifyDebugAndroidTestScreenshotTest 
+
+      - run: cd sample && ./gradlew verifyDebugAndroidTestScreenshotTest
 
       - name: Upload screenshot tests result
         uses: actions/upload-artifact@v3
