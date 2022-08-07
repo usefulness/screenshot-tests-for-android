@@ -40,9 +40,6 @@ abstract class ScreenshotTask(objectFactory: ObjectFactory, private val projectL
     internal val bundleResults = objectFactory.property(Boolean::class.java)
 
     @get:Input
-    internal val testRunId = objectFactory.property(String::class.java)
-
-    @get:Input
     internal val variantName = objectFactory.property(String::class.java)
 
     open fun init(variant: TestVariant, extension: ScreenshotsPluginExtension) {
@@ -54,7 +51,6 @@ abstract class ScreenshotTask(objectFactory: ObjectFactory, private val projectL
         failureDir.set(extension.failureDir)
         failureOutput.set(extension.failureDir?.let(projectLayout.projectDirectory::file))
         bundleResults.set(extension.bundleResults)
-        testRunId.set(extension.testRunId)
         variantName.set(variant.name)
     }
 }

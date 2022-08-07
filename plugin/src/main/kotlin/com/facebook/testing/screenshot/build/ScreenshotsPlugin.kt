@@ -49,8 +49,6 @@ open class ScreenshotsPluginExtension {
 
     /** Whether to tar the screenshots in an archive file to transfer */
     var bundleResults = false
-
-    internal var testRunId: String = UUID.randomUUID().toString()
 }
 
 class ScreenshotsPlugin : Plugin<Project> {
@@ -58,6 +56,7 @@ class ScreenshotsPlugin : Plugin<Project> {
         const val GROUP = "Screenshot Test"
         const val DEPENDENCY_GROUP = "com.github.usefulness.testing.screenshot"
         const val DEPENDENCY_CORE = "core"
+        const val SCREENSHOT_TESTS_RUN_ID = "single_test_id"
     }
 
     private lateinit var screenshotExtensions: ScreenshotsPluginExtension
@@ -73,7 +72,7 @@ class ScreenshotsPlugin : Plugin<Project> {
         }
         val androidExtension = getProjectExtension(project)
         androidExtension.testVariants.configureEach { generateTasksFor(project, it) }
-        androidExtension.defaultConfig.testInstrumentationRunnerArguments["SCREENSHOT_TESTS_RUN_ID"] = screenshotExtensions.testRunId
+        androidExtension.defaultConfig.testInstrumentationRunnerArguments["SCREENSHOT_TESTS_RUN_ID"] = SCREENSHOT_TESTS_RUN_ID
     }
 
     private fun getProjectExtension(project: Project): TestedExtension {

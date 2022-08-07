@@ -18,6 +18,7 @@ package com.facebook.testing.screenshot.build
 
 import com.android.build.gradle.api.ApkVariantOutput
 import com.android.build.gradle.api.TestVariant
+import com.facebook.testing.screenshot.build.ScreenshotsPlugin.Companion.SCREENSHOT_TESTS_RUN_ID
 import com.usefulness.testing.screenshot.build.ScreenshotTask
 import org.gradle.api.file.ProjectLayout
 import org.gradle.api.model.ObjectFactory
@@ -50,6 +51,7 @@ open class PullScreenshotsTask @Inject constructor(
     init {
         description = "Pull screenshots from your device"
         group = ScreenshotsPlugin.GROUP
+        outputs.upToDateWhen { false }
     }
 
     override fun init(variant: TestVariant, extension: ScreenshotsPluginExtension) {
@@ -85,7 +87,7 @@ open class PullScreenshotsTask @Inject constructor(
                 "--apk",
                 apkPath.absolutePath,
                 "--test-run-id",
-                testRunId.get(),
+                SCREENSHOT_TESTS_RUN_ID,
                 "--temp-dir",
                 outputDir.absolutePath,
             )
