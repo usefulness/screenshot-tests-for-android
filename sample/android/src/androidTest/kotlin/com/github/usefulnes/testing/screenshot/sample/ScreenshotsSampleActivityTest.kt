@@ -25,14 +25,6 @@ class ScreenshotsSampleActivityTest {
     }
 
     @Test
-    fun mainActivityTestSettingsOpen() {
-        onView(allOf(withId(R.id.fab), isDisplayed())).perform(click())
-        rule.scenario.onActivity { activity ->
-            Screenshot.snapActivity(activity).record()
-        }
-    }
-
-    @Test
     fun testScreenshotEntireActivityWithoutAccessibilityMetadata() {
         rule.scenario.onActivity { activity ->
             Screenshot.snapActivity(activity).setIncludeAccessibilityInfo(false).record()

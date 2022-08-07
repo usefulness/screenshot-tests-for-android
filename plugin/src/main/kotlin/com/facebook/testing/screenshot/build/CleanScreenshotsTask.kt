@@ -40,6 +40,6 @@ open class CleanScreenshotsTask @Inject constructor(
     @TaskAction
     fun cleanScreenshots() {
         val outputDir = projectLayout.getReportDir(variantName.get())
-        project.delete(outputDir)
+        outputDir.deleteRecursively()
     }
 }

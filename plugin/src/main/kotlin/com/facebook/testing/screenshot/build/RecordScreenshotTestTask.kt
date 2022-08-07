@@ -19,12 +19,15 @@ package com.facebook.testing.screenshot.build
 import com.android.build.gradle.api.TestVariant
 import org.gradle.api.file.ProjectLayout
 import org.gradle.api.model.ObjectFactory
+import org.gradle.process.ExecOperations
 import javax.inject.Inject
 
 open class RecordScreenshotTestTask @Inject constructor(
     objectFactory: ObjectFactory,
     layout: ProjectLayout,
-) : RunScreenshotTestTask(objectFactory, layout) {
+    execOperations: ExecOperations,
+) : RunScreenshotTestTask(objectFactory, layout, execOperations) {
+
     companion object {
         fun taskName(variantName: String) = "record${variantName.replaceFirstChar(Char::titlecase)}ScreenshotTest"
     }

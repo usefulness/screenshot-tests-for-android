@@ -99,13 +99,12 @@ class ScreenshotsPlugin : Plugin<Project> {
         val variantName = variant.name
         variant.outputs.configureEach {
             if (it is ApkVariantOutput) {
-                val cleanScreenshots =
-                    registerTask(
-                        project,
-                        CleanScreenshotsTask.taskName(variantName),
-                        variant,
-                        CleanScreenshotsTask::class.java,
-                    )
+                val cleanScreenshots = registerTask(
+                    project,
+                    CleanScreenshotsTask.taskName(variantName),
+                    variant,
+                    CleanScreenshotsTask::class.java,
+                )
                 registerTask(
                     project,
                     PullScreenshotsTask.taskName(variantName),

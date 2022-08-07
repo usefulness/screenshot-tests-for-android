@@ -23,18 +23,20 @@ import org.gradle.api.file.ProjectLayout
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
+import org.gradle.process.ExecOperations
 import java.io.File
 import javax.inject.Inject
 
 open class PullScreenshotsTask @Inject constructor(
     objectFactory: ObjectFactory,
     private val layout: ProjectLayout,
+    private val execOperations: ExecOperations,
 ) : ScreenshotTask(objectFactory = objectFactory) {
     companion object {
         fun taskName(variantName: String) = "pull${variantName.replaceFirstChar(Char::titlecase)}Screenshots"
 
-        fun ProjectLayout.getReportDir(variantName: String) =
-            buildDirectory.file("screenshots" + variantName.replaceFirstChar(Char::titlecase)).get().asFile
+        internal fun ProjectLayout.getReportDir(variantName: String): File =
+            buildDirectory.file("screenshots${variantName.replaceFirstChar(Char::titlecase)}").get().asFile
     }
 
     private lateinit var apkPath: File
@@ -73,7 +75,7 @@ open class PullScreenshotsTask @Inject constructor(
 
         assert(if (verify) outputDir.exists() else !outputDir.exists())
 
-        project.exec {
+        execOperations.exec {
             it.executable = pythonExecutable.get()
             it.environment("PYTHONPATH", jarFile)
 
