@@ -23,6 +23,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
+
 import androidx.annotation.VisibleForTesting;
 
 import java.io.BufferedReader;
@@ -76,7 +77,7 @@ public class AlbumImpl implements Album {
     private String readPreviousTestRunId() {
         try {
             BufferedReader reader =
-                    new BufferedReader(new FileReader(new File(mDir, SCREENSHOT_TESTS_RUN_ID_FILE_NAME)));
+                new BufferedReader(new FileReader(new File(mDir, SCREENSHOT_TESTS_RUN_ID_FILE_NAME)));
             return reader.readLine();
         } catch (IOException e) {
             return null;
@@ -133,10 +134,6 @@ public class AlbumImpl implements Album {
      */
     @Override
     public void cleanup() {
-        if (mCurrentTestRunId.equals(mPreviousTestRunId)) {
-            // AlbumImpl instance was recreated because of ORCHESTRATOR
-            return;
-        }
         if (!mDir.exists()) {
             // We probably failed to even create it, so nothing to clean up
             return;
@@ -188,28 +185,28 @@ public class AlbumImpl implements Album {
         if (mAllNames.contains(recordBuilder.getName())) {
             if (recordBuilder.hasExplicitName()) {
                 throw new AssertionError(
-                        "Can't create multiple screenshots with the same name: " + recordBuilder.getName());
+                    "Can't create multiple screenshots with the same name: " + recordBuilder.getName());
             }
 
             throw new AssertionError(
-                    "Can't create multiple screenshots from the same test, or "
-                            + "use .setName() to name each screenshot differently");
+                "Can't create multiple screenshots from the same test, or "
+                    + "use .setName() to name each screenshot differently");
         }
 
         Tiling tiling = recordBuilder.getTiling();
 
         MetadataRecorder.ScreenshotMetadataRecorder screenshotNode =
-                mMetadataRecorder
-                        .addNewScreenshot()
-                        .withDescription(recordBuilder.getDescription())
-                        .withName(recordBuilder.getName())
-                        .withTestClass(recordBuilder.getTestClass())
-                        .withTestName(recordBuilder.getTestName())
-                        .withTileWidth(tiling.getWidth())
-                        .withTileHeight(tiling.getHeight())
-                        .withViewHierarchy(getViewHierarchyFilename(recordBuilder.getName()))
-                        .withAxIssues(getAxIssuesFilename(recordBuilder.getName()))
-                        .withExtras(recordBuilder.getExtras());
+            mMetadataRecorder
+                .addNewScreenshot()
+                .withDescription(recordBuilder.getDescription())
+                .withName(recordBuilder.getName())
+                .withTestClass(recordBuilder.getTestClass())
+                .withTestName(recordBuilder.getTestName())
+                .withTileWidth(tiling.getWidth())
+                .withTileHeight(tiling.getHeight())
+                .withViewHierarchy(getViewHierarchyFilename(recordBuilder.getName()))
+                .withAxIssues(getAxIssuesFilename(recordBuilder.getName()))
+                .withExtras(recordBuilder.getExtras());
 
         if (recordBuilder.getError() != null) {
             screenshotNode.withError(recordBuilder.getError());
@@ -232,16 +229,16 @@ public class AlbumImpl implements Album {
     }
 
     private void saveTiling(
-            MetadataRecorder.ScreenshotMetadataRecorder recorder, RecordBuilderImpl recordBuilder)
-            throws IOException {
+        MetadataRecorder.ScreenshotMetadataRecorder recorder, RecordBuilderImpl recordBuilder)
+        throws IOException {
         Tiling tiling = recordBuilder.getTiling();
         for (int i = 0; i < tiling.getWidth(); i++) {
             for (int j = 0; j < tiling.getHeight(); j++) {
                 File file = new File(mDir, generateTileName(recordBuilder.getName(), i, j));
 
                 recorder
-                        .withAbsoluteFileName(file.getAbsolutePath())
-                        .withRelativeFileName(getRelativePath(file, mDir));
+                    .withAbsoluteFileName(file.getAbsolutePath())
+                    .withRelativeFileName(getRelativePath(file, mDir));
             }
         }
     }
