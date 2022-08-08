@@ -1,6 +1,6 @@
 plugins {
     id("com.starter.application.android")
-    id("io.github.usefulness.testing.screenshot")
+    id("io.github.usefulness.screenshot-testing-plugin")
 }
 
 android {
