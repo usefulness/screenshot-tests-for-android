@@ -1,4 +1,4 @@
-package com.github.usefulnes.testing.screenshot.sample
+package io.github.usefulnes.testing.screenshot.sample
 
 import androidx.test.ext.junit.rules.activityScenarioRule
 import com.facebook.testing.screenshot.Screenshot

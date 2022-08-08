@@ -7,7 +7,7 @@ plugins {
   id("com.gradle.plugin-publish") version("1.0.0-rc-1")
 }
 
-final GENERATED_PACKAGE_NAME = "com.github.usefulness.testing.screenshot.generated"
+final GENERATED_PACKAGE_NAME = "io.github.usefulness.testing.screenshot.generated"
 final GENERATED_BUILD_DIR = new File(projectDir.absolutePath, "src/generated/kotlin/${GENERATED_PACKAGE_NAME.replace('.', '/')}")
 
 tasks.register("generateBuildConfig") {
@@ -70,7 +70,7 @@ pluginBundle {
 gradlePlugin {
   plugins {
     screenshotPlugin {
-      id = 'com.github.usefulness.testing.screenshot'
+      id = 'io.github.usefulness.testing.screenshot'
       displayName = 'Screenshot Tests for Android'
       description = 'https://github.com/facebook/screenshot-tests-for-android fork'
       implementationClass = 'com.facebook.testing.screenshot.build.ScreenshotsPlugin'

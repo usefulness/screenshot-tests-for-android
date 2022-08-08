@@ -1,17 +1,18 @@
 plugins {
     id("com.starter.application.android")
-    id("com.github.usefulness.testing.screenshot")
+    id("io.github.usefulness.testing.screenshot")
 }
 
 android {
     defaultConfig {
         minSdk 26
-        applicationId = "com.github.usefulness.testing.screenshot.sample"
-        namespace = "com.github.usefulness.testing.screenshot.sample"
+        applicationId = "io.github.usefulness.testing.screenshot.sample"
+        namespace = "io.github.usefulness.testing.screenshot.sample"
         testInstrumentationRunner = "com.github.usefulnes.testing.screenshot.sample.CustomScreenshotTestRunner"
     }
 }
 screenshots {
+    pythonExecutable "python3.10"
     failureDir "$buildDir/reports/failedScreenshots"
 }
 

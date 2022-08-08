@@ -1,4 +1,4 @@
-package com.github.usefulnes.testing.screenshot.sample
+package io.github.usefulnes.testing.screenshot.sample
 
 import android.os.Bundle
 import androidx.test.runner.AndroidJUnitRunner

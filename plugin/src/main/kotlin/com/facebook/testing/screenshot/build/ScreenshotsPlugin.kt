@@ -22,11 +22,10 @@ import com.android.build.gradle.TestedExtension
 import com.android.build.gradle.api.ApkVariantOutput
 import com.android.build.gradle.api.TestVariant
 import com.android.build.gradle.internal.tasks.factory.dependsOn
-import com.github.usefulness.testing.screenshot.generated.ScreenshotTestBuildConfig
+import io.github.usefulness.testing.screenshot.generated.ScreenshotTestBuildConfig
 import com.usefulness.testing.screenshot.build.ScreenshotTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import java.util.*
 
 open class ScreenshotsPluginExtension {
     /** The directory to store recorded screenshots in */
@@ -54,7 +53,7 @@ open class ScreenshotsPluginExtension {
 class ScreenshotsPlugin : Plugin<Project> {
     companion object {
         const val GROUP = "Screenshot Test"
-        const val DEPENDENCY_GROUP = "com.github.usefulness.testing.screenshot"
+        const val DEPENDENCY_GROUP = "io.github.usefulness.testing.screenshot"
         const val DEPENDENCY_CORE = "core"
         const val SCREENSHOT_TESTS_RUN_ID = "single_test_id"
     }
