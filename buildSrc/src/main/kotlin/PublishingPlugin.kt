@@ -12,31 +12,32 @@ class PublishingPlugin : Plugin<Project> {
 
     override fun apply(target: Project) = with(target) {
         pluginManager.apply("maven-publish")
-
+        extensions.configure<PublishingExtension> {
+            with(repositories) {
+                maven { maven ->
+                    maven.name = "github"
+                    maven.setUrl("https://maven.pkg.github.com/usefulness/screenshot-tests-for-android")
+                    with(maven.credentials) {
+                        username = "usefulness"
+                        password = findConfig("GITHUB_TOKEN")
+                    }
+                }
+                maven { maven ->
+                    maven.name = "mavenCentral"
+                    maven.setUrl("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
+                    maven.mavenContent { it.releasesOnly() }
+                    with(maven.credentials) {
+                        username = findConfig("OSSRH_USERNAME")
+                        password = findConfig("OSSRH_PASSWORD")
+                    }
+                }
+            }
+        }
         pluginManager.withPlugin("java") {
             extensions.configure<JavaPluginExtension> {
                 withSourcesJar()
             }
             extensions.configure<PublishingExtension> {
-                with(repositories) {
-                    maven { maven ->
-                        maven.name = "github"
-                        maven.setUrl("https://maven.pkg.github.com/usefulness/screenshot-tests-for-android")
-                        with(maven.credentials) {
-                            username = "usefulness"
-                            password = findConfig("GITHUB_TOKEN")
-                        }
-                    }
-                    maven { maven ->
-                        maven.name = "mavenCentral"
-                        maven.setUrl("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
-                        maven.mavenContent { it.releasesOnly() }
-                        with(maven.credentials) {
-                            username = findConfig("OSSRH_USERNAME")
-                            password = findConfig("OSSRH_PASSWORD")
-                        }
-                    }
-                }
                 with(publications) {
                     register("mavenJava", MavenPublication::class.java) { publication ->
                         publication.from(components.getByName("java"))
@@ -78,25 +79,6 @@ class PublishingPlugin : Plugin<Project> {
                 jar.from((android.sourceSets.getByName("main").kotlin as com.android.build.gradle.api.AndroidSourceDirectorySet).srcDirs)
             }
             extensions.configure<PublishingExtension> {
-                with(repositories) {
-                    maven { maven ->
-                        maven.name = "github"
-                        maven.setUrl("https://maven.pkg.github.com/usefulness/screenshot-tests-for-android")
-                        with(maven.credentials) {
-                            username = "usefulness"
-                            password = findConfig("GITHUB_TOKEN")
-                        }
-                    }
-                    maven { maven ->
-                        maven.name = "mavenCentral"
-                        maven.setUrl("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
-                        maven.mavenContent { it.releasesOnly() }
-                        with(maven.credentials) {
-                            username = findConfig("OSSRH_USERNAME")
-                            password = findConfig("OSSRH_PASSWORD")
-                        }
-                    }
-                }
                 afterEvaluate {
                     with(publications) {
                         register("release", MavenPublication::class.java) { publication ->
