@@ -84,8 +84,11 @@ jobs:
 
       - name: Set up Python
         uses: actions/setup-python@v4
-        with:
-          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install 'Pillow==9.1.1'
 
       - name: run tests
         uses: reactivecircus/android-emulator-runner@v2
@@ -99,6 +102,8 @@ jobs:
             adb shell settings put global hidden_api_policy_p_apps 1
             adb shell settings put global hidden_api_policy_pre_p_apps 1
             adb shell settings put global hidden_api_policy  1
+            python --version
+            pip show Pillow
             ./gradlew pytests connectedCheck 
 
       - name: Upload screenshot tests result
@@ -131,8 +136,11 @@ jobs:
 
       - name: Set up Python
         uses: actions/setup-python@v4
-        with:
-          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install 'Pillow==9.1.1'
 
       - name: run tests
         uses: reactivecircus/android-emulator-runner@v2
@@ -148,7 +156,7 @@ jobs:
             adb shell settings put global hidden_api_policy_pre_p_apps 1
             adb shell settings put global hidden_api_policy 1
             python --version
-            pyenv versions
+            pip show Pillow
             ./gradlew verifyDebugAndroidTestScreenshotTest
 
       - name: Upload screenshot tests result
