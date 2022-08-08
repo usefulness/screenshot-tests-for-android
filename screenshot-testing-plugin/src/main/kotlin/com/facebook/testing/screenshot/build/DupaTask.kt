@@ -18,12 +18,12 @@ abstract class DupaTask @Inject constructor(
         println("DUPA1-A python taskName=$name")
         execOperations.exec { exec ->
             exec.executable = "sh"
-            exec.args = listOf("python --version")
+            exec.args = listOf("pytho", "--version")
         }
         println("DUPA1-B python taskName=$name")
         execOperations.exec { exec ->
             exec.executable = "sh"
-            exec.args = listOf("python3 --version")
+            exec.args = listOf("python3", "--version")
             println("Dupa env=${exec.environment}")
         }
     }
