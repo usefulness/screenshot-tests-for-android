@@ -20,6 +20,7 @@ abstract class DupaTask @Inject constructor(
         execOperations.exec { exec ->
             exec.executable = "python3"
             exec.args = listOf("--version")
+            println("Dupa env=${exec.environment}")
         }
     }
 }

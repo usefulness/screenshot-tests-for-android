@@ -34,8 +34,6 @@ jobs:
           build-root-directory: sample
           arguments: assemble
 
-      - run: cd sample && ./gradlew --stop
-
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
@@ -46,31 +44,3 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install 'Pillow==9.1.1'
           cd sample && ./gradlew dupaTask
-
-      - name: run screenshot tests
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: ${{ matrix.apiVersion }}
-          profile: pixel_xl
-          target: google_apis
-          arch: x86
-          disable-spellchecker: true
-          working-directory: sample
-          script: |
-            adb shell settings put global hidden_api_policy_p_apps 1
-            adb shell settings put global hidden_api_policy_pre_p_apps 1
-            adb shell settings put global hidden_api_policy 1
-            ./gradlew verifyDebugAndroidTestScreenshotTest
-
-      - name: Upload screenshot tests result
-        uses: actions/upload-artifact@v3
-        with:
-          name: screenshots
-          path: "${{ github.workspace }}/**/build/*AndroidTest/"
-
-      - name: Upload failed screenshots
-        if: ${{ failure() }}
-        uses: actions/upload-artifact@v3
-        with:
-          name: failedScreenshots
-          path: "${{ github.workspace }}/**/build/failedScreenshots"
