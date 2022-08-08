@@ -4,7 +4,7 @@ plugins {
   id("com.starter.library.kotlin")
   id("java-gradle-plugin")
   id("com.starter.publishing")
-  id("com.gradle.plugin-publish") version("1.0.0-rc-1")
+  id("com.gradle.plugin-publish") version("1.0.0")
 }
 
 final GENERATED_PACKAGE_NAME = "io.github.usefulness.testing.screenshot.generated"
@@ -69,7 +69,7 @@ pluginBundle {
 
 gradlePlugin {
   plugins {
-    screenshotPlugin {
+    screenshotTesting {
       id = 'io.github.usefulness.screenshot-testing-plugin'
       displayName = 'Screenshot Tests for Android'
       description = "Generate fast deterministic screenshots during Android instrumentation tests. The plugin works Configuration Cache support!"
