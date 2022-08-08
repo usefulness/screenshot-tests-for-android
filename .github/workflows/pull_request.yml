@@ -32,7 +32,7 @@ jobs:
       - uses: gradle/gradle-build-action@v2
         with:
           build-root-directory: sample
-          arguments: assemble
+          arguments: help
 
       - name: Set up Python
         uses: actions/setup-python@v4
