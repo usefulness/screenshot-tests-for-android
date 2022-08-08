@@ -26,6 +26,7 @@ import io.github.usefulness.testing.screenshot.generated.ScreenshotTestBuildConf
 import com.usefulness.testing.screenshot.build.ScreenshotTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.configurationcache.extensions.capitalized
 
 open class ScreenshotsPluginExtension {
     /** The directory to store recorded screenshots in */
@@ -131,6 +132,8 @@ class ScreenshotsPlugin : Plugin<Project> {
                     variant,
                     VerifyScreenshotTestTask::class.java,
                 )
+
+                project.tasks.register("dupaTask${variant.name.capitalized()}", DupaTask::class.java)
             }
         }
     }

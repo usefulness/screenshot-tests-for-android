@@ -77,6 +77,19 @@ open class PullScreenshotsTask @Inject constructor(
 
         assert(if (verify) outputDir.exists() else !outputDir.exists())
 
+        println("DUPA-1-A python taskName=$name")
+        execOperations.exec { exec ->
+            exec.executable = "python"
+            exec.args = listOf("--version")
+        }
+        println("DUPA-1-B python taskName=$name")
+        execOperations.exec { exec ->
+            exec.executable = "python3"
+            exec.args = listOf("--version")
+            println("dupa1-python3-workingDir=${exec.workingDir}")
+            println("dupa1-python3-env=${exec.environment}")
+        }
+
         execOperations.exec { exec ->
             exec.executable = pythonExecutable.get()
             exec.environment("PYTHONPATH", jarFile)

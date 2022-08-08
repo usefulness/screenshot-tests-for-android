@@ -33,6 +33,12 @@ jobs:
         with:
           arguments: assemble
 
+      - name: Assemble sample app
+        uses: gradle/gradle-build-action@v2
+        with:
+          build-root-directory: sample
+          arguments: check
+
       - name: Unwrap GPG key
         env:
           GPG_KEY_CONTENTS: ${{ secrets.GPG_KEY_CONTENTS }}
