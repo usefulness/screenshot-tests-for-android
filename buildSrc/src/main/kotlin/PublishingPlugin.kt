@@ -38,8 +38,31 @@ class PublishingPlugin : Plugin<Project> {
                     }
                 }
                 with(publications) {
-                    register("mavenJava", MavenPublication::class.java) {
-                        it.from(components.getByName("java"))
+                    register("mavenJava", MavenPublication::class.java) { publication ->
+                        publication.from(components.getByName("java"))
+                        publication.pom { pom ->
+                            pom.name.set("${project.group}:${project.name}")
+                            pom.description.set("Screenshot Test for Android")
+                            pom.url.set("https://github.com/usefulness/screenshot-tests-for-android")
+                            pom.licenses { licenses ->
+                                licenses.license { license ->
+                                    license.name.set("MIT")
+                                    license.url.set("https://github.com/usefulness/screenshot-tests-for-android/blob/master/LICENSE")
+                                }
+                            }
+                            pom.developers { developers ->
+                                developers.developer { developer ->
+                                    developer.id.set("mateuszkwiecinski")
+                                    developer.name.set("Mateusz Kwiecinski")
+                                    developer.email.set("36954793+mateuszkwiecinski@users.noreply.github.com")
+                                }
+                            }
+                            pom.scm { scm ->
+                                scm.connection.set("scm:git:github.com/usefulness/screenshot-tests-for-android.git")
+                                scm.developerConnection.set("scm:git:ssh://github.com/usefulness/screenshot-tests-for-android.git")
+                                scm.url.set("https://github.com/usefulness/screenshot-tests-for-android/tree/master")
+                            }
+                        }
                     }
                 }
             }
@@ -81,7 +104,7 @@ class PublishingPlugin : Plugin<Project> {
                             publication.artifacts.artifact(tasks.getByName("androidSourcesJar"))
                             publication.pom { pom ->
                                 pom.name.set("${project.group}:${project.name}")
-                                pom.description.set("Swipe edge to go back - android library")
+                                pom.description.set("Screenshot Test for Android")
                                 pom.url.set("https://github.com/usefulness/screenshot-tests-for-android")
                                 pom.licenses { licenses ->
                                     licenses.license { license ->
@@ -106,7 +129,9 @@ class PublishingPlugin : Plugin<Project> {
                     }
                 }
             }
+        }
 
+        pluginManager.withPlugin("signing") {
             with(extensions.extraProperties) {
                 set("signing.keyId", findConfig("SIGNING_KEY_ID"))
                 set("signing.password", findConfig("SIGNING_PASSWORD"))

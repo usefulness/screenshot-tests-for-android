@@ -19,7 +19,7 @@ pluginManagement {
     }
 }
 
-rootProject.name = "com.github.usefulness.testing.screenshot.sample"
+rootProject.name = "io.github.usefulness.testing.screenshot.sample"
 
 include "android"
 
