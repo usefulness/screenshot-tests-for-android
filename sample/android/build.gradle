@@ -12,7 +12,7 @@ android {
     }
 }
 screenshots {
-    pythonExecutable "python3.10"
+    pythonExecutable "python"
     failureDir "$buildDir/reports/failedScreenshots"
 }
 
