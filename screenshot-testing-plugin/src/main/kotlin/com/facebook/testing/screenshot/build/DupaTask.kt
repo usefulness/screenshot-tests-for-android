@@ -22,5 +22,9 @@ abstract class DupaTask @Inject constructor(
             exec.args = listOf("--version")
             println("Dupa env=${exec.environment}")
         }
+        execOperations.exec { exec ->
+            exec.executable = "which"
+            exec.args = listOf("python")
+        }
     }
 }
