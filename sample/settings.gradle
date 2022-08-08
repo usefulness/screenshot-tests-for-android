@@ -23,6 +23,4 @@ rootProject.name = "io.github.usefulness.testing.screenshot.sample"
 
 include "android"
 
-if (!hasProperty("useMavenLocal")) {
-    includeBuild ".."
-}
+includeBuild ".."

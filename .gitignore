@@ -7,7 +7,6 @@ repo
 examples/**/build
 examples/**/.idea/*
 .idea/*
-!.idea/codeStyleSettings.xml
 *.iml
 local.properties
 plugin/src/generated

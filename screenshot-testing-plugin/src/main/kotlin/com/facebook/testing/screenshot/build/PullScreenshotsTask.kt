@@ -79,10 +79,6 @@ open class PullScreenshotsTask @Inject constructor(
 
         execOperations.exec { exec ->
             exec.executable = pythonExecutable.get()
-            exec.args = listOf("--version")
-        }
-        execOperations.exec { exec ->
-            exec.executable = pythonExecutable.get()
             exec.environment("PYTHONPATH", jarFile)
 
             exec.args = mutableListOf(
