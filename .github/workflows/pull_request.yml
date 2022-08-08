@@ -84,8 +84,6 @@ jobs:
 
       - name: Set up Python
         uses: actions/setup-python@v4
-        with:
-          python-version: 3.10.6
 
       - name: Install dependencies
         run: |
@@ -104,6 +102,8 @@ jobs:
             adb shell settings put global hidden_api_policy_p_apps 1
             adb shell settings put global hidden_api_policy_pre_p_apps 1
             adb shell settings put global hidden_api_policy  1
+            python --version
+            pip show Pillow
             ./gradlew pytests connectedCheck 
 
       - name: Upload screenshot tests result
@@ -136,8 +136,6 @@ jobs:
 
       - name: Set up Python
         uses: actions/setup-python@v4
-        with:
-          python-version: 3.10.6
 
       - name: Install dependencies
         run: |
@@ -157,6 +155,8 @@ jobs:
             adb shell settings put global hidden_api_policy_p_apps 1
             adb shell settings put global hidden_api_policy_pre_p_apps 1
             adb shell settings put global hidden_api_policy 1
+            python --version
+            pip show Pillow
             ./gradlew verifyDebugAndroidTestScreenshotTest
 
       - name: Upload screenshot tests result

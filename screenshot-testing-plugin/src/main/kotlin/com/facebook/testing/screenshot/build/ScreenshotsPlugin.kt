@@ -53,8 +53,8 @@ open class ScreenshotsPluginExtension {
 class ScreenshotsPlugin : Plugin<Project> {
     companion object {
         const val GROUP = "Screenshot Test"
-        const val DEPENDENCY_GROUP = "io.github.usefulness.testing.screenshot"
-        const val DEPENDENCY_CORE = "core"
+        const val DEPENDENCY_GROUP = "io.github.usefulness"
+        const val DEPENDENCY_CORE = "screenshot-testing-core"
         const val SCREENSHOT_TESTS_RUN_ID = "single_test_id"
     }
 

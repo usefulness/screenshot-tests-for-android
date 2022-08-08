@@ -44,7 +44,7 @@ jobs:
         uses: usefulness/diffuse-action@master
         with:
           old-file-path: diffuse-source-file-release
-          new-file-path: core/build/outputs/aar/core-release.aar
+          new-file-path: screenshot-testing-core/build/outputs/aar/screenshot-testing-core-release.aar
 
       - uses: peter-evans/find-comment@v2
         id: find_comment
