@@ -89,7 +89,7 @@ class PublishingPlugin : Plugin<Project> {
                     }
                     maven { maven ->
                         maven.name = "mavenCentral"
-                        maven.setUrl("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
+                        maven.setUrl("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
                         maven.mavenContent { it.releasesOnly() }
                         with(maven.credentials) {
                             username = findConfig("OSSRH_USERNAME")
