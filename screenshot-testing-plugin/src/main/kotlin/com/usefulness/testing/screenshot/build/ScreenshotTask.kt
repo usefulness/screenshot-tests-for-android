@@ -16,9 +16,6 @@ abstract class ScreenshotTask(objectFactory: ObjectFactory, private val projectL
     internal val recordDir = objectFactory.property(String::class.java)
 
     @get:Input
-    internal val addDeps = objectFactory.property(Boolean::class.java)
-
-    @get:Input
     internal val multipleDevices = objectFactory.property(Boolean::class.java)
 
     @get:Input
@@ -44,7 +41,6 @@ abstract class ScreenshotTask(objectFactory: ObjectFactory, private val projectL
 
     open fun init(variant: TestVariant, extension: ScreenshotsPluginExtension) {
         recordDir.set(extension.recordDir)
-        addDeps.set(extension.addDeps)
         multipleDevices.set(extension.multipleDevices)
         pythonExecutable.set(extension.pythonExecutable)
         referenceDir.set(extension.referenceDir)
