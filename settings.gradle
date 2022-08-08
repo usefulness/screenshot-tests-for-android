@@ -22,5 +22,5 @@ dependencyResolutionManagement {
 }
 
 
-rootProject.name = 'io.github.usefulness.testing.screenshot'
-include 'core', 'plugin'
+rootProject.name = 'io.github.usefulness'
+include 'screenshot-testing-plugin', 'screenshot-testing-core'

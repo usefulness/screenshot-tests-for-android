@@ -70,7 +70,7 @@ pluginBundle {
 gradlePlugin {
   plugins {
     screenshotPlugin {
-      id = 'io.github.usefulness.testing.screenshot'
+      id = 'io.github.usefulness.screenshot-testing-plugin'
       displayName = 'Screenshot Tests for Android'
       description = 'https://github.com/facebook/screenshot-tests-for-android fork'
       implementationClass = 'com.facebook.testing.screenshot.build.ScreenshotsPlugin'
