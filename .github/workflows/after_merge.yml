@@ -31,7 +31,7 @@ jobs:
       - name: Assemble
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: assembleRelease
+          arguments: assemble
 
       - name: Unwrap GPG key
         env:
@@ -64,5 +64,5 @@ jobs:
           path: diffuse-source-file-release
           key: diffuse-${{ github.sha }}-${{ hashFiles('**/aar/**.aar') }}
 
-      - run: cp core/build/outputs/aar/core-release.aar diffuse-source-file-release
+      - run: cp screenshot-testing-core/build/outputs/aar/core-release.aar diffuse-source-file-release
         shell: bash
