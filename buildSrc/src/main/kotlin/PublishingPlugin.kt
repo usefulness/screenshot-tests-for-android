@@ -12,6 +12,7 @@ class PublishingPlugin : Plugin<Project> {
 
     override fun apply(target: Project) = with(target) {
         pluginManager.apply("maven-publish")
+        pluginManager.apply("signing")
         extensions.configure<PublishingExtension> {
             with(repositories) {
                 maven { maven ->
@@ -33,36 +34,48 @@ class PublishingPlugin : Plugin<Project> {
                 }
             }
         }
+
+        pluginManager.withPlugin("signing") {
+            with(extensions.extraProperties) {
+                set("signing.keyId", findConfig("SIGNING_KEY_ID"))
+                set("signing.password", findConfig("SIGNING_PASSWORD"))
+                set("signing.secretKeyRingFile", findConfig("SIGNING_SECRET_KEY_RING_FILE"))
+            }
+
+            extensions.configure<SigningExtension>("signing") { signing ->
+                if (findConfig("SIGNING_PASSWORD").isNotEmpty()) {
+                    signing.sign(extensions.getByType(PublishingExtension::class.java).publications)
+                }
+            }
+        }
+
         pluginManager.withPlugin("java") {
             extensions.configure<JavaPluginExtension> {
                 withSourcesJar()
             }
             extensions.configure<PublishingExtension> {
-                with(publications) {
-                    register("mavenJava", MavenPublication::class.java) { publication ->
-                        publication.from(components.getByName("java"))
-                        publication.pom { pom ->
-                            pom.name.set("${project.group}:${project.name}")
-                            pom.description.set("Screenshot Test for Android")
-                            pom.url.set("https://github.com/usefulness/screenshot-tests-for-android")
-                            pom.licenses { licenses ->
-                                licenses.license { license ->
-                                    license.name.set("MIT")
-                                    license.url.set("https://github.com/usefulness/screenshot-tests-for-android/blob/master/LICENSE")
-                                }
+                publications.configureEach { publication ->
+                    (publication as? MavenPublication)?.pom { pom ->
+                        pom.name.set("${project.group}:${project.name}")
+                        pom.description.set("Screenshot Test for Android")
+                        pom.url.set("https://github.com/usefulness/screenshot-tests-for-android")
+                        pom.licenses { licenses ->
+                            licenses.license { license ->
+                                license.name.set("MIT")
+                                license.url.set("https://github.com/usefulness/screenshot-tests-for-android/blob/master/LICENSE")
                             }
-                            pom.developers { developers ->
-                                developers.developer { developer ->
-                                    developer.id.set("mateuszkwiecinski")
-                                    developer.name.set("Mateusz Kwiecinski")
-                                    developer.email.set("36954793+mateuszkwiecinski@users.noreply.github.com")
-                                }
+                        }
+                        pom.developers { developers ->
+                            developers.developer { developer ->
+                                developer.id.set("mateuszkwiecinski")
+                                developer.name.set("Mateusz Kwiecinski")
+                                developer.email.set("36954793+mateuszkwiecinski@users.noreply.github.com")
                             }
-                            pom.scm { scm ->
-                                scm.connection.set("scm:git:github.com/usefulness/screenshot-tests-for-android.git")
-                                scm.developerConnection.set("scm:git:ssh://github.com/usefulness/screenshot-tests-for-android.git")
-                                scm.url.set("https://github.com/usefulness/screenshot-tests-for-android/tree/master")
-                            }
+                        }
+                        pom.scm { scm ->
+                            scm.connection.set("scm:git:github.com/usefulness/screenshot-tests-for-android.git")
+                            scm.developerConnection.set("scm:git:ssh://github.com/usefulness/screenshot-tests-for-android.git")
+                            scm.url.set("https://github.com/usefulness/screenshot-tests-for-android/tree/master")
                         }
                     }
                 }
@@ -70,7 +83,6 @@ class PublishingPlugin : Plugin<Project> {
         }
 
         pluginManager.withPlugin("com.android.library") {
-            pluginManager.apply("signing")
             tasks.register("androidSourcesJar", Jar::class.java) { jar ->
                 jar.archiveClassifier.set("sources")
                 val android = extensions.findByName("android") as BaseExtension
@@ -109,20 +121,6 @@ class PublishingPlugin : Plugin<Project> {
                             }
                         }
                     }
-                }
-            }
-        }
-
-        pluginManager.withPlugin("signing") {
-            with(extensions.extraProperties) {
-                set("signing.keyId", findConfig("SIGNING_KEY_ID"))
-                set("signing.password", findConfig("SIGNING_PASSWORD"))
-                set("signing.secretKeyRingFile", findConfig("SIGNING_SECRET_KEY_RING_FILE"))
-            }
-
-            extensions.configure<SigningExtension>("signing") { signing ->
-                if (findConfig("SIGNING_PASSWORD").isNotEmpty()) {
-                    signing.sign(extensions.getByType(PublishingExtension::class.java).publications)
                 }
             }
         }

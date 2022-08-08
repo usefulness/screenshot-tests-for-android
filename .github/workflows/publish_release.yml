@@ -38,13 +38,12 @@ jobs:
         run: sudo bash -c "echo '$GPG_KEY_CONTENTS' | base64 -d > '$SIGNING_SECRET_KEY_RING_FILE'"
 
       - run: ./gradlew :screenshot-testing-core:publishReleasePublicationToGithubRepository | true
-
       - run: ./gradlew :screenshot-testing-core:publishReleasePublicationToMavenCentralRepository
 
-      - run: ./gradlew :screenshot-testing-plugin:publishMavenJavaPublicationToGithubRepository | true
+      - run: ./gradlew :screenshot-testing-plugin:publishPluginMavenPublicationToMavenCentralRepository
+      - run: ./gradlew :screenshot-testing-plugin:publishScreenshotTestingPluginMarkerMavenPublicationToMavenCentralRepository
 
-      - run: ./gradlew :screenshot-testing-plugin:publishMavenJavaPublicationToMavenCentralRepository --stacktrace
-
-      - run: ./gradlew :screenshot-testing-plugin:publishScreenshotPluginPluginMarkerMavenPublicationToGithubRepository | true
+      - run: ./gradlew :screenshot-testing-plugin:publishPluginMavenPublicationToGithubRepository | true
+      - run: ./gradlew :screenshot-testing-plugin:publishScreenshotTestingPluginMarkerMavenPublicationToGithubRepository | true
 
       - run: ./gradlew publishPlugins -Pgradle.publish.key=${{ secrets.gradle_publish_key }} -Pgradle.publish.secret=${{ secrets.gradle_publish_secret }}
