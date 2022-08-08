@@ -64,7 +64,7 @@ tasks.register("pyTests", Exec) {
 pluginBundle {
   website = "https://github.com/usefulness/screenshot-tests-for-android/"
   vcsUrl = "https://github.com/usefulness/screenshot-tests-for-android.git"
-  tags = ["android", "screenshots"]
+  tags = ["android", "screenshots", "espresso", "screenshot-testing"]
 }
 
 gradlePlugin {
@@ -72,7 +72,7 @@ gradlePlugin {
     screenshotPlugin {
       id = 'io.github.usefulness.screenshot-testing-plugin'
       displayName = 'Screenshot Tests for Android'
-      description = 'https://github.com/facebook/screenshot-tests-for-android fork'
+      description = "Generate fast deterministic screenshots during Android instrumentation tests. The plugin works Configuration Cache support!"
       implementationClass = 'com.facebook.testing.screenshot.build.ScreenshotsPlugin'
     }
   }
