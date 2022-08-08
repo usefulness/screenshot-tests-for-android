@@ -12,7 +12,6 @@ android {
     }
 }
 screenshots {
-    pythonExecutable "python"
     failureDir "$buildDir/reports/failedScreenshots"
 }
 

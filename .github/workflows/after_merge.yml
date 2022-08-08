@@ -64,5 +64,5 @@ jobs:
           path: diffuse-source-file-release
           key: diffuse-${{ github.sha }}-${{ hashFiles('**/aar/**.aar') }}
 
-      - run: cp screenshot-testing-core/build/outputs/aar/core-release.aar diffuse-source-file-release
+      - run: cp screenshot-testing-core/build/outputs/aar/screenshot-testing-core-release.aar diffuse-source-file-release
         shell: bash
