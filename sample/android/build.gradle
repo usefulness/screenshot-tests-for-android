@@ -8,10 +8,11 @@ android {
         minSdk 26
         applicationId = "io.github.usefulness.testing.screenshot.sample"
         namespace = "io.github.usefulness.testing.screenshot.sample"
-        testInstrumentationRunner = "com.github.usefulnes.testing.screenshot.sample.CustomScreenshotTestRunner"
+        testInstrumentationRunner = "com.usefulness.testing.screenshot.CustomScreenshotTestRunner"
     }
 }
 screenshots {
+    pythonExecutable = "python3"
     failureDir "$buildDir/reports/failedScreenshots"
 }
 
