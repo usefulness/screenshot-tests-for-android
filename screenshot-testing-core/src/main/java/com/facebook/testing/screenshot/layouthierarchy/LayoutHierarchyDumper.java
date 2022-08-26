@@ -54,12 +54,10 @@ public final class LayoutHierarchyDumper {
     }
 
     public static LayoutHierarchyDumper create() {
-        return createWith(
-                Collections.<HierarchyPlugin>emptyList(), Collections.<AttributePlugin>emptyList());
+        return createWith(Collections.emptyList(), Collections.emptyList());
     }
 
-    public static LayoutHierarchyDumper createWith(
-            List<HierarchyPlugin> hierarchyPlugins, List<AttributePlugin> attributePlugins) {
+    public static LayoutHierarchyDumper createWith(List<HierarchyPlugin> hierarchyPlugins, List<AttributePlugin> attributePlugins) {
         final List<HierarchyPlugin> allHierarchyPlugins = new ArrayList<>(hierarchyPlugins.size() + 1);
         allHierarchyPlugins.addAll(hierarchyPlugins);
         allHierarchyPlugins.addAll(sGlobalHierarchyPlugins);
@@ -73,8 +71,7 @@ public final class LayoutHierarchyDumper {
         return createWithOnly(allHierarchyPlugins, allAttributePlugins);
     }
 
-    public static LayoutHierarchyDumper createWithOnly(
-            List<HierarchyPlugin> hierarchyPlugins, List<AttributePlugin> attributePlugins) {
+    public static LayoutHierarchyDumper createWithOnly(List<HierarchyPlugin> hierarchyPlugins, List<AttributePlugin> attributePlugins) {
         final List<HierarchyPlugin> allHierarchyPlugins = new ArrayList<>(hierarchyPlugins.size());
         allHierarchyPlugins.addAll(hierarchyPlugins);
 
@@ -84,8 +81,7 @@ public final class LayoutHierarchyDumper {
         return new LayoutHierarchyDumper(allHierarchyPlugins, allAttributePlugins);
     }
 
-    LayoutHierarchyDumper(
-            List<HierarchyPlugin> hierarchyPlugins, List<AttributePlugin> attributePlugins) {
+    LayoutHierarchyDumper(List<HierarchyPlugin> hierarchyPlugins, List<AttributePlugin> attributePlugins) {
         mHierarchyPlugins.addAll(hierarchyPlugins);
         mAttributePlugins.addAll(attributePlugins);
     }
@@ -114,21 +110,14 @@ public final class LayoutHierarchyDumper {
                 return node;
             }
         }
-        throw new IllegalStateException(
-                "No available plugins for type " + obj.getClass().getCanonicalName());
+        throw new IllegalStateException("No available plugins for type " + obj.getClass().getCanonicalName());
     }
 
     public static int getViewLeft(View view) {
-        if (Build.VERSION.SDK_INT >= 11) {
-            return view.getLeft() + (int) view.getTranslationX();
-        }
-        return view.getLeft();
+        return view.getLeft() + (int) view.getTranslationX();
     }
 
     public static int getViewTop(View view) {
-        if (Build.VERSION.SDK_INT >= 11) {
-            return view.getTop() + (int) view.getTranslationY();
-        }
-        return view.getTop();
+        return view.getTop() + (int) view.getTranslationY();
     }
 }

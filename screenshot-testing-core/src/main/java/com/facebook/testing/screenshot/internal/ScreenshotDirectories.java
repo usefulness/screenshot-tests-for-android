@@ -22,7 +22,6 @@ import android.annotation.SuppressLint;
 import android.app.UiAutomation;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
 

@@ -16,7 +16,7 @@ android {
     exclude 'LICENSE.txt'
   }
   lint {
-    baseline = file("lint-baseline.xml")
+    disable("UnknownNullness")
   }
 }
 
