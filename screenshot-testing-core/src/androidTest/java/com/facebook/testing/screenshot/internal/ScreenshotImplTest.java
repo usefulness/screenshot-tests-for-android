@@ -16,11 +16,6 @@
 
 package com.facebook.testing.screenshot.internal;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
 import android.app.Instrumentation;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -31,16 +26,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-import androidx.test.InstrumentationRegistry;
-import androidx.test.filters.SdkSuppress;
-import androidx.test.runner.AndroidJUnit4;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.Locale;
 
 import org.json.JSONObject;
 import org.junit.After;
@@ -49,6 +34,22 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.Timeout;
 import org.junit.runner.RunWith;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
+
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.platform.app.InstrumentationRegistry;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * Tests for {@link ScreenshotImpl}
@@ -62,21 +63,21 @@ public class ScreenshotImplTest {
     private ScreenshotDirectories mScreenshotDirectories;
 
     @Rule
-    public Timeout mTimeout = new Timeout(60000);
+    public Timeout mTimeout = new Timeout(1, TimeUnit.MINUTES);
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         mScreenshotDirectories = new ScreenshotDirectories(getInstrumentation().getTargetContext());
         mAlbumImpl = AlbumImpl.create(getInstrumentation().getTargetContext(), "verify-in-test");
         mSecondAlbumImpl =
-                AlbumImpl.create(getInstrumentation().getTargetContext(), "recorded-in-test");
+            AlbumImpl.create(getInstrumentation().getTargetContext(), "recorded-in-test");
         mTextView = new TextView(getInstrumentation().getTargetContext());
         mTextView.setText("foobar");
 
         // Unfortunately TextView needs a LayoutParams for onDraw
         mTextView.setLayoutParams(
-                new FrameLayout.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
         measureAndLayout();
         // For most of the tests, we send a null album to verify against
@@ -84,35 +85,35 @@ public class ScreenshotImplTest {
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         mAlbumImpl.cleanup();
         mSecondAlbumImpl.cleanup();
     }
 
     @Test
-    public void testBasicFunctionalityHappyPath() throws Throwable {
+    public void testBasicFunctionalityHappyPath() {
         mScreenshot.snap(mTextView).setName("fooBar").record();
     }
 
     @Test
-    public void testClassNameIsDetectedOnNonUiThread() throws Throwable {
+    public void testClassNameIsDetectedOnNonUiThread() {
         assertEquals(getClass().getName(), mScreenshot.snap(mTextView).getTestClass());
     }
 
     @Test
-    public void testTestNameIsDetected() throws Throwable {
+    public void testTestNameIsDetected() {
         assertEquals("testTestNameIsDetected", mScreenshot.snap(mTextView).getTestName());
     }
 
     @Test
-    public void testRecordBuilderImplHasAHierarchyDumpFile() throws Throwable {
+    public void testRecordBuilderImplHasAHierarchyDumpFile() throws Exception {
         RecordBuilderImpl rb = mScreenshot.snap(mTextView).setName("blahblah");
         rb.record();
         mScreenshot.flush();
 
         String fileName =
-                new File(mScreenshotDirectories.get("verify-in-test"), "blahblah_dump.json")
-                        .getAbsolutePath();
+            new File(mScreenshotDirectories.get("verify-in-test"), "blahblah_dump.json")
+                .getAbsolutePath();
 
         InputStream is = new FileInputStream(fileName);
 
@@ -140,7 +141,7 @@ public class ScreenshotImplTest {
     }
 
     @Test
-    public void testLargeViewThrowsWithDefaultMax() throws Throwable {
+    public void testLargeViewThrowsWithDefaultMax() {
         measureAndLayout(200, 0xffff00);
 
         assertEquals(200, mTextView.getMeasuredWidth());
@@ -154,7 +155,7 @@ public class ScreenshotImplTest {
     }
 
     @Test
-    public void testLargeViewDoesntThrowWithCustomMax() throws Throwable {
+    public void testLargeViewDoesntThrowWithCustomMax() {
         measureAndLayout(1440, 1000);
 
         assertEquals(1440, mTextView.getMeasuredWidth());
@@ -163,7 +164,7 @@ public class ScreenshotImplTest {
     }
 
     @Test
-    public void testLargeViewDoesntThrowWithNoMax() throws Throwable {
+    public void testLargeViewDoesntThrowWithNoMax() {
         measureAndLayout(1440, 1000);
 
         assertEquals(1440, mTextView.getMeasuredWidth());
@@ -189,7 +190,7 @@ public class ScreenshotImplTest {
     }
 
     @Test
-    public void testBitmapIsSameAsDrawingCache() throws Throwable {
+    public void testBitmapIsSameAsDrawingCache() {
         Bitmap bmp = mScreenshot.snap(mTextView).getBitmap();
 
         mTextView.setDrawingCacheEnabled(true);
@@ -198,15 +199,14 @@ public class ScreenshotImplTest {
     }
 
     @Test
-    public void testViewIsAttachedWhileDrawing() throws Throwable {
+    public void testViewIsAttachedWhileDrawing() {
         mTextView = new MyViewForAttachment(getInstrumentation().getTargetContext());
         measureAndLayout();
         mScreenshot.snap(mTextView).record(); // assertion is taken care of in the view
     }
 
-    public void doTestTiling(boolean enableReconfigure) throws Throwable {
+    public void doTestTiling() throws Exception {
         mScreenshot.setTileSize(1000);
-        mScreenshot.setEnableBitmapReconfigure(enableReconfigure);
 
         final int VIEW_WIDTH = 43;
         final int VIEW_HEIGHT = 32;
@@ -221,7 +221,7 @@ public class ScreenshotImplTest {
         mScreenshot.snap(mTextView).setName("foo").record();
 
         Bitmap reconstructedFromTiles =
-                Bitmap.createBitmap(VIEW_WIDTH, VIEW_HEIGHT, Bitmap.Config.ARGB_8888);
+            Bitmap.createBitmap(VIEW_WIDTH, VIEW_HEIGHT, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(reconstructedFromTiles);
 
         assertEquals(Color.TRANSPARENT, reconstructedFromTiles.getPixel(0, 0));
@@ -244,19 +244,11 @@ public class ScreenshotImplTest {
                 canvas.drawBitmap(bmp, left, top, paint);
 
                 if (i == TILE_COLS - 1) {
-                    if (enableReconfigure) {
-                        assertEquals(3, bmp.getWidth());
-                    } else {
-                        assertEquals(10, bmp.getWidth());
-                    }
+                    assertEquals(3, bmp.getWidth());
                 }
 
                 if (j == TILE_ROWS - 1) {
-                    if (enableReconfigure) {
-                        assertEquals(2, bmp.getHeight());
-                    } else {
-                        assertEquals(10, bmp.getHeight());
-                    }
+                    assertEquals(2, bmp.getHeight());
                 }
             }
         }
@@ -265,18 +257,12 @@ public class ScreenshotImplTest {
     }
 
     @Test
-    public void testTiling() throws Throwable {
-        doTestTiling(false);
-    }
-
-    @SdkSuppress(minSdkVersion = 19)
-    @Test
-    public void testTilingWithReconfigure() throws Throwable {
-        doTestTiling(true);
+    public void testTiling() throws Exception{
+        doTestTiling();
     }
 
     @Test
-    public void testCannotCallgetBitmapAfterRecord() throws Throwable {
+    public void testCannotCallgetBitmapAfterRecord() {
         try {
             RecordBuilderImpl rb = mScreenshot.snap(mTextView);
             rb.record();
@@ -298,7 +284,7 @@ public class ScreenshotImplTest {
     }
 
     @Test
-    public void testMultipleOfTileSize() throws Throwable {
+    public void testMultipleOfTileSize() {
         measureAndLayout(512, 512);
         mScreenshot.snap(mTextView).record();
     }
@@ -310,23 +296,19 @@ public class ScreenshotImplTest {
     private void measureAndLayout(final int width, final int height) {
         try {
             InstrumentationRegistry.getInstrumentation()
-                    .runOnMainSync(
-                            new Runnable() {
-                                @Override
-                                public void run() {
-                                    mTextView.measure(
-                                            View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),
-                                            View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY));
-                                    mTextView.layout(
-                                            0, 0, mTextView.getMeasuredWidth(), mTextView.getMeasuredHeight());
-                                }
-                            });
+                .runOnMainSync(() -> {
+                    mTextView.measure(
+                        View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),
+                        View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY));
+                    mTextView.layout(
+                        0, 0, mTextView.getMeasuredWidth(), mTextView.getMeasuredHeight());
+                });
         } catch (Throwable t) {
             throw new RuntimeException(t);
         }
     }
 
-    public class MyViewForAttachment extends TextView {
+    public static class MyViewForAttachment extends TextView {
         private boolean mAttached = false;
 
         public MyViewForAttachment(Context context) {
@@ -376,13 +358,13 @@ public class ScreenshotImplTest {
 
                 if (expectedPixel != actualPixel) {
                     throw new AssertionError(
-                            String.format(
-                                    Locale.US,
-                                    "Pixels don't match at (%d, %d), Expected %s, got %s",
-                                    i,
-                                    j,
-                                    Long.toHexString(expected.getPixel(i, j)),
-                                    Long.toHexString(actual.getPixel(i, j))));
+                        String.format(
+                            Locale.US,
+                            "Pixels don't match at (%d, %d), Expected %s, got %s",
+                            i,
+                            j,
+                            Long.toHexString(expected.getPixel(i, j)),
+                            Long.toHexString(actual.getPixel(i, j))));
                 }
             }
         }

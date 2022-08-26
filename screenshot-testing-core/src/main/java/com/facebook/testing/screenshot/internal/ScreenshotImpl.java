@@ -16,7 +16,6 @@
 
 package com.facebook.testing.screenshot.internal;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Context;
@@ -24,23 +23,24 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
+
+import com.facebook.testing.screenshot.TestMethodInfo;
+import com.facebook.testing.screenshot.TestNameDetector;
 import com.facebook.testing.screenshot.WindowAttachment;
 import com.facebook.testing.screenshot.layouthierarchy.AccessibilityHierarchyDumper;
 import com.facebook.testing.screenshot.layouthierarchy.AccessibilityIssuesDumper;
 import com.facebook.testing.screenshot.layouthierarchy.AccessibilityUtil;
 import com.facebook.testing.screenshot.layouthierarchy.LayoutHierarchyDumper;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.util.Locale;
 import java.util.concurrent.Callable;
-
-import kotlin.Pair;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 /**
  * Implementation for Screenshot class.
@@ -67,7 +67,6 @@ public class ScreenshotImpl {
     private int mTileSize = 512;
     private Bitmap mBitmap = null;
     private Canvas mCanvas = null;
-    private boolean mEnableBitmapReconfigure = Build.VERSION.SDK_INT >= 19;
 
     ScreenshotImpl(Album album) {
         mAlbum = album;
@@ -114,11 +113,6 @@ public class ScreenshotImpl {
         return sInstance != null;
     }
 
-    // VisibleForTesting
-    void setEnableBitmapReconfigure(boolean enableBitmapReconfigure) {
-        mEnableBitmapReconfigure = enableBitmapReconfigure;
-    }
-
     public int getTileSize() {
         return mTileSize;
     }
@@ -134,10 +128,10 @@ public class ScreenshotImpl {
      */
     public RecordBuilderImpl snapActivity(final Activity activity) {
         if (!isUiThread()) {
-            Pair<String, String> testMethodInfo = TestNameDetector.getTestMethodInfo();
+            TestMethodInfo testMethodInfo = TestNameDetector.getTestMethodInfo();
             return runCallableOnUiThread(() -> snapActivity(activity))
-                    .setTestClass(testMethodInfo == null ? "unknown" : testMethodInfo.getFirst())
-                    .setTestName(testMethodInfo == null ? "unknown" : testMethodInfo.getSecond());
+                .setTestClass(testMethodInfo == null ? "unknown" : testMethodInfo.getClassName())
+                .setTestName(testMethodInfo == null ? "unknown" : testMethodInfo.getMethodName());
         }
         View rootView = activity.getWindow().getDecorView();
         return snap(rootView);
@@ -148,16 +142,15 @@ public class ScreenshotImpl {
      * as the name.
      */
     public RecordBuilderImpl snap(final View measuredView) {
-        Pair<String, String> testMethodInfo = TestNameDetector.getTestMethodInfo();
+        TestMethodInfo testMethodInfo = TestNameDetector.getTestMethodInfo();
         RecordBuilderImpl recordBuilder = new RecordBuilderImpl(this)
-                .setView(measuredView)
-                .setTestClass(testMethodInfo == null ? "unknown" : testMethodInfo.getFirst())
-                .setTestName(testMethodInfo == null ? "unknown" : testMethodInfo.getSecond());
+            .setView(measuredView)
+            .setTestClass(testMethodInfo == null ? "unknown" : testMethodInfo.getClassName())
+            .setTestName(testMethodInfo == null ? "unknown" : testMethodInfo.getMethodName());
 
         return recordBuilder;
     }
 
-    // VisibleForTesting
     public void flush() {
         mAlbum.flush();
     }
@@ -168,14 +161,10 @@ public class ScreenshotImpl {
         }
 
         if (!isUiThread()) {
-            runCallableOnUiThread(
-                    new Callable<Void>() {
-                        @Override
-                        public Void call() {
-                            storeBitmap(recordBuilder);
-                            return null;
-                        }
-                    });
+            runCallableOnUiThread((Callable<Void>) () -> {
+                storeBitmap(recordBuilder);
+                return null;
+            });
             return;
         }
 
@@ -214,13 +203,12 @@ public class ScreenshotImpl {
         }
         if (((long) width) * height > maxPixels) {
             throw new IllegalStateException(
-                    String.format(Locale.US, "View too large: (%d, %d)", width, height));
+                String.format(Locale.US, "View too large: (%d, %d)", width, height));
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.KITKAT)
     private void drawTile(View measuredView, int i, int j, RecordBuilderImpl recordBuilder)
-            throws IOException {
+        throws IOException {
         int width = measuredView.getWidth();
         int height = measuredView.getHeight();
         int left = i * mTileSize;
@@ -230,10 +218,8 @@ public class ScreenshotImpl {
 
         lazyInitBitmap();
 
-        if (mEnableBitmapReconfigure) {
-            mBitmap.reconfigure(right - left, bottom - top, Bitmap.Config.ARGB_8888);
-            mCanvas = new Canvas(mBitmap);
-        }
+        mBitmap.reconfigure(right - left, bottom - top, Bitmap.Config.ARGB_8888);
+        mCanvas = new Canvas(mBitmap);
         clearCanvas(mCanvas);
 
         drawClippedView(measuredView, left, top, mCanvas);
@@ -282,9 +268,9 @@ public class ScreenshotImpl {
             dump.put("version", METADATA_VERSION);
 
             AccessibilityUtil.AXTreeNode axTree =
-                    recordBuilder.getIncludeAccessibilityInfo()
-                            ? AccessibilityUtil.generateAccessibilityTree(recordBuilder.getView(), null)
-                            : null;
+                recordBuilder.getIncludeAccessibilityInfo()
+                    ? AccessibilityUtil.generateAccessibilityTree(recordBuilder.getView(), null)
+                    : null;
             dump.put("axHierarchy", AccessibilityHierarchyDumper.dumpHierarchy(axTree));
             mAlbum.writeViewHierarchyFile(recordBuilder.getName(), dump.toString(2));
 
@@ -329,20 +315,16 @@ public class ScreenshotImpl {
         Handler handler = new Handler(Looper.getMainLooper());
 
         synchronized (lock) {
-            handler.post(
-                    new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                ret[0] = callable.call();
-                            } catch (Exception ee) {
-                                e[0] = ee;
-                            }
-                            synchronized (lock) {
-                                lock.notifyAll();
-                            }
-                        }
-                    });
+            handler.post(() -> {
+                try {
+                    ret[0] = callable.call();
+                } catch (Exception ee) {
+                    e[0] = ee;
+                }
+                synchronized (lock) {
+                    lock.notifyAll();
+                }
+            });
 
             try {
                 lock.wait();

@@ -49,13 +49,11 @@ public class AlbumImpl implements Album {
     private final Set<String> mAllNames = new HashSet<>();
     private final MetadataRecorder mMetadataRecorder;
     private final ReportArtifactsManager mReportArtifactsManager;
-    private String mPreviousTestRunId;
-    private String mCurrentTestRunId;
+    private final String mCurrentTestRunId;
 
     /* VisibleForTesting */
     AlbumImpl(ScreenshotDirectories screenshotDirectories, String name) {
         mDir = screenshotDirectories.get(name);
-        mPreviousTestRunId = readPreviousTestRunId();
         mCurrentTestRunId = getCurrentTestRunId();
         mMetadataRecorder = new MetadataRecorder(mDir);
         mReportArtifactsManager = new ReportArtifactsManager(mCurrentTestRunId, mDir);
@@ -72,16 +70,6 @@ public class AlbumImpl implements Album {
     public void flush() {
         mMetadataRecorder.flush();
         writePreviousTestRunId();
-    }
-
-    private String readPreviousTestRunId() {
-        try {
-            BufferedReader reader =
-                new BufferedReader(new FileReader(new File(mDir, SCREENSHOT_TESTS_RUN_ID_FILE_NAME)));
-            return reader.readLine();
-        } catch (IOException e) {
-            return null;
-        }
     }
 
     private void writePreviousTestRunId() {

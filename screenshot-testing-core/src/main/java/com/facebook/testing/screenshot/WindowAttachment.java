@@ -26,6 +26,8 @@ import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
@@ -78,17 +80,6 @@ public abstract class WindowAttachment {
         }
 
         sAttachments.put(view, true);
-        if (Build.VERSION.SDK_INT < 23) {
-            // On older versions of Android, requesting focus on a view that would bring the
-            // soft keyboard up prior to attachment would result in a NPE in the view's onAttachedToWindow
-            // callback. This is due to the fact that it internally calls
-            // InputMethodManager.peekInstance() to
-            // grab the singleton instance, however it isn't created at that point, leading to the NPE.
-            // So in order to avoid that, we just grab the InputMethodManager from the view's context
-            // ahead of time to ensure the instance exists.
-            // https://android.googlesource.com/platform/frameworks/base/+/a046faaf38ad818e6b5e981a39fd7394cf7cee03
-            view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        }
         sAttachInfo = generateAttachInfo(view);
         setAttachInfo(view);
 
@@ -123,8 +114,8 @@ public abstract class WindowAttachment {
 
         try {
             Method dispatch =
-                    View.class.getDeclaredMethod(
-                            "dispatchAttachedToWindow", Class.forName("android.view.View$AttachInfo"), int.class);
+                View.class.getDeclaredMethod(
+                    "dispatchAttachedToWindow", Class.forName("android.view.View$AttachInfo"), int.class);
             dispatch.setAccessible(true);
             dispatch.invoke(view, sAttachInfo, 0);
         } catch (Exception e) {
@@ -135,24 +126,21 @@ public abstract class WindowAttachment {
     /**
      * Simulates the view as being attached.
      */
-    public static @Nullable Object generateAttachInfo(View view) {
+    @NotNull
+    public static Object generateAttachInfo(View view) {
         if (sAttachInfo != null) {
             return sAttachInfo;
         }
 
         try {
-            Class cAttachInfo = Class.forName("android.view.View$AttachInfo");
-            Class cViewRootImpl;
+            Class<?> cAttachInfo = Class.forName("android.view.View$AttachInfo");
+            Class<?> cViewRootImpl;
 
-            if (Build.VERSION.SDK_INT >= 11) {
-                cViewRootImpl = Class.forName("android.view.ViewRootImpl");
-            } else {
-                return null;
-            }
+            cViewRootImpl = Class.forName("android.view.ViewRootImpl");
 
-            Class cIWindowSession = Class.forName("android.view.IWindowSession");
-            Class cIWindow = Class.forName("android.view.IWindow");
-            Class cICallbacks = Class.forName("android.view.View$AttachInfo$Callbacks");
+            Class<?> cIWindowSession = Class.forName("android.view.IWindowSession");
+            Class<?> cIWindow = Class.forName("android.view.IWindow");
+            Class<?> cICallbacks = Class.forName("android.view.View$AttachInfo$Callbacks");
 
             Context context = view.getContext();
             WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
@@ -166,61 +154,46 @@ public abstract class WindowAttachment {
 
             if (Build.VERSION.SDK_INT >= 26) {
                 viewRootImpl =
-                        cViewRootImpl
-                                .getConstructor(Context.class, Display.class)
-                                .newInstance(context, display);
+                    cViewRootImpl
+                        .getConstructor(Context.class, Display.class)
+                        .newInstance(context, display);
 
                 viewRootCtorParams =
-                        new Class[]{
-                                cIWindowSession,
-                                cIWindow,
-                                Display.class,
-                                cViewRootImpl,
-                                Handler.class,
-                                cICallbacks,
-                                Context.class
-                        };
+                    new Class[]{
+                        cIWindowSession,
+                        cIWindow,
+                        Display.class,
+                        cViewRootImpl,
+                        Handler.class,
+                        cICallbacks,
+                        Context.class
+                    };
 
                 viewRootCtorValues =
-                        new Object[]{
-                                stub(cIWindowSession),
-                                window,
-                                display,
-                                viewRootImpl,
-                                new Handler(),
-                                stub(cICallbacks),
-                                context
-                        };
-            } else if (Build.VERSION.SDK_INT >= 17) {
-                viewRootImpl =
-                        cViewRootImpl
-                                .getConstructor(Context.class, Display.class)
-                                .newInstance(context, display);
-
-                viewRootCtorParams =
-                        new Class[]{
-                                cIWindowSession, cIWindow, Display.class, cViewRootImpl, Handler.class, cICallbacks
-                        };
-
-                viewRootCtorValues =
-                        new Object[]{
-                                stub(cIWindowSession), window, display, viewRootImpl, new Handler(), stub(cICallbacks)
-                        };
-            } else if (Build.VERSION.SDK_INT >= 16) {
-                viewRootImpl = cViewRootImpl.getConstructor(Context.class).newInstance(context);
-
-                viewRootCtorParams =
-                        new Class[]{cIWindowSession, cIWindow, cViewRootImpl, Handler.class, cICallbacks};
-
-                viewRootCtorValues =
-                        new Object[]{
-                                stub(cIWindowSession), window, viewRootImpl, new Handler(), stub(cICallbacks)
-                        };
+                    new Object[]{
+                        stub(cIWindowSession),
+                        window,
+                        display,
+                        viewRootImpl,
+                        new Handler(),
+                        stub(cICallbacks),
+                        context
+                    };
             } else {
-                viewRootCtorParams = new Class[]{cIWindowSession, cIWindow, Handler.class, cICallbacks};
+                viewRootImpl =
+                    cViewRootImpl
+                        .getConstructor(Context.class, Display.class)
+                        .newInstance(context, display);
+
+                viewRootCtorParams =
+                    new Class[]{
+                        cIWindowSession, cIWindow, Display.class, cViewRootImpl, Handler.class, cICallbacks
+                    };
 
                 viewRootCtorValues =
-                        new Object[]{stub(cIWindowSession), window, new Handler(), stub(cICallbacks)};
+                    new Object[]{
+                        stub(cIWindowSession), window, display, viewRootImpl, new Handler(), stub(cICallbacks)
+                    };
             }
 
             Object attachInfo = invokeConstructor(cAttachInfo, viewRootCtorParams, viewRootCtorValues);
@@ -228,9 +201,7 @@ public abstract class WindowAttachment {
             setField(attachInfo, "mHasWindowFocus", true);
             setField(attachInfo, "mWindowVisibility", View.VISIBLE);
             setField(attachInfo, "mInTouchMode", false);
-            if (Build.VERSION.SDK_INT >= 11) {
-                setField(attachInfo, "mHardwareAccelerated", false);
-            }
+            setField(attachInfo, "mHardwareAccelerated", false);
 
             return attachInfo;
         } catch (Exception e) {
@@ -238,32 +209,28 @@ public abstract class WindowAttachment {
         }
     }
 
-    private static Object invokeConstructor(Class clazz, Class[] params, Object[] values)
-            throws Exception {
-        Constructor cons = clazz.getDeclaredConstructor(params);
+    private static Object invokeConstructor(Class<?> clazz, Class<?>[] params, Object[] values)
+        throws Exception {
+        Constructor<?> cons = clazz.getDeclaredConstructor(params);
         cons.setAccessible(true);
         return cons.newInstance(values);
     }
 
     private static Object createIWindow() throws Exception {
-        Class cIWindow = Class.forName("android.view.IWindow");
+        Class<?> cIWindow = Class.forName("android.view.IWindow");
 
         // Since IWindow is an interface, I don't need dexmaker for this
-        InvocationHandler handler =
-                new InvocationHandler() {
-                    @Override
-                    public @Nullable Object invoke(Object proxy, Method method, Object[] args) {
-                        if (method.getName().equals("asBinder")) {
-                            return new Binder();
-                        }
-                        return null;
-                    }
-                };
+        InvocationHandler handler = (proxy, method, args) -> {
+            if (method.getName().equals("asBinder")) {
+                return new Binder();
+            }
+            return null;
+        };
 
         return Proxy.newProxyInstance(cIWindow.getClassLoader(), new Class[]{cIWindow}, handler);
     }
 
-    private static Object stub(Class klass) {
+    private static Object stub(Class<?> klass) {
         if (!klass.isInterface()) {
             throw new IllegalArgumentException("Cannot stub an non-interface");
         }
@@ -272,7 +239,7 @@ public abstract class WindowAttachment {
     }
 
     private static void setField(Object o, String fieldName, Object value) throws Exception {
-        Class clazz = o.getClass();
+        Class<?> clazz = o.getClass();
         Field field = clazz.getDeclaredField(fieldName);
         field.setAccessible(true);
         field.set(o, value);
@@ -289,7 +256,7 @@ public abstract class WindowAttachment {
     }
 
     private static class RealDetacher implements Detacher {
-        private View mView;
+        private final View mView;
 
         public RealDetacher(View view) {
             mView = view;
