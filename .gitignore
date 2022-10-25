@@ -1,12 +1,6 @@
 *.pyc
-*/build/
+build/
 .gradle
-/repo/
-/build
-repo
-examples/**/build
-examples/**/.idea/*
 .idea/*
 *.iml
 local.properties
-plugin/src/generated

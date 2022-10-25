@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.dsl.KotlinCompile
 
 plugins {
-  id("com.starter.library.kotlin")
+  alias(libs.plugins.starter.library.kotlin)
   id("java-gradle-plugin")
   id("com.starter.publishing")
   id("com.gradle.plugin-publish") version("1.0.0")
