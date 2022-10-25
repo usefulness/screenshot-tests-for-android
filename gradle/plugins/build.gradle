@@ -8,7 +8,7 @@ plugins {
 
 dependencies {
     implementation(libs.kotlin.gradle)
-    implementation(libs.starter.gradle)
+    implementation(libs.agp.gradle)
 }
 
 tasks.withType(KotlinCompile).configureEach {

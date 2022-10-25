@@ -1,13 +1,13 @@
 plugins {
-  id("com.starter.library.android")
+  alias(libs.plugins.starter.library.android)
   id("com.starter.publishing")
 }
 
 android {
+  namespace = "com.usefulness.testing.screenshot.tests"
   defaultConfig {
     minSdk 23
     testInstrumentationRunner "com.usefulness.testing.screenshot.CustomScreenshotTestRunner"
-    namespace = "com.usefulness.testing.screenshot.tests"
   }
   publishing {
     singleVariant("release")
