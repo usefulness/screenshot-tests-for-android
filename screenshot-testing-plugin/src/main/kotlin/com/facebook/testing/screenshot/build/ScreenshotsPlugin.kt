@@ -55,14 +55,14 @@ class ScreenshotsPlugin : Plugin<Project> {
         const val GROUP = "Screenshot Test"
         const val DEPENDENCY_GROUP = "io.github.usefulness"
         const val DEPENDENCY_CORE = "screenshot-testing-core"
+        const val TEST_RUNNER_CLASS = "io.github.usefulness.testing.screenshot.DefaultScreenshotRunner"
         const val SCREENSHOT_TESTS_RUN_ID = "single_test_id"
     }
 
     private lateinit var screenshotExtensions: ScreenshotsPluginExtension
 
     override fun apply(project: Project) {
-        val extensions = project.extensions
-        screenshotExtensions = extensions.create("screenshots", ScreenshotsPluginExtension::class.java)
+        screenshotExtensions = project.extensions.create("screenshots", ScreenshotsPluginExtension::class.java)
 
         project.afterEvaluate {
             if (screenshotExtensions.addDeps) {
@@ -71,6 +71,7 @@ class ScreenshotsPlugin : Plugin<Project> {
         }
         val androidExtension = getProjectExtension(project)
         androidExtension.testVariants.configureEach { generateTasksFor(project, it) }
+        androidExtension.defaultConfig.testInstrumentationRunner = TEST_RUNNER_CLASS
         androidExtension.defaultConfig.testInstrumentationRunnerArguments["SCREENSHOT_TESTS_RUN_ID"] = SCREENSHOT_TESTS_RUN_ID
     }
 
