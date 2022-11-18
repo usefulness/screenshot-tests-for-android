@@ -12,7 +12,7 @@ plugins {
     id("io.github.usefulness.screenshot-testing-plugin") version "{{ version }}"
 }
 ```
-1. `androidTest/kotlin/SampleTest.kt`
+2. `androidTest/kotlin/SampleTest.kt`
 
 ```kotlin
 class SampleTest
@@ -24,8 +24,8 @@ class SampleTest
 }
 ```
 
-1. run `./gradlew recordDebugAndroidTestScreenshotTest`
-1. modify the view, run `./gradlew verifyDebugAndroidTestScreenshotTest` observe failure with a report
+3. run `./gradlew recordDebugAndroidTestScreenshotTest`
+4. modify the view, run `./gradlew verifyDebugAndroidTestScreenshotTest` observe failure with a report
 
 ## License
 
