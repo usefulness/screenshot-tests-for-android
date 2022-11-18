@@ -15,7 +15,7 @@ plugins {
 2. `androidTest/kotlin/SampleTest.kt`
 
 ```kotlin
-class SampleTest
+class SampleTest {
 
     @Test
     fun foo() {
