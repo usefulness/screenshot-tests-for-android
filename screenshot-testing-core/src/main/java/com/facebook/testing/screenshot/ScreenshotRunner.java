@@ -18,6 +18,7 @@ package com.facebook.testing.screenshot;
 
 import android.app.Instrumentation;
 import android.os.Bundle;
+
 import com.facebook.testing.screenshot.internal.Registry;
 import com.facebook.testing.screenshot.internal.ScreenshotImpl;
 

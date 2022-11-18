@@ -8,7 +8,6 @@ android {
         minSdk 26
         applicationId = "io.github.usefulness.testing.screenshot.sample"
         namespace = "io.github.usefulness.testing.screenshot.sample"
-        testInstrumentationRunner = "io.github.usefulnes.testing.screenshot.sample.CustomScreenshotTestRunner"
     }
 }
 screenshots {
