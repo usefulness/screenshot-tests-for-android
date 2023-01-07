@@ -4,7 +4,7 @@ plugins {
   alias(libs.plugins.starter.library.kotlin)
   id("java-gradle-plugin")
   id("com.starter.publishing")
-  id("com.gradle.plugin-publish") version("1.0.0")
+  alias(libs.plugins.gradle.pluginpublish)
 }
 
 final GENERATED_PACKAGE_NAME = "io.github.usefulness.testing.screenshot.generated"
@@ -61,19 +61,16 @@ tasks.register("pyTests", Exec) {
   commandLine 'python3', '-m', 'unittest', 'discover'
 }
 
-pluginBundle {
+gradlePlugin {
   website = "https://github.com/usefulness/screenshot-tests-for-android/"
   vcsUrl = "https://github.com/usefulness/screenshot-tests-for-android.git"
-  tags = ["android", "screenshots", "espresso", "screenshot-testing"]
-}
-
-gradlePlugin {
   plugins {
     screenshotTesting {
       id = 'io.github.usefulness.screenshot-testing-plugin'
       displayName = 'Screenshot Tests for Android'
       description = "Generate fast deterministic screenshots during Android instrumentation tests. Configuration Cache compatibility included"
       implementationClass = 'com.facebook.testing.screenshot.build.ScreenshotsPlugin'
+      tags.add(["android", "screenshots", "espresso", "screenshot-testing"])
     }
   }
 }

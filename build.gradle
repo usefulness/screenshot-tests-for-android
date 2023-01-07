@@ -22,13 +22,8 @@ allprojects {
         }
       }
     }
-  }
-
-  pluginManager.withPlugin("java") {
-    java {
-      toolchain {
-        languageVersion = JavaLanguageVersion.of(JavaVersion.VERSION_17.toString())
-      }
+    kotlin {
+      jvmToolchain(17)
     }
   }
 }
