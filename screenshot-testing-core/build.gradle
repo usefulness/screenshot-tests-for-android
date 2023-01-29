@@ -16,7 +16,7 @@ android {
     exclude 'LICENSE.txt'
   }
   lint {
-    disable("UnknownNullness")
+    disable += "UnknownNullness"
   }
 }
 

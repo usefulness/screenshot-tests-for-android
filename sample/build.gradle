@@ -1,6 +1,7 @@
 plugins {
-    id("com.starter.config") version "0.56.1"
-    id("com.starter.library.android") version "0.54.0" apply false
+    alias(libs.plugins.starter.config)
+    alias(libs.plugins.starter.library.android) apply false
+    alias(libs.plugins.starter.application.android) apply false
 }
 
 commonConfig {

@@ -1,8 +1,8 @@
 import org.jetbrains.kotlin.gradle.dsl.KotlinCompile
 
 plugins {
-  alias(libs.plugins.starter.library.kotlin)
   id("java-gradle-plugin")
+  alias(libs.plugins.starter.library.kotlin)
   id("com.starter.publishing")
   alias(libs.plugins.gradle.pluginpublish)
 }
@@ -70,15 +70,15 @@ gradlePlugin {
       displayName = 'Screenshot Tests for Android'
       description = "Generate fast deterministic screenshots during Android instrumentation tests. Configuration Cache compatibility included"
       implementationClass = 'com.facebook.testing.screenshot.build.ScreenshotsPlugin'
-      tags.add(["android", "screenshots", "espresso", "screenshot-testing"])
+      tags.set(["android", "screenshots", "espresso", "screenshot-testing"])
     }
   }
 }
 
 dependencies {
-  compileOnly(libs.agp.gradle)
+  compileOnly(libs.agp.gradle.impl)
 
-  testImplementation(libs.agp.gradle)
+  testImplementation(libs.agp.gradle.impl)
   testImplementation(gradleTestKit())
   testImplementation(libs.junit.jupiter)
   testImplementation(libs.assertj.core)
