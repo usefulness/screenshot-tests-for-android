@@ -21,7 +21,6 @@ import com.android.build.gradle.LibraryExtension
 import com.android.build.gradle.TestedExtension
 import com.android.build.gradle.api.ApkVariantOutput
 import com.android.build.gradle.api.TestVariant
-import com.android.build.gradle.internal.tasks.factory.dependsOn
 import io.github.usefulness.testing.screenshot.generated.ScreenshotTestBuildConfig
 import com.usefulness.testing.screenshot.build.ScreenshotTask
 import org.gradle.api.Plugin
@@ -110,7 +109,7 @@ class ScreenshotsPlugin : Plugin<Project> {
                     variant,
                     PullScreenshotsTask::class.java,
                 )
-                    .dependsOn(cleanScreenshots)
+                    .configure { pull -> pull.dependsOn(cleanScreenshots) }
 
                 registerTask(
                     project,

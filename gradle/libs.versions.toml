@@ -1,7 +1,7 @@
 [versions]
-gradle-starter = "0.54.0"
-gradle-kotlinter = "3.13.0"
+gradle-starter = "0.56.1"
 gradle-pluginpublish = "1.1.0"
+gradle-doctor = "0.8.1"
 google-agp = "7.4.0"
 maven-kotlin = "1.8.0"
 maven-junit = "5.9.2"
@@ -18,7 +18,8 @@ google-material = "1.8.0"
 google-coordinatorlayout = "1.2.0"
 
 [libraries]
-agp-gradle = { module = "com.android.tools.build:gradle", version.ref = "google-agp" }
+agp-gradle-impl = { module = "com.android.tools.build:gradle", version.ref = "google-agp" }
+agp-gradle-api = { module = "com.android.tools.build:gradle-api", version.ref = "google-agp" }
 kotlin-gradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "maven-kotlin" }
 
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "maven-junit" }
@@ -36,10 +37,10 @@ material-core = { module = "com.google.android.material:material", version.ref =
 coordinatorlayout-core = { module = "androidx.coordinatorlayout:coordinatorlayout", version.ref = "google-coordinatorlayout" }
 
 [plugins]
-jmailen-kotlinter = { id = "org.jmailen.kotlinter", version.ref = "gradle-kotlinter" }
-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "maven-kotlin" }
 starter-config = { id = "com.starter.config", version.ref = "gradle-starter" }
 starter-versioning = { id = "com.starter.versioning", version.ref = "gradle-starter" }
 starter-library-kotlin = { id = "com.starter.library.kotlin", version.ref = "gradle-starter" }
 starter-library-android = { id = "com.starter.library.android", version.ref = "gradle-starter" }
+starter-application-android = { id = "com.starter.application.android", version.ref = "gradle-starter" }
 gradle-pluginpublish = { id = "com.gradle.plugin-publish", version.ref = "gradle-pluginpublish" }
+osacky-doctor = { id = "com.osacky.doctor", version.ref = "gradle-doctor" }

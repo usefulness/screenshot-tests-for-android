@@ -1,4 +1,4 @@
-import com.android.build.gradle.BaseExtension
+import com.android.build.api.variant.AndroidComponentsExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.ExtensionContainer
@@ -12,7 +12,9 @@ class PublishingPlugin : Plugin<Project> {
 
     override fun apply(target: Project) = with(target) {
         pluginManager.apply("maven-publish")
-        pluginManager.apply("signing")
+        if (findConfig("SIGNING_PASSWORD").isNotEmpty()) {
+            pluginManager.apply("signing")
+        }
         extensions.configure<PublishingExtension> {
             with(repositories) {
                 maven { maven ->
@@ -43,9 +45,7 @@ class PublishingPlugin : Plugin<Project> {
             }
 
             extensions.configure<SigningExtension>("signing") { signing ->
-                if (findConfig("SIGNING_PASSWORD").isNotEmpty()) {
-                    signing.sign(extensions.getByType(PublishingExtension::class.java).publications)
-                }
+                signing.sign(extensions.getByType(PublishingExtension::class.java).publications)
             }
         }
 
@@ -83,13 +83,18 @@ class PublishingPlugin : Plugin<Project> {
         }
 
         pluginManager.withPlugin("com.android.library") {
-            tasks.register("androidSourcesJar", Jar::class.java) { jar ->
+            val androidSourcesJar = tasks.register("androidSourcesJar", Jar::class.java) { jar ->
                 jar.archiveClassifier.set("sources")
-                val android = extensions.findByName("android") as BaseExtension
-                jar.from(android.sourceSets.getByName("main").java.srcDirs)
-                @Suppress("DEPRECATION")
-                jar.from((android.sourceSets.getByName("main").kotlin as com.android.build.gradle.api.AndroidSourceDirectorySet).srcDirs)
             }
+
+            val androidComponents = extensions.findByName("androidComponents") as AndroidComponentsExtension<*, *, *>
+            androidComponents.onVariants(androidComponents.selector().withBuildType("release")) { variant ->
+                androidSourcesJar.configure { jar ->
+                    variant.sources.kotlin?.all?.let { jar.from(it) }
+                    variant.sources.java?.all?.let { jar.from(it) }
+                }
+            }
+
             extensions.configure<PublishingExtension> {
                 afterEvaluate {
                     with(publications) {
