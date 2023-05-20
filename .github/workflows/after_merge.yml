@@ -50,10 +50,7 @@ jobs:
           SIGNING_SECRET_KEY_RING_FILE: ${{ secrets.SIGNING_SECRET_KEY_RING_FILE }}
         run: ./gradlew publishAllPublicationsToGithubRepository
 
-      - name: Coverage
-        uses: gradle/gradle-build-action@v2
-        with:
-          arguments: projectCoverage
+      - run: ./gradlew projectCoverage
 
       - uses: codecov/codecov-action@v3
         with:
