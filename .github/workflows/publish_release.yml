@@ -39,12 +39,13 @@ jobs:
 
       - run: git status
       - run: ./gradlew currentVersion
-      - run: ./gradlew publishAllPublicationsToGithubRepository
+      - run: ./gradlew :screenshot-testing-core:publishReleasePublicationToGithubRepository
+      - run: ./gradlew :screenshot-testing-core:publishReleasePublicationToMavenCentralRepository
 
-      - run: git status
-      - run: ./gradlew currentVersion
-      - run: ./gradlew publishAllPublicationsToMavenCentralRepository
+      - run: ./gradlew :screenshot-testing-plugin:publishPluginMavenPublicationToMavenCentralRepository
+      - run: ./gradlew :screenshot-testing-plugin:publishScreenshotTestingPluginMarkerMavenPublicationToMavenCentralRepository
 
-      - run: git status
-      - run: ./gradlew currentVersion
+      - run: ./gradlew :screenshot-testing-plugin:publishPluginMavenPublicationToGithubRepository
+      - run: ./gradlew :screenshot-testing-plugin:publishScreenshotTestingPluginMarkerMavenPublicationToGithubRepository
+
       - run: ./gradlew publishPlugins -Pgradle.publish.key=${{ secrets.gradle_publish_key }} -Pgradle.publish.secret=${{ secrets.gradle_publish_secret }}

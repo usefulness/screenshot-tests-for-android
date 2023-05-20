@@ -61,6 +61,8 @@ jobs:
 
       - run: ./gradlew publishToMavenLocal
 
+      - run: git diff --exit-code
+
       - uses: actions/upload-artifact@v3
         if: ${{ always() }}
         with:
