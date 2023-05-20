@@ -4,3 +4,4 @@ build/
 .idea/*
 *.iml
 local.properties
+*/src/generated/kotlin/io/github/usefulness/testing/screenshot/generated/ScreenshotTestBuildConfig.kt
