@@ -6,7 +6,7 @@ plugins {
 android {
   namespace = "com.usefulness.testing.screenshot.tests"
   defaultConfig {
-    minSdk 23
+    minSdk 21
     testInstrumentationRunner "com.usefulness.testing.screenshot.CustomScreenshotTestRunner"
   }
   publishing {
