@@ -12,7 +12,7 @@ dependencies {
 }
 
 kotlin {
-  jvmToolchain(17)
+  jvmToolchain(20)
 }
 
 def targetJavaVersion = JavaVersion.VERSION_11

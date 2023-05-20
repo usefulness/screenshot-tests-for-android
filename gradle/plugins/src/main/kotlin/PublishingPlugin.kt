@@ -15,6 +15,7 @@ class PublishingPlugin : Plugin<Project> {
         if (findConfig("SIGNING_PASSWORD").isNotEmpty()) {
             pluginManager.apply("signing")
         }
+
         extensions.configure<PublishingExtension> {
             with(repositories) {
                 maven { maven ->
