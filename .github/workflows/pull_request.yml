@@ -24,11 +24,13 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
-          java-version: 17
+          java-version: 20
 
       - uses: gradle/wrapper-validation-action@v1
 
       - uses: gradle/gradle-build-action@v2
+
+      - run: ./gradlew currentVersion
 
       - run: ./gradlew projectCodestyle
 
@@ -57,6 +59,8 @@ jobs:
 
       - run: ./gradlew projectLint
 
+      - run: ./gradlew publishToMavenLocal
+
       - uses: actions/upload-artifact@v3
         if: ${{ always() }}
         with:
@@ -78,7 +82,7 @@ jobs:
       - uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
-          java-version: 17
+          java-version: 20
 
       - uses: gradle/gradle-build-action@v2
 
@@ -129,7 +133,7 @@ jobs:
       - uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
-          java-version: 17
+          java-version: 20
 
       - uses: gradle/gradle-build-action@v2
         with:
