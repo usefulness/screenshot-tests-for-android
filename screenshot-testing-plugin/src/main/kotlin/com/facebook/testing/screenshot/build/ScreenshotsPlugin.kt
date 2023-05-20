@@ -84,14 +84,10 @@ class ScreenshotsPlugin : Plugin<Project> {
         }
     }
 
-    private fun <T : ScreenshotTask> registerTask(
-        project: Project,
-        name: String,
-        variant: TestVariant,
-        clazz: Class<T>,
-    ) = project.tasks.register(name, clazz) { task ->
-        task.init(variant, screenshotExtensions)
-    }
+    private fun <T : ScreenshotTask> registerTask(project: Project, name: String, variant: TestVariant, clazz: Class<T>) =
+        project.tasks.register(name, clazz) { task ->
+            task.init(variant, screenshotExtensions)
+        }
 
     private fun generateTasksFor(project: Project, variant: TestVariant) {
         val variantName = variant.name
