@@ -16,7 +16,7 @@
 
 package com.facebook.testing.screenshot.build
 
-import com.android.build.gradle.api.TestVariant
+import com.android.build.api.variant.AndroidTest
 import org.gradle.api.file.ProjectLayout
 import org.gradle.api.model.ObjectFactory
 import org.gradle.process.ExecOperations
@@ -37,14 +37,15 @@ open class RunScreenshotTestTask @Inject constructor(
         group = ScreenshotsPlugin.GROUP
     }
 
-    override fun init(variant: TestVariant, extension: ScreenshotsPluginExtension) {
+    override fun init(variant: AndroidTest, extension: ScreenshotsPluginExtension) {
         super.init(variant, extension)
 
         if (verify && extension.referenceDir != null) {
             return
         }
 
-        dependsOn(variant.connectedInstrumentTestProvider)
-        mustRunAfter(variant.connectedInstrumentTestProvider)
+        val androidTestTask = "connected${variant.name.replaceFirstChar(Char::titlecase)}"
+        dependsOn(androidTestTask)
+        mustRunAfter(androidTestTask)
     }
 }

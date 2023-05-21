@@ -16,7 +16,7 @@
 
 package com.facebook.testing.screenshot.build
 
-import com.android.build.gradle.api.TestVariant
+import com.android.build.api.variant.AndroidTest
 import org.gradle.api.file.ProjectLayout
 import org.gradle.api.model.ObjectFactory
 import org.gradle.process.ExecOperations
@@ -37,7 +37,7 @@ open class RecordScreenshotTestTask @Inject constructor(
         group = ScreenshotsPlugin.GROUP
     }
 
-    override fun init(variant: TestVariant, extension: ScreenshotsPluginExtension) {
+    override fun init(variant: AndroidTest, extension: ScreenshotsPluginExtension) {
         super.init(variant, extension)
         record = true
     }
