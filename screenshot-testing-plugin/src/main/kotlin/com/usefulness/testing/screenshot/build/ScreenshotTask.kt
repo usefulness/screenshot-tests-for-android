@@ -1,6 +1,6 @@
 package com.usefulness.testing.screenshot.build
 
-import com.android.build.gradle.api.TestVariant
+import com.android.build.api.variant.AndroidTest
 import com.facebook.testing.screenshot.build.ScreenshotsPluginExtension
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.ProjectLayout
@@ -8,7 +8,6 @@ import org.gradle.api.model.ObjectFactory
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputDirectory
-import java.util.*
 
 abstract class ScreenshotTask(objectFactory: ObjectFactory, private val projectLayout: ProjectLayout) : DefaultTask() {
 
@@ -39,7 +38,7 @@ abstract class ScreenshotTask(objectFactory: ObjectFactory, private val projectL
     @get:Input
     internal val variantName = objectFactory.property(String::class.java)
 
-    open fun init(variant: TestVariant, extension: ScreenshotsPluginExtension) {
+    open fun init(variant: AndroidTest, extension: ScreenshotsPluginExtension) {
         recordDir.set(extension.recordDir)
         multipleDevices.set(extension.multipleDevices)
         pythonExecutable.set(extension.pythonExecutable)

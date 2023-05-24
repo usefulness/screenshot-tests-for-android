@@ -16,13 +16,14 @@
 
 package com.facebook.testing.screenshot.build
 
+import com.android.build.api.variant.AndroidComponentsExtension
+import com.android.build.api.variant.AndroidTest
+import com.android.build.api.variant.HasAndroidTest
 import com.android.build.gradle.AppExtension
 import com.android.build.gradle.LibraryExtension
 import com.android.build.gradle.TestedExtension
-import com.android.build.gradle.api.ApkVariantOutput
-import com.android.build.gradle.api.TestVariant
-import io.github.usefulness.testing.screenshot.generated.ScreenshotTestBuildConfig
 import com.usefulness.testing.screenshot.build.ScreenshotTask
+import io.github.usefulness.testing.screenshot.generated.ScreenshotTestBuildConfig
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
@@ -60,16 +61,22 @@ class ScreenshotsPlugin : Plugin<Project> {
 
     private lateinit var screenshotExtensions: ScreenshotsPluginExtension
 
-    override fun apply(project: Project) {
-        screenshotExtensions = project.extensions.create("screenshots", ScreenshotsPluginExtension::class.java)
+    override fun apply(project: Project) = with(project) {
+        screenshotExtensions = extensions.create("screenshots", ScreenshotsPluginExtension::class.java)
 
-        project.afterEvaluate {
+        afterEvaluate {
             if (screenshotExtensions.addDeps) {
                 it.dependencies.add("androidTestImplementation", "$DEPENDENCY_GROUP:$DEPENDENCY_CORE:${ScreenshotTestBuildConfig.VERSION}")
             }
         }
-        val androidExtension = getProjectExtension(project)
-        androidExtension.testVariants.configureEach { generateTasksFor(project, it) }
+        val androidComponents = extensions.getByName("androidComponents") as AndroidComponentsExtension<*, *, *>
+        androidComponents.onVariants { variant ->
+            val androidTest = (variant as? HasAndroidTest)?.androidTest
+            if (androidTest != null) {
+                generateTasksFor(androidTest)
+            }
+        }
+        val androidExtension = getProjectExtension(this)
         androidExtension.defaultConfig.testInstrumentationRunner = TEST_RUNNER_CLASS
         androidExtension.defaultConfig.testInstrumentationRunnerArguments["SCREENSHOT_TESTS_RUN_ID"] = SCREENSHOT_TESTS_RUN_ID
     }
@@ -84,50 +91,20 @@ class ScreenshotsPlugin : Plugin<Project> {
         }
     }
 
-    private fun <T : ScreenshotTask> registerTask(project: Project, name: String, variant: TestVariant, clazz: Class<T>) =
-        project.tasks.register(name, clazz) { task ->
+    private inline fun <reified T : ScreenshotTask> Project.registerTask(name: String, variant: AndroidTest) =
+        project.tasks.register(name, T::class.java) { task ->
             task.init(variant, screenshotExtensions)
         }
 
-    private fun generateTasksFor(project: Project, variant: TestVariant) {
+    private fun Project.generateTasksFor(variant: AndroidTest) {
         val variantName = variant.name
-        variant.outputs.configureEach {
-            if (it is ApkVariantOutput) {
-                val cleanScreenshots = registerTask(
-                    project,
-                    CleanScreenshotsTask.taskName(variantName),
-                    variant,
-                    CleanScreenshotsTask::class.java,
-                )
-                registerTask(
-                    project,
-                    PullScreenshotsTask.taskName(variantName),
-                    variant,
-                    PullScreenshotsTask::class.java,
-                )
-                    .configure { pull -> pull.dependsOn(cleanScreenshots) }
 
-                registerTask(
-                    project,
-                    RunScreenshotTestTask.taskName(variantName),
-                    variant,
-                    RunScreenshotTestTask::class.java,
-                )
+        val cleanScreenshots = registerTask<CleanScreenshotsTask>(name = CleanScreenshotsTask.taskName(variantName), variant = variant)
+        registerTask<PullScreenshotsTask>(name = PullScreenshotsTask.taskName(variantName), variant = variant)
+            .configure { pull -> pull.dependsOn(cleanScreenshots) }
 
-                registerTask(
-                    project,
-                    RecordScreenshotTestTask.taskName(variantName),
-                    variant,
-                    RecordScreenshotTestTask::class.java,
-                )
-
-                registerTask(
-                    project,
-                    VerifyScreenshotTestTask.taskName(variantName),
-                    variant,
-                    VerifyScreenshotTestTask::class.java,
-                )
-            }
-        }
+        registerTask<RunScreenshotTestTask>(name = RunScreenshotTestTask.taskName(variantName), variant = variant)
+        registerTask<RecordScreenshotTestTask>(name = RecordScreenshotTestTask.taskName(variantName), variant = variant)
+        registerTask<VerifyScreenshotTestTask>(name = VerifyScreenshotTestTask.taskName(variantName), variant = variant)
     }
 }

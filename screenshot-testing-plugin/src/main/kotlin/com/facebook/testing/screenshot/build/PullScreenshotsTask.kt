@@ -16,13 +16,15 @@
 
 package com.facebook.testing.screenshot.build
 
-import com.android.build.gradle.api.ApkVariantOutput
-import com.android.build.gradle.api.TestVariant
+import com.android.build.api.artifact.SingleArtifact
+import com.android.build.api.variant.AndroidTest
 import com.facebook.testing.screenshot.build.ScreenshotsPlugin.Companion.SCREENSHOT_TESTS_RUN_ID
 import com.usefulness.testing.screenshot.build.ScreenshotTask
 import org.gradle.api.file.ProjectLayout
 import org.gradle.api.model.ObjectFactory
+import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.TaskAction
 import org.gradle.process.ExecOperations
 import java.io.File
@@ -33,6 +35,7 @@ open class PullScreenshotsTask @Inject constructor(
     private val projectLayout: ProjectLayout,
     private val execOperations: ExecOperations,
 ) : ScreenshotTask(objectFactory = objectFactory, projectLayout = projectLayout) {
+
     companion object {
         fun taskName(variantName: String) = "pull${variantName.replaceFirstChar(Char::titlecase)}Screenshots"
 
@@ -40,7 +43,8 @@ open class PullScreenshotsTask @Inject constructor(
             buildDirectory.file("screenshots${variantName.replaceFirstChar(Char::titlecase)}").get().asFile
     }
 
-    private lateinit var apkPath: File
+    @InputFile
+    protected val apkPath: Property<File> = objectFactory.property(File::class.java)
 
     @Input
     protected var verify = false
@@ -54,14 +58,19 @@ open class PullScreenshotsTask @Inject constructor(
         outputs.upToDateWhen { false }
     }
 
-    override fun init(variant: TestVariant, extension: ScreenshotsPluginExtension) {
+    override fun init(variant: AndroidTest, extension: ScreenshotsPluginExtension) {
         super.init(variant, extension)
-        val output = variant.outputs.find { it is ApkVariantOutput } as? ApkVariantOutput
-            ?: throw IllegalArgumentException("Can't find APK output")
-        val packageTask = variant.packageApplicationProvider.orNull
-            ?: throw IllegalArgumentException("Can't find package application provider")
 
-        apkPath = File(packageTask.outputDirectory.asFile.get(), output.outputFileName)
+        val apkDirectory = variant.artifacts.get(SingleArtifact.APK)
+            .map { directory ->
+                directory.asFile.listFiles()?.singleOrNull { it.extension == "apk" } ?: error(
+                    """
+                    Failed to pick target apk. APKs = [${directory.asFile.listFiles()}] 
+                    """.trimIndent(),
+                )
+            }
+
+        apkPath.set(apkDirectory)
     }
 
     @TaskAction
@@ -85,7 +94,7 @@ open class PullScreenshotsTask @Inject constructor(
                 "-m",
                 "android_screenshot_tests.pull_screenshots",
                 "--apk",
-                apkPath.absolutePath,
+                apkPath.get().absolutePath,
                 "--test-run-id",
                 SCREENSHOT_TESTS_RUN_ID,
                 "--temp-dir",
