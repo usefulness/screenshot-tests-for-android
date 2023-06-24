@@ -34,7 +34,7 @@ jobs:
       - run: ./gradlew assembleRelease -m
 
       - id: dependency-diff
-        name: Generate dependency diff
+        if: github.event_name == 'pull_request'
         uses: usefulness/dependency-tree-diff-action@v1
         with:
           project: 'screenshot-testing-core'
