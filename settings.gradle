@@ -16,7 +16,15 @@ pluginManagement {
 }
 
 plugins {
+  id("org.gradle.toolchains.foojay-resolver-convention") version "0.5.0"
   id "com.gradle.enterprise" version "3.13.4"
+}
+
+gradleEnterprise {
+  buildScan {
+    termsOfServiceUrl = "https://gradle.com/terms-of-service"
+    termsOfServiceAgree = "yes"
+  }
 }
 
 dependencyResolutionManagement {
@@ -27,8 +35,8 @@ dependencyResolutionManagement {
   }
 }
 
-
 rootProject.name = 'io.github.usefulness'
-include 'screenshot-testing-plugin', 'screenshot-testing-core'
 
 includeBuild("gradle/plugins")
+include 'screenshot-testing-plugin', 'screenshot-testing-core'
+
