@@ -2,26 +2,28 @@ name: Build project
 
 on:
   pull_request:
+  push:
+    branches:
+      - master
+      - main
+      - trunk
+      - develop
+      - maine
+      - mane
+      
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 jobs:
-  cancel-previous-workflows:
-    name: Cancel previous workflow runs
-    runs-on: ubuntu-latest
-    steps:
-      - uses: styfle/cancel-workflow-action@0.11.0
-        with:
-          access_token: ${{ github.token }}
-
   build:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
-      - name: set up JDK
-        uses: actions/setup-java@v3
+      - uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: 20
@@ -34,15 +36,19 @@ jobs:
 
       - run: ./gradlew projectCodestyle
 
-      - run: ./gradlew assemble
-
-      - run: ./gradlew validatePlugins
+      - run: ./gradlew check --scan
 
       - run: ./gradlew projectCoverage
 
       - uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+
+      - run: ./gradlew publishToMavenLocal
+
+      - run: ./gradlew publishPlugins -m
+
+      - run: git diff --exit-code
 
       - name: Upload test results
         if: ${{ always() }}
@@ -56,12 +62,6 @@ jobs:
         with:
           name: jacoco-report
           path: "${{ github.workspace }}/**/build/reports/jacoco"
-
-      - run: ./gradlew projectLint
-
-      - run: ./gradlew publishToMavenLocal
-
-      - run: git diff --exit-code
 
       - uses: actions/upload-artifact@v3
         if: ${{ always() }}

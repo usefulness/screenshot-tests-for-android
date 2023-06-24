@@ -2,6 +2,7 @@ name: Generate dependency diff
 
 on:
   pull_request:
+  push:
     branches:
       - master
       - main
@@ -10,10 +11,12 @@ on:
       - maine
       - mane
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
 jobs:
   generate-diff:
-    env:
-      github_token: ${{ secrets.GITHUB_TOKEN }}
     runs-on: ubuntu-latest
 
     steps:
