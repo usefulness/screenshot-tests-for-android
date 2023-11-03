@@ -9,7 +9,10 @@ import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputDirectory
 
-abstract class ScreenshotTask(objectFactory: ObjectFactory, private val projectLayout: ProjectLayout) : DefaultTask() {
+abstract class ScreenshotTask(
+    objectFactory: ObjectFactory,
+    private val projectLayout: ProjectLayout,
+) : DefaultTask() {
 
     @get:Input
     internal val recordDir = objectFactory.property(String::class.java)

@@ -8,16 +8,20 @@ import androidx.appcompat.app.AppCompatActivity
 import io.github.usefulness.testing.screenshot.sample.R
 
 class ScreenshotsSampleActivity : AppCompatActivity() {
-
     companion object {
-        fun newIntent(context: Context, status: Status) = Intent(context, ScreenshotsSampleActivity::class.java).apply {
+        fun newIntent(
+            context: Context,
+            status: Status,
+        ) = Intent(context, ScreenshotsSampleActivity::class.java).apply {
             putExtra("status", status.ordinal)
         }
     }
 
     private val status
-        get() = intent?.getIntExtra("status", 0)
-            ?.let { Status.values()[it] }
+        get() =
+            intent
+                ?.getIntExtra("status", 0)
+                ?.let { Status.values()[it] }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
