@@ -8,16 +8,17 @@ plugins {
 }
 
 final GENERATED_PACKAGE_NAME = "io.github.usefulness.testing.screenshot.generated"
-final GENERATED_BUILD_DIR = new File(projectDir.absolutePath, "src/generated/kotlin/${GENERATED_PACKAGE_NAME.replace('.', '/')}")
+final GENERATED_BUILD_DIR = layout.buildDirectory.map { it.dir("generated/config/${GENERATED_PACKAGE_NAME.replace('.', '/')}")}
 
 tasks.register("generateBuildConfig") {
   final version = project.version
   doLast {
-    GENERATED_BUILD_DIR.deleteDir()
-    GENERATED_BUILD_DIR.mkdirs()
+    def generatedDir = GENERATED_BUILD_DIR.get().asFile
+    generatedDir.deleteDir()
+    generatedDir.mkdirs()
 
     final className = "ScreenshotTestBuildConfig"
-    final configClass = new File(GENERATED_BUILD_DIR, "${className}.kt")
+    final configClass = new File(generatedDir, "${className}.kt")
     BufferedWriter writer = configClass.newWriter()
     try {
       writer.writeLine("package $GENERATED_PACKAGE_NAME")
@@ -41,7 +42,7 @@ tasks.named("compileKotlin") {
   dependsOn("generateBuildConfig")
   sourceSets {
     main {
-      kotlin.srcDirs += 'src/generated/kotlin'
+      kotlin.srcDir(GENERATED_BUILD_DIR)
       resources.srcDirs 'src/py'
       resources {
         exclude '**/*.pyc'
