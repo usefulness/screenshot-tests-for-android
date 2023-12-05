@@ -48,6 +48,9 @@ open class ScreenshotsPluginExtension {
 
     /** Whether to tar the screenshots in an archive file to transfer */
     var bundleResults = false
+
+    /** Root-mean-square error value, @see https://github.com/usefulness/screenshot-tests-for-android/pull/190#issue-2025888191 */
+    var tolerance = 0.0f
 }
 
 class ScreenshotsPlugin : Plugin<Project> {

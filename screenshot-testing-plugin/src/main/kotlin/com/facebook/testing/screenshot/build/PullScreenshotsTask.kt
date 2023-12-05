@@ -103,13 +103,17 @@ open class PullScreenshotsTask @Inject constructor(
                 .apply {
                     if (verify) {
                         add("--verify")
-                        add("--tolerance=1.5")
                     } else if (record) {
                         add("--record")
                     }
 
                     if (verify || record) {
                         add(recordDir.get())
+                    }
+
+                    if (verify) {
+                        add("--tolerance")
+                        add(tolerance.get().toString())
                     }
 
                     if (verify && failureDir.isPresent) {
