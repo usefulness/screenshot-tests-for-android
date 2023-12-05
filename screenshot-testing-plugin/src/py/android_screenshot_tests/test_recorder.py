@@ -30,7 +30,7 @@ class TestRecorder(unittest.TestCase):
         self.inputdir = tempfile.mkdtemp()
         self.failureDir = tempfile.mkdtemp()
         self.tmpimages = []
-        self.recorder = Recorder(self.inputdir, self.outputdir, self.failureDir)
+        self.recorder = Recorder(self.inputdir, self.outputdir, self.failureDir, 0.0)
 
     def create_temp_image(self, name, dimens, color):
         im = Image.new("RGBA", dimens, color)

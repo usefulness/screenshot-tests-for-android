@@ -554,6 +554,7 @@ def pull_screenshots(
         filter_name_regex=None,
         record=None,
         verify=None,
+        tolerance = None,
         test_run_id=None,
         opt_generate_png=None,
         test_img_api=None,
@@ -592,6 +593,7 @@ def pull_screenshots(
     device_name = device_name_calculator.name() if device_name_calculator else None
     record_dir = join(record, device_name) if record and device_name else record
     verify_dir = join(verify, device_name) if verify and device_name else verify
+    tolerance = tolerance or 0.0
 
     if failure_dir:
         failure_dir = join(failure_dir, device_name) if device_name else failure_dir
@@ -602,7 +604,7 @@ def pull_screenshots(
         # don't import this early, since we need PIL to import this
         from .recorder import Recorder
 
-        recorder = Recorder(temp_dir, record_dir or verify_dir, failure_dir)
+        recorder = Recorder(temp_dir, record_dir or verify_dir, failure_dir, tolerance)
         if verify:
             recorder.verify()
         else:
@@ -642,6 +644,7 @@ def main(argv):
                 "apk",
                 "record=",
                 "verify=",
+                "tolerance=",
                 "failure-dir=",
                 "temp-dir=",
                 "no-pull",
@@ -668,6 +671,12 @@ def main(argv):
 
     should_perform_pull = "--no-pull" not in opts
     bundle_results = "--bundle-results" in opts
+
+    tolerance = None
+    try:
+        tolerance = float(opts.get("--tolerance"))
+    except (TypeError, ValueError):
+        pass
 
     multiple_devices = opts.get("--multiple-devices")
     device_calculator = (
@@ -705,6 +714,7 @@ def main(argv):
             test_run_id=opts.get("--test-run-id"),
             record=opts.get("--record"),
             verify=opts.get("--verify"),
+            tolerance=tolerance,
             adb_puller=SimplePuller(puller_args),
             device_name_calculator=device_calculator,
             failure_dir=opts.get("--failure-dir"),

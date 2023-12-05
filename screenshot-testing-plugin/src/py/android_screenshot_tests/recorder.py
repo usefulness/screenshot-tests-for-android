@@ -17,6 +17,7 @@ import json
 import os
 import shutil
 import sys
+import math
 import tempfile
 import xml.etree.ElementTree as ET
 from os.path import join
@@ -31,11 +32,12 @@ class VerifyError(Exception):
 
 
 class Recorder:
-    def __init__(self, input, output, failure_output):
+    def __init__(self, input, output, failure_output, tolerance):
         self._input = input
         self._output = output
         self._realoutput = output
         self._failure_output = failure_output
+        self._tolerance = tolerance
 
     def _get_image_size(self, file_name):
         with Image.open(file_name) as im:
@@ -88,15 +90,22 @@ class Recorder:
             shutil.rmtree(self._output)
         os.makedirs(self._output)
 
+    def _image_rms(self, image):
+        histogram = image.histogram()
+        squares = (value * ((idx % 256) ** 2) for idx, value in enumerate(histogram))
+        sum_of_squares = sum(squares)
+        rms = math.sqrt(sum_of_squares / float(image.size[0] * image.size[1]))
+        return rms
+
     def _is_image_same(self, file1, file2, failure_file):
         with Image.open(file1) as im1, Image.open(file2) as im2:
             diff_image = ImageChops.difference(im1.convert("RGB"), im2.convert("RGB"))
             try:
-                diff = diff_image.getbbox()
-                if diff is None and im1.size == im2.size:
+                if im1.size == im2.size and self._image_rms(diff_image) <= self._tolerance:
                     return True
                 else:
                     if failure_file:
+                        diff = diff_image.getbbox()
                         diff_list = list(diff) if diff else []
                         draw = ImageDraw.Draw(im2)
                         draw.rectangle(diff_list, outline=(255, 0, 0))

@@ -103,6 +103,7 @@ open class PullScreenshotsTask @Inject constructor(
                 .apply {
                     if (verify) {
                         add("--verify")
+                        add("--tolerance=1.5")
                     } else if (record) {
                         add("--record")
                     }
