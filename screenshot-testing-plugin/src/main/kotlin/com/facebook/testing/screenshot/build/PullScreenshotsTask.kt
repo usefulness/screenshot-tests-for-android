@@ -111,6 +111,11 @@ open class PullScreenshotsTask @Inject constructor(
                         add(recordDir.get())
                     }
 
+                    if (verify) {
+                        add("--tolerance")
+                        add(tolerance.get().toString())
+                    }
+
                     if (verify && failureDir.isPresent) {
                         failureOutput.get().asFile.deleteRecursively()
                         add("--failure-dir")

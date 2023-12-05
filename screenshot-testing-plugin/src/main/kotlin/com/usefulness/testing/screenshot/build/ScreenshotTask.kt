@@ -41,6 +41,9 @@ abstract class ScreenshotTask(
     @get:Input
     internal val variantName = objectFactory.property(String::class.java)
 
+    @get:Input
+    internal val tolerance = objectFactory.property(Float::class.java)
+
     open fun init(variant: AndroidTest, extension: ScreenshotsPluginExtension) {
         recordDir.set(extension.recordDir)
         multipleDevices.set(extension.multipleDevices)
@@ -49,6 +52,7 @@ abstract class ScreenshotTask(
         failureDir.set(extension.failureDir)
         failureOutput.set(extension.failureDir?.let(projectLayout.projectDirectory::file))
         bundleResults.set(extension.bundleResults)
+        tolerance.set(extension.tolerance)
         variantName.set(variant.name)
     }
 }
