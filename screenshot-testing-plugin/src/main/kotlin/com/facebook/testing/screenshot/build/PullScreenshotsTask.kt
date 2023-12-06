@@ -21,8 +21,8 @@ import com.android.build.api.variant.AndroidTest
 import com.facebook.testing.screenshot.build.ScreenshotsPlugin.Companion.SCREENSHOT_TESTS_RUN_ID
 import com.usefulness.testing.screenshot.build.ScreenshotTask
 import org.gradle.api.file.ProjectLayout
+import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.model.ObjectFactory
-import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.TaskAction
@@ -44,7 +44,7 @@ open class PullScreenshotsTask @Inject constructor(
     }
 
     @InputFile
-    protected val apkPath: Property<File> = objectFactory.property(File::class.java)
+    protected val apkPath: RegularFileProperty = objectFactory.fileProperty()
 
     @Input
     protected var verify = false
@@ -70,7 +70,7 @@ open class PullScreenshotsTask @Inject constructor(
                 )
             }
 
-        apkPath.set(apkDirectory)
+        apkPath.fileProvider(apkDirectory)
     }
 
     @TaskAction
@@ -94,7 +94,7 @@ open class PullScreenshotsTask @Inject constructor(
                 "-m",
                 "android_screenshot_tests.pull_screenshots",
                 "--apk",
-                apkPath.get().absolutePath,
+                apkPath.get().asFile.absolutePath,
                 "--test-run-id",
                 SCREENSHOT_TESTS_RUN_ID,
                 "--temp-dir",
