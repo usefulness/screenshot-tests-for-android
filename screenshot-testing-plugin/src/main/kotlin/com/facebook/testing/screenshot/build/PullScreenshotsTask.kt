@@ -20,11 +20,11 @@ import com.android.build.api.artifact.SingleArtifact
 import com.android.build.api.variant.AndroidTest
 import com.facebook.testing.screenshot.build.ScreenshotsPlugin.Companion.SCREENSHOT_TESTS_RUN_ID
 import com.usefulness.testing.screenshot.build.ScreenshotTask
+import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.ProjectLayout
-import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.tasks.Input
-import org.gradle.api.tasks.InputFile
+import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.TaskAction
 import org.gradle.process.ExecOperations
 import java.io.File
@@ -43,8 +43,8 @@ open class PullScreenshotsTask @Inject constructor(
             buildDirectory.file("screenshots${variantName.replaceFirstChar(Char::titlecase)}").get().asFile
     }
 
-    @InputFile
-    protected val apkPath: RegularFileProperty = objectFactory.fileProperty()
+    @InputDirectory
+    protected val apkDirectory: DirectoryProperty = objectFactory.directoryProperty()
 
     @Input
     protected var verify = false
@@ -61,16 +61,7 @@ open class PullScreenshotsTask @Inject constructor(
     override fun init(variant: AndroidTest, extension: ScreenshotsPluginExtension) {
         super.init(variant, extension)
 
-        val apkDirectory = variant.artifacts.get(SingleArtifact.APK)
-            .map { directory ->
-                directory.asFile.listFiles()?.singleOrNull { it.extension == "apk" } ?: error(
-                    """
-                    Failed to pick target apk. APKs = [${directory.asFile.listFiles()}] 
-                    """.trimIndent(),
-                )
-            }
-
-        apkPath.fileProvider(apkDirectory)
+        apkDirectory.set(variant.artifacts.get(SingleArtifact.APK))
     }
 
     @TaskAction
@@ -86,6 +77,8 @@ open class PullScreenshotsTask @Inject constructor(
 
         assert(if (verify) outputDir.exists() else !outputDir.exists())
 
+        val testedApk = getTestedApk()
+
         execOperations.exec { exec ->
             exec.executable = pythonExecutable.get()
             exec.environment("PYTHONPATH", jarFile)
@@ -94,7 +87,7 @@ open class PullScreenshotsTask @Inject constructor(
                 "-m",
                 "android_screenshot_tests.pull_screenshots",
                 "--apk",
-                apkPath.get().asFile.absolutePath,
+                testedApk.absolutePath,
                 "--test-run-id",
                 SCREENSHOT_TESTS_RUN_ID,
                 "--temp-dir",
@@ -139,4 +132,7 @@ open class PullScreenshotsTask @Inject constructor(
             println(exec.args)
         }
     }
+
+    private fun getTestedApk() = apkDirectory.get().asFile.listFiles()?.singleOrNull { it.extension == "apk" }
+        ?: error("Failed to pick target apk. APKs = [${apkDirectory.orNull?.asFile?.listFiles()}]")
 }
