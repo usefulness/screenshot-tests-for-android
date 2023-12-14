@@ -52,18 +52,18 @@ jobs:
 
       - name: Upload test results
         if: ${{ always() }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: test-results
           path: "${{ github.workspace }}/**/build/reports/tests"
 
       - name: Upload jacoco report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: jacoco-report
           path: "${{ github.workspace }}/**/build/reports/jacoco"
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         if: ${{ always() }}
         with:
           name: lint-results
@@ -115,7 +115,7 @@ jobs:
             ./gradlew pytests connectedCheck 
 
       - name: Upload screenshot tests result
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: screenshots
           path: "${{ github.workspace }}/**/build/*AndroidTest/"
@@ -169,14 +169,14 @@ jobs:
             ./gradlew verifyDebugAndroidTestScreenshotTest
 
       - name: Upload screenshot tests result
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: screenshots
           path: "${{ github.workspace }}/**/build/*AndroidTest/"
 
       - name: Upload failed screenshots
         if: ${{ failure() }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: failedScreenshots
           path: "${{ github.workspace }}/**/build/failedScreenshots"
