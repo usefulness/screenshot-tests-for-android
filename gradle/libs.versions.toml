@@ -14,7 +14,7 @@ google-androidtestRunner = "1.5.2"
 google-androidtestext = "1.1.5"
 google-espresso = "3.5.1"
 google-appcompat = "1.6.1"
-google-material = "1.10.0"
+google-material = "1.11.0"
 google-coordinatorlayout = "1.2.0"
 
 [libraries]
