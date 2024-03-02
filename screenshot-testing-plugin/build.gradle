@@ -1,4 +1,5 @@
-import org.jetbrains.kotlin.gradle.dsl.KotlinCompile
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
   id("java-gradle-plugin")
@@ -32,9 +33,9 @@ tasks.register("generateBuildConfig") {
 }
 
 tasks.withType(KotlinCompile).configureEach {
-  kotlinOptions {
-    apiVersion = "1.5"
-    languageVersion = "1.5"
+  compilerOptions {
+    apiVersion = KotlinVersion.KOTLIN_1_8
+    languageVersion = KotlinVersion.KOTLIN_1_8
   }
 }
 
