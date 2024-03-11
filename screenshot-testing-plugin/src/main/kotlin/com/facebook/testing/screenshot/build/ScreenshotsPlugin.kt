@@ -19,9 +19,6 @@ package com.facebook.testing.screenshot.build
 import com.android.build.api.variant.AndroidComponentsExtension
 import com.android.build.api.variant.AndroidTest
 import com.android.build.api.variant.HasAndroidTest
-import com.android.build.gradle.AppExtension
-import com.android.build.gradle.LibraryExtension
-import com.android.build.gradle.TestedExtension
 import com.usefulness.testing.screenshot.build.ScreenshotTask
 import io.github.usefulness.testing.screenshot.generated.ScreenshotTestBuildConfig
 import org.gradle.api.Plugin
@@ -77,20 +74,10 @@ class ScreenshotsPlugin : Plugin<Project> {
             val androidTest = (variant as? HasAndroidTest)?.androidTest
             if (androidTest != null) {
                 generateTasksFor(androidTest)
+                androidTest.instrumentationRunner
+                androidTest.instrumentationRunner.set(TEST_RUNNER_CLASS)
+                androidTest.instrumentationRunnerArguments.put("SCREENSHOT_TESTS_RUN_ID", SCREENSHOT_TESTS_RUN_ID)
             }
-        }
-        val androidExtension = getProjectExtension(this)
-        androidExtension.defaultConfig.testInstrumentationRunner = TEST_RUNNER_CLASS
-        androidExtension.defaultConfig.testInstrumentationRunnerArguments["SCREENSHOT_TESTS_RUN_ID"] = SCREENSHOT_TESTS_RUN_ID
-    }
-
-    private fun getProjectExtension(project: Project): TestedExtension {
-        val extensions = project.extensions
-        val plugins = project.plugins
-        return when {
-            plugins.hasPlugin("com.android.application") -> extensions.findByType(AppExtension::class.java)!!
-            plugins.hasPlugin("com.android.library") -> extensions.findByType(LibraryExtension::class.java)!!
-            else -> throw IllegalArgumentException("Screenshot Test plugin requires Android's plugin")
         }
     }
 

@@ -18,7 +18,6 @@ google-material = "1.11.0"
 google-coordinatorlayout = "1.2.0"
 
 [libraries]
-agp-gradle-impl = { module = "com.android.tools.build:gradle", version.ref = "google-agp" }
 agp-gradle-api = { module = "com.android.tools.build:gradle-api", version.ref = "google-agp" }
 kotlin-gradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "maven-kotlin" }
 
