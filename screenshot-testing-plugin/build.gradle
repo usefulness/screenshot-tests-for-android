@@ -78,7 +78,7 @@ gradlePlugin {
 }
 
 dependencies {
-  compileOnly(libs.agp.gradle.impl)
+  compileOnly(libs.agp.gradle.api)
 
   testImplementation(libs.agp.gradle.api)
   testImplementation(gradleTestKit())
