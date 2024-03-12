@@ -74,7 +74,6 @@ class ScreenshotsPlugin : Plugin<Project> {
             val androidTest = (variant as? HasAndroidTest)?.androidTest
             if (androidTest != null) {
                 generateTasksFor(androidTest)
-                androidTest.instrumentationRunner
                 androidTest.instrumentationRunner.set(TEST_RUNNER_CLASS)
                 androidTest.instrumentationRunnerArguments.put("SCREENSHOT_TESTS_RUN_ID", SCREENSHOT_TESTS_RUN_ID)
             }
