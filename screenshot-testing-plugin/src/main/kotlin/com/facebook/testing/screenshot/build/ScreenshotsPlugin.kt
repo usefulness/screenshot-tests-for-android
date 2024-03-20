@@ -16,7 +16,6 @@
 
 package com.facebook.testing.screenshot.build
 
-import com.android.build.api.AndroidPluginVersion
 import com.android.build.api.dsl.CommonExtension
 import com.android.build.api.variant.AndroidComponentsExtension
 import com.android.build.api.variant.AndroidTest
@@ -71,22 +70,17 @@ class ScreenshotsPlugin : Plugin<Project> {
                 it.dependencies.add("androidTestImplementation", "$DEPENDENCY_GROUP:$DEPENDENCY_CORE:${ScreenshotTestBuildConfig.VERSION}")
             }
         }
+        val android = extensions.getByName("android") as CommonExtension<*, *, *, *, *, *>
+        android.defaultConfig {
+            testInstrumentationRunnerArguments["SCREENSHOT_TESTS_RUN_ID"] = SCREENSHOT_TESTS_RUN_ID
+            testInstrumentationRunner = TEST_RUNNER_CLASS
+        }
+
         val androidComponents = extensions.getByName("androidComponents") as AndroidComponentsExtension<*, *, *>
-        val agpVersion = androidComponents.pluginVersion
         androidComponents.onVariants { variant ->
             val androidTest = (variant as? HasAndroidTest)?.androidTest
             if (androidTest != null) {
                 generateTasksFor(androidTest)
-                androidTest.instrumentationRunner.set(TEST_RUNNER_CLASS)
-                if (agpVersion.canUseRunnerArgumentsArguments) {
-                    androidTest.instrumentationRunnerArguments.put("SCREENSHOT_TESTS_RUN_ID", SCREENSHOT_TESTS_RUN_ID)
-                }
-            }
-        }
-        if (!agpVersion.canUseRunnerArgumentsArguments) {
-            val android = extensions.getByName("android") as CommonExtension<*, *, *, *, *, *>
-            android.defaultConfig {
-                testInstrumentationRunnerArguments.put("SCREENSHOT_TESTS_RUN_ID", SCREENSHOT_TESTS_RUN_ID)
             }
         }
     }
@@ -107,6 +101,4 @@ class ScreenshotsPlugin : Plugin<Project> {
         registerTask<RecordScreenshotTestTask>(name = RecordScreenshotTestTask.taskName(variantName), variant = variant)
         registerTask<VerifyScreenshotTestTask>(name = VerifyScreenshotTestTask.taskName(variantName), variant = variant)
     }
-
-    private val AndroidPluginVersion.canUseRunnerArgumentsArguments get() = this >= AndroidPluginVersion(8, 2, 0)
 }
