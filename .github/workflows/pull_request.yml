@@ -70,7 +70,7 @@ jobs:
           path: '${{ github.workspace }}/**/build/**/reports/lint-results-*.html'
 
   connected-test:
-    runs-on: macos-latest
+    runs-on: macos-13
     strategy:
       matrix:
         apiVersion: [ 28 ]
@@ -121,7 +121,7 @@ jobs:
           path: "${{ github.workspace }}/**/build/*AndroidTest/"
 
   sample-smoke-test:
-    runs-on: macos-latest
+    runs-on: macos-13
     strategy:
       matrix:
         apiVersion: [ 28 ]
