@@ -57,7 +57,6 @@ class ScreenshotsPlugin : Plugin<Project> {
         const val DEPENDENCY_GROUP = "io.github.usefulness"
         const val DEPENDENCY_CORE = "screenshot-testing-core"
         const val TEST_RUNNER_CLASS = "io.github.usefulness.testing.screenshot.DefaultScreenshotRunner"
-        const val SCREENSHOT_TESTS_RUN_ID = "single_test_id"
     }
 
     private lateinit var screenshotExtensions: ScreenshotsPluginExtension
@@ -67,12 +66,13 @@ class ScreenshotsPlugin : Plugin<Project> {
 
         afterEvaluate {
             if (screenshotExtensions.addDeps) {
-                it.dependencies.add("androidTestImplementation", "$DEPENDENCY_GROUP:$DEPENDENCY_CORE:${ScreenshotTestBuildConfig.VERSION}")
+                it.dependencies.add("androidTestImplementation", "$DEPENDENCY_GROUP:$DEPENDENCY_CORE:${ScreenshotTestBuildConfig.PLUGIN_VERSION}")
+                it.dependencies.add("androidTestUtil", "androidx.test.services:test-services:${ScreenshotTestBuildConfig.ANDROID_TEST_SERVICES_VERSION}")
             }
         }
         val android = extensions.getByName("android") as CommonExtension<*, *, *, *, *, *>
         android.defaultConfig {
-            testInstrumentationRunnerArguments["SCREENSHOT_TESTS_RUN_ID"] = SCREENSHOT_TESTS_RUN_ID
+            testInstrumentationRunnerArguments["useTestStorageService"] = "true"
             testInstrumentationRunner = TEST_RUNNER_CLASS
         }
 

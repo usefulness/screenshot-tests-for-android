@@ -3,7 +3,3 @@ plugins {
     alias(libs.plugins.starter.library.android) apply false
     alias(libs.plugins.starter.application.android) apply false
 }
-
-commonConfig {
-    javaFilesAllowed = true
-}

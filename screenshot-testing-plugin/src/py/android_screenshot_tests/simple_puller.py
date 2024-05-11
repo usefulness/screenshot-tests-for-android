@@ -81,7 +81,4 @@ class SimplePuller:
         self._remove_temp_tar(src)
 
     def get_external_data_dir(self):
-        output = common.check_output(
-            [get_adb()] + self._adb_args + ["shell", "echo", "$EXTERNAL_STORAGE"]
-        )
-        return output.strip().split()[-1]
+        return "/sdcard/googletest/test_outputfiles"

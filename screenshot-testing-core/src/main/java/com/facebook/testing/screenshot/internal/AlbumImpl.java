@@ -16,99 +16,48 @@
 
 package com.facebook.testing.screenshot.internal;
 
-import static com.facebook.testing.screenshot.ScreenshotRunner.SCREENSHOT_TESTS_RUN_ID;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.util.Log;
 
-import androidx.annotation.VisibleForTesting;
-
-import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
-import androidx.annotation.Nullable;
+import io.github.usefulness.testing.screenshot.ReportArtifactsManager;
+import io.github.usefulness.testing.screenshot.ScreenshotDirectories;
 
 /**
  * A "local" implementation of Album.
  */
-@SuppressWarnings("deprecation")
 public class AlbumImpl implements Album {
     private static final int COMPRESSION_QUALITY = 90;
-    private static final String SCREENSHOT_TESTS_RUN_ID_FILE_NAME = "tests_run_id";
 
-    private final File mDir;
     private final Set<String> mAllNames = new HashSet<>();
     private final MetadataRecorder mMetadataRecorder;
     private final ReportArtifactsManager mReportArtifactsManager;
-    private final String mCurrentTestRunId;
 
     /* VisibleForTesting */
-    AlbumImpl(ScreenshotDirectories screenshotDirectories, String name) {
-        mDir = screenshotDirectories.get(name);
-        mCurrentTestRunId = getCurrentTestRunId();
-        mMetadataRecorder = new MetadataRecorder(mDir);
-        mReportArtifactsManager = new ReportArtifactsManager(mCurrentTestRunId, mDir);
+    AlbumImpl(ScreenshotDirectories screenshotDirectories) {
+        mMetadataRecorder = new MetadataRecorder(screenshotDirectories);
+        mReportArtifactsManager = new ReportArtifactsManager(screenshotDirectories);
     }
 
     /**
      * Creates a "local" album that stores all the images on device.
      */
-    public static AlbumImpl create(Context context, String name) {
-        return new AlbumImpl(new ScreenshotDirectories(context), name);
+    public static AlbumImpl create(Context context) {
+        return new AlbumImpl(new ScreenshotDirectories(context));
     }
 
     @Override
     public void flush() {
         mMetadataRecorder.flush();
-        writePreviousTestRunId();
-    }
-
-    private void writePreviousTestRunId() {
-        try {
-            FileWriter writer = new FileWriter(new File(mDir, SCREENSHOT_TESTS_RUN_ID_FILE_NAME));
-            writer.write(mCurrentTestRunId);
-            writer.close();
-        } catch (IOException e) {
-            Log.e(AlbumImpl.class.getName(), "Couldn't write previous test run id.", e);
-        }
-    }
-
-    private String getCurrentTestRunId() {
-        return Registry.getRegistry().arguments.getString(SCREENSHOT_TESTS_RUN_ID, "");
-    }
-
-    /**
-     * Returns the stored screenshot in the album, or null if no such test case exists.
-     */
-    @Nullable
-    Bitmap getScreenshot(String name) throws IOException {
-        if (getScreenshotFile(name) == null) {
-            return null;
-        }
-        return BitmapFactory.decodeFile(getScreenshotFile(name).getAbsolutePath());
-    }
-
-    /**
-     * Returns the file in which the screenshot is stored, or null if this is not a valid screenshot
-     *
-     * <p>TODO: Adjust tests to no longer use this method. It's quite sketchy and inefficient.
-     */
-    @Nullable
-    File getScreenshotFile(String name) {
-        return mReportArtifactsManager.readFile(getScreenshotFilenameInternal(name));
     }
 
     @Override
-    public String writeBitmap(String name, int tilei, int tilej, Bitmap bitmap) throws IOException {
+    public String writeBitmap(String name, int tilei, int tilej, Bitmap bitmap) {
         String tileName = generateTileName(name, tilei, tilej);
         String filename = getScreenshotFilenameInternal(tileName);
         ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -122,13 +71,13 @@ public class AlbumImpl implements Album {
      */
     @Override
     public void cleanup() {
-        if (!mDir.exists()) {
-            // We probably failed to even create it, so nothing to clean up
-            return;
-        }
-        for (String s : mDir.list()) {
-            new File(mDir, s).delete();
-        }
+//        if (!mDir.exists()) {
+//             We probably failed to even create it, so nothing to clean up
+//            return;
+//        }
+//        for (File file : mDir.listFiles()) {
+//            new file.delete();
+//        }
     }
 
     /**
@@ -148,16 +97,16 @@ public class AlbumImpl implements Album {
     }
 
     @Override
-    public void writeAxIssuesFile(String name, String data) throws IOException {
+    public void writeAxIssuesFile(String name, String data) {
         writeMetadataFile(getAxIssuesFilename(name), data);
     }
 
     @Override
-    public void writeViewHierarchyFile(String name, String data) throws IOException {
+    public void writeViewHierarchyFile(String name, String data) {
         writeMetadataFile(getViewHierarchyFilename(name), data);
     }
 
-    public void writeMetadataFile(String name, String data) throws IOException {
+    public void writeMetadataFile(String name, String data) {
         byte[] out = data.getBytes();
         mReportArtifactsManager.recordFile(name, out);
     }
@@ -198,8 +147,6 @@ public class AlbumImpl implements Album {
 
         if (recordBuilder.getError() != null) {
             screenshotNode.withError(recordBuilder.getError());
-        } else {
-            saveTiling(screenshotNode, recordBuilder);
         }
 
         if (recordBuilder.getGroup() != null) {
@@ -209,44 +156,6 @@ public class AlbumImpl implements Album {
         mAllNames.add(recordBuilder.getName());
 
         screenshotNode.save();
-    }
-
-    @VisibleForTesting
-    File getMetadataFile() {
-        return mMetadataRecorder.getMetadataFile();
-    }
-
-    private void saveTiling(
-        MetadataRecorder.ScreenshotMetadataRecorder recorder, RecordBuilderImpl recordBuilder)
-        throws IOException {
-        Tiling tiling = recordBuilder.getTiling();
-        for (int i = 0; i < tiling.getWidth(); i++) {
-            for (int j = 0; j < tiling.getHeight(); j++) {
-                File file = new File(mDir, generateTileName(recordBuilder.getName(), i, j));
-
-                recorder
-                    .withAbsoluteFileName(file.getAbsolutePath())
-                    .withRelativeFileName(getRelativePath(file, mDir));
-            }
-        }
-    }
-
-    /**
-     * Returns the relative path of file from dir
-     */
-    private String getRelativePath(File file, File dir) {
-        try {
-            String filePath = file.getCanonicalPath();
-            String dirPath = dir.getCanonicalPath();
-
-            if (filePath.startsWith(dirPath)) {
-                return filePath.substring(dirPath.length() + 1);
-            }
-
-            return filePath;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     /**
@@ -261,6 +170,6 @@ public class AlbumImpl implements Album {
             return name;
         }
 
-        return String.format("%s_%s_%s", name, String.valueOf(i), String.valueOf(j));
+        return String.format("%s_%s_%s", name, i, j);
     }
 }

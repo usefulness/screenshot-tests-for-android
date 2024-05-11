@@ -20,22 +20,26 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.github.usefulness.testing.screenshot.ScreenshotDirectories;
+
 class MetadataRecorder {
 
-    private final File mDir;
+    private String metadataFileName = "metadata.json";
+    private final ScreenshotDirectories screenshotDirectories;
     private List<ScreenshotMetadata> mMetadata;
 
-    MetadataRecorder(File reportDirectory) {
-        mDir = reportDirectory;
+    MetadataRecorder(ScreenshotDirectories screenshotDirectories) {
+        this.screenshotDirectories = screenshotDirectories;
     }
 
     void flush() {
@@ -116,42 +120,20 @@ class MetadataRecorder {
             mCurrentScreenshotMetadata.group = group;
             return this;
         }
-
-        public ScreenshotMetadataRecorder withAbsoluteFileName(String absolutePath) {
-            if (mCurrentScreenshotMetadata.absoluteFilesNames == null) {
-                mCurrentScreenshotMetadata.absoluteFilesNames = new ArrayList<>();
-            }
-            mCurrentScreenshotMetadata.absoluteFilesNames.add(absolutePath);
-            return this;
-        }
-
-        public ScreenshotMetadataRecorder withRelativeFileName(String relativePath) {
-            if (mCurrentScreenshotMetadata.relativeFileNames == null) {
-                mCurrentScreenshotMetadata.relativeFileNames = new ArrayList<>();
-            }
-            mCurrentScreenshotMetadata.relativeFileNames.add(relativePath);
-            return this;
-        }
-    }
-
-    File getMetadataFile() {
-        return new File(mDir, "metadata.json");
     }
 
     private List<ScreenshotMetadata> getOrReadMetadata() throws IOException {
         if (mMetadata == null) {
-
-            File metadataFile = getMetadataFile();
-            if (metadataFile.exists()) {
+            try (InputStream metadataFile = screenshotDirectories.openInputFile(metadataFileName)) {
                 Gson gson = new Gson();
-                JsonReader jsonReader = new JsonReader(new FileReader(getMetadataFile()));
+                JsonReader jsonReader = new JsonReader(new InputStreamReader(metadataFile));
                 mMetadata =
-                        gson.fromJson(jsonReader, new TypeToken<List<ScreenshotMetadata>>() {
-                        }.getType());
+                    gson.fromJson(jsonReader, new TypeToken<List<ScreenshotMetadata>>() {
+                    }.getType());
                 if (mMetadata == null) {
                     mMetadata = new ArrayList<>();
                 }
-            } else {
+            } catch (FileNotFoundException exception) {
                 mMetadata = new ArrayList<>();
             }
         }
@@ -161,9 +143,10 @@ class MetadataRecorder {
     private void writeMetadata() throws IOException {
         if (mMetadata != null) {
             Gson gson = new Gson();
-            FileWriter jsonWriter = new FileWriter(getMetadataFile());
-            gson.toJson(mMetadata, jsonWriter);
-            jsonWriter.close();
+            String json = gson.toJson(mMetadata);
+            try (OutputStream output = screenshotDirectories.openOutputFile(metadataFileName)) {
+                output.write(json.getBytes());
+            }
         }
     }
 
@@ -178,8 +161,6 @@ class MetadataRecorder {
         String axIssues;
         String error;
         String group;
-        List<String> absoluteFilesNames;
-        List<String> relativeFileNames;
         Map<String, String> extras;
     }
 }

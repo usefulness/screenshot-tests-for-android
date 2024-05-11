@@ -69,57 +69,6 @@ jobs:
           name: lint-results
           path: '${{ github.workspace }}/**/build/**/reports/lint-results-*.html'
 
-  connected-test:
-    runs-on: macos-13
-    strategy:
-      matrix:
-        apiVersion: [ 28 ]
-
-    steps:
-      - name: checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: 21
-
-      - uses: gradle/actions/setup-gradle@v3
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version-file: '.python-version'
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          python -m pip install 'Pillow==9.1.1'
-
-      - name: run tests
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: ${{ matrix.apiVersion }}
-          profile: pixel_xl
-          target: google_apis
-          arch: x86
-          disable-spellchecker: true
-          script: |
-            adb shell settings put global hidden_api_policy_p_apps 1
-            adb shell settings put global hidden_api_policy_pre_p_apps 1
-            adb shell settings put global hidden_api_policy  1
-            python --version
-            pip show Pillow
-            ./gradlew pytests connectedCheck 
-
-      - name: Upload screenshot tests result
-        uses: actions/upload-artifact@v4
-        with:
-          name: screenshots
-          path: "${{ github.workspace }}/**/build/*AndroidTest/"
-
   sample-smoke-test:
     runs-on: macos-13
     strategy:

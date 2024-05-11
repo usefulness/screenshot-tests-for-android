@@ -77,7 +77,7 @@ public class ScreenshotImpl {
      * instrumentation
      */
     private static ScreenshotImpl create(Context context) {
-        Album album = AlbumImpl.create(context, "default");
+        Album album = AlbumImpl.create(context);
         album.cleanup();
         return new ScreenshotImpl(album);
     }

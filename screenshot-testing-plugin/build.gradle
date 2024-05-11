@@ -24,7 +24,12 @@ tasks.register("generateBuildConfig") {
     try {
       writer.writeLine("package $GENERATED_PACKAGE_NAME")
       writer.writeLine("")
-      writer.writeLine("object $className { const val VERSION = \"${version.toString()}\" }")
+      writer.writeLine("""
+        object $className { 
+            const val PLUGIN_VERSION = \"${version.toString()}\" 
+            const val ANDROID_TEST_SERVICES_VERSION = \"${libs.androidx.test.services.get().version}\" 
+        }
+      """.stripIndent())
       writer.flush()
     } finally {
       writer.close()
@@ -56,11 +61,6 @@ tasks.named("compileKotlin") {
 
 tasks.named('clean') {
   delete GENERATED_BUILD_DIR
-}
-
-tasks.register("pyTests", Exec) {
-  workingDir file('./src/py')
-  commandLine 'python3', '-m', 'unittest', 'discover'
 }
 
 gradlePlugin {

@@ -448,22 +448,11 @@ def android_path_join(a, *args):
 
 
 def pull_metadata(package, dir, adb_puller):
-    root_screenshot_dir = android_path_join(
-        adb_puller.get_external_data_dir(), "screenshots"
-    )
-    metadata_file = android_path_join(
-        root_screenshot_dir, package, "screenshots-default/metadata.json"
-    )
-
-    old_metadata_file = android_path_join(
-        OLD_ROOT_SCREENSHOT_DIR, package, "app_screenshots-default/metadata.json"
-    )
+    root_screenshot_dir = adb_puller.get_external_data_dir()
+    metadata_file = android_path_join(root_screenshot_dir, "metadata.json")
 
     if adb_puller.remote_file_exists(metadata_file):
         adb_puller.pull(metadata_file, join(dir, "metadata.json"))
-    elif adb_puller.remote_file_exists(old_metadata_file):
-        adb_puller.pull(old_metadata_file, join(dir, "metadata.json"))
-        metadata_file = old_metadata_file
     else:
         create_empty_metadata_file(dir)
 
@@ -475,15 +464,15 @@ def create_empty_metadata_file(dir):
         out.write("{}")
 
 
-def pull_images(dir, device_dir, test_run_id, adb_puller, bundle_results=False):
-    if adb_puller.remote_file_exists(android_path_join(device_dir, test_run_id)):
-        bundle_name_local_file = join(dir, os.path.basename(test_run_id))
+def pull_images(dir, device_dir, adb_puller, bundle_results=False):
+    if adb_puller.remote_file_exists(device_dir):
+        bundle_name_local_file = join(dir, os.path.basename("screenshot-tests-for-android-temp"))
 
         # Optimization to pull down all the screenshots in a single pull.
         # If this file exists, we assume all of the screenshots are inside it.
         pulling_function = adb_puller.pull_folder if bundle_results else adb_puller.pull
         pulling_function(
-            android_path_join(device_dir, test_run_id), bundle_name_local_file
+            device_dir, bundle_name_local_file
         )
 
         move_all_files_to_different_directory(bundle_name_local_file, dir)
@@ -491,16 +480,15 @@ def pull_images(dir, device_dir, test_run_id, adb_puller, bundle_results=False):
         shutil.rmtree(bundle_name_local_file)
 
 
-def pull_all(package, dir, test_run_id, adb_puller):
+def pull_all(package, dir, adb_puller):
     device_dir = pull_metadata(package, dir, adb_puller=adb_puller)
-    pull_images(dir, device_dir, test_run_id, adb_puller=adb_puller)
+    pull_images(dir, device_dir, adb_puller=adb_puller)
 
 
 def pull_filtered(
         package,
         dir,
         adb_puller,
-        test_run_id,
         filter_name_regex=None,
         bundle_results=False,
 ):
@@ -512,7 +500,6 @@ def pull_filtered(
     pull_images(
         dir,
         device_dir,
-        test_run_id,
         adb_puller=adb_puller,
         bundle_results=bundle_results,
     )
@@ -555,7 +542,6 @@ def pull_screenshots(
         record=None,
         verify=None,
         tolerance = None,
-        test_run_id=None,
         opt_generate_png=None,
         test_img_api=None,
         old_imgs_data=None,
@@ -567,8 +553,6 @@ def pull_screenshots(
         raise RuntimeError(
             """You must supply a directory for temp_dir if --no-pull is present"""
         )
-    if not perform_pull and test_run_id is None:
-        raise RuntimeError("""You must supply a test run id if --no-pull is present""")
 
     temp_dir = temp_dir or tempfile.mkdtemp(prefix="screenshots")
 
@@ -582,7 +566,6 @@ def pull_screenshots(
             process,
             adb_puller=adb_puller,
             dir=temp_dir,
-            test_run_id=test_run_id,
             filter_name_regex=filter_name_regex,
             bundle_results=bundle_results,
         )
@@ -711,7 +694,6 @@ def main(argv):
             temp_dir=opts.get("--temp-dir"),
             filter_name_regex=opts.get("--filter-name-regex"),
             opt_generate_png=opts.get("--generate-png"),
-            test_run_id=opts.get("--test-run-id"),
             record=opts.get("--record"),
             verify=opts.get("--verify"),
             tolerance=tolerance,

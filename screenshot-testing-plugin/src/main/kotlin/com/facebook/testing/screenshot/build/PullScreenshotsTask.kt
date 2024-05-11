@@ -18,7 +18,6 @@ package com.facebook.testing.screenshot.build
 
 import com.android.build.api.artifact.SingleArtifact
 import com.android.build.api.variant.AndroidTest
-import com.facebook.testing.screenshot.build.ScreenshotsPlugin.Companion.SCREENSHOT_TESTS_RUN_ID
 import com.usefulness.testing.screenshot.build.ScreenshotTask
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.ProjectLayout
@@ -88,8 +87,6 @@ open class PullScreenshotsTask @Inject constructor(
                 "android_screenshot_tests.pull_screenshots",
                 "--apk",
                 testedApk.absolutePath,
-                "--test-run-id",
-                SCREENSHOT_TESTS_RUN_ID,
                 "--temp-dir",
                 outputDir.absolutePath,
             )

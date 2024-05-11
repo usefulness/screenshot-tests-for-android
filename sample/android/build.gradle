@@ -11,13 +11,14 @@ android {
     }
 }
 screenshots {
-    failureDir "$buildDir/reports/failedScreenshots"
+    failureDir layout.buildDirectory.dir("reports/failedScreenshots").get().asFile.path
 }
 
 dependencies {
     implementation(libs.appcompat.core)
     implementation(libs.material.core)
     implementation(libs.coordinatorlayout.core)
+    implementation(libs.chrisbanes.insetter)
 
     androidTestImplementation(libs.assertj.core)
     androidTestImplementation(libs.espresso.core)
