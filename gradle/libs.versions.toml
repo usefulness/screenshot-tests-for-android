@@ -21,6 +21,7 @@ google-testServices = "1.4.2"
 
 [libraries]
 agp-gradle-api = { module = "com.android.tools.build:gradle-api", version.ref = "google-agp" }
+agp-gradle-impl = { module = "com.android.tools.build:gradle", version.ref = "google-agp" }
 kotlin-gradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "maven-kotlin" }
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "maven-junit" }
 assertj-core = { module = "org.assertj:assertj-core", version.ref = "maven-assertj" }

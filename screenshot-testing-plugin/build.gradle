@@ -12,7 +12,8 @@ final GENERATED_PACKAGE_NAME = "io.github.usefulness.testing.screenshot.generate
 final GENERATED_BUILD_DIR = layout.buildDirectory.map { it.dir("generated/config/${GENERATED_PACKAGE_NAME.replace('.', '/')}")}
 
 tasks.register("generateBuildConfig") {
-  final version = project.version
+  final pluginVersion = project.version
+  final androidTestServicesVersion = libs.androidx.test.services.get().version
   doLast {
     def generatedDir = GENERATED_BUILD_DIR.get().asFile
     generatedDir.deleteDir()
@@ -26,8 +27,8 @@ tasks.register("generateBuildConfig") {
       writer.writeLine("")
       writer.writeLine("""
         object $className { 
-            const val PLUGIN_VERSION = \"${version.toString()}\" 
-            const val ANDROID_TEST_SERVICES_VERSION = \"${libs.androidx.test.services.get().version}\" 
+            const val PLUGIN_VERSION = \"${pluginVersion.toString()}\" 
+            const val ANDROID_TEST_SERVICES_VERSION = \"${androidTestServicesVersion}\" 
         }
       """.stripIndent())
       writer.flush()
@@ -71,14 +72,14 @@ gradlePlugin {
       id = 'io.github.usefulness.screenshot-testing-plugin'
       displayName = 'Screenshot Tests for Android'
       description = "Generate fast deterministic screenshots during Android instrumentation tests. Configuration Cache compatibility included"
-      implementationClass = 'com.facebook.testing.screenshot.build.ScreenshotsPlugin'
+      implementationClass = 'io.github.usefulness.testing.screenshot.ScreenshotsPlugin'
       tags.set(["android", "screenshots", "espresso", "screenshot-testing"])
     }
   }
 }
 
 dependencies {
-  compileOnly(libs.agp.gradle.api)
+  compileOnly(libs.agp.gradle.impl)
 
   testImplementation(libs.agp.gradle.api)
   testImplementation(gradleTestKit())

@@ -11,7 +11,6 @@ import dev.chrisbanes.insetter.applyInsetter
 import io.github.usefulness.testing.screenshot.sample.R
 
 class ScreenshotsSampleActivity : AppCompatActivity() {
-
     private val status
         get() =
             intent

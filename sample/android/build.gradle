@@ -11,7 +11,7 @@ android {
     }
 }
 screenshots {
-    failureDir layout.buildDirectory.dir("reports/failedScreenshots").get().asFile.path
+    failureDirectory = layout.buildDirectory.dir("reports/failedScreenshots").get()
 }
 
 dependencies {

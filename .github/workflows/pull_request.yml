@@ -40,10 +40,6 @@ jobs:
 
       - run: ./gradlew projectCoverage
 
-      - uses: codecov/codecov-action@v4
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-
       - run: ./gradlew publishToMavenLocal
 
       - run: ./gradlew publishPlugins -m
@@ -71,9 +67,6 @@ jobs:
 
   sample-smoke-test:
     runs-on: macos-13
-    strategy:
-      matrix:
-        apiVersion: [ 28 ]
 
     steps:
       - name: checkout
@@ -105,16 +98,13 @@ jobs:
       - name: run screenshot tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: ${{ matrix.apiVersion }}
+          api-level: 33
           profile: pixel_xl
           target: google_apis
-          arch: x86
+          arch: x86_64
           disable-spellchecker: true
           working-directory: ./sample
           script: |
-            adb shell settings put global hidden_api_policy_p_apps 1
-            adb shell settings put global hidden_api_policy_pre_p_apps 1
-            adb shell settings put global hidden_api_policy 1
             ./gradlew verifyDebugAndroidTestScreenshotTest
 
       - name: Upload screenshot tests result
