@@ -47,11 +47,12 @@ KEY_CHILDREN = "children"
 DEFAULT_VIEW_CLASS = "android.view.View"
 
 
-def usage():
+def usage(rest_args):
     print(
         "usage: ./scripts/screenshot_tests/pull_screenshots com.facebook.apk.name.tests [--generate-png]",
         file=sys.stderr,
     )
+    print("got: %s" % rest_args)
     return
 
 
@@ -532,13 +533,8 @@ def _validate_metadata(dir):
 
 
 def pull_screenshots(
-        process,
-        adb_puller,
-        device_name_calculator=None,
-        perform_pull=True,
-        bundle_results=False,
+        source,
         temp_dir=None,
-        filter_name_regex=None,
         record=None,
         verify=None,
         tolerance = None,
@@ -549,37 +545,26 @@ def pull_screenshots(
         diff=False,
         open_html=False,
 ):
-    if not perform_pull and temp_dir is None:
-        raise RuntimeError(
-            """You must supply a directory for temp_dir if --no-pull is present"""
-        )
-
     temp_dir = temp_dir or tempfile.mkdtemp(prefix="screenshots")
 
     if not os.path.exists(temp_dir):
         os.makedirs(temp_dir)
 
-    copy_assets(temp_dir)
+    if not os.path.exists(source):
+        raise RuntimeError("source does not exists. path = %s" % source)
 
-    if perform_pull is True:
-        pull_filtered(
-            process,
-            adb_puller=adb_puller,
-            dir=temp_dir,
-            filter_name_regex=filter_name_regex,
-            bundle_results=bundle_results,
-        )
+    shutil.copytree(source,temp_dir, dirs_exist_ok=True)
+    copy_assets(temp_dir)
 
     _validate_metadata(temp_dir)
 
     path_to_html = generate_html(temp_dir, test_img_api, old_imgs_data, diff)
-    device_name = device_name_calculator.name() if device_name_calculator else None
-    record_dir = join(record, device_name) if record and device_name else record
-    verify_dir = join(verify, device_name) if verify and device_name else verify
+    record_dir = record
+    verify_dir = verify
     tolerance = tolerance or 0.0
 
     if failure_dir:
-        failure_dir = join(failure_dir, device_name) if device_name else failure_dir
+        failure_dir = failure_dir
         if not os.path.exists(failure_dir):
             os.makedirs(failure_dir)
 
@@ -588,6 +573,7 @@ def pull_screenshots(
         from .recorder import Recorder
 
         recorder = Recorder(temp_dir, record_dir or verify_dir, failure_dir, tolerance)
+
         if verify:
             recorder.verify()
         else:
@@ -617,54 +603,30 @@ def setup_paths():
 
 def main(argv):
     setup_paths()
-    try:
-        opt_list, rest_args = getopt.gnu_getopt(
-            argv[1:],
-            "eds:",
-            [
-                "generate-png=",
-                "filter-name-regex=",
-                "apk",
-                "record=",
-                "verify=",
-                "tolerance=",
-                "failure-dir=",
-                "temp-dir=",
-                "no-pull",
-                "multiple-devices=",
-                "test-run-id=",
-                "bundle-results",
-            ],
-        )
-    except getopt.GetoptError:
-        usage()
-        return 2
+    opt_list, rest_args = getopt.gnu_getopt(
+        argv[1:],
+        "eds:",
+        [
+            "source=",
+            "record=",
+            "verify=",
+            "tolerance=",
+            "failure-dir=",
+            "temp-dir=",
+        ],
+    )
 
-    if len(rest_args) != 1:
-        usage()
+    if len(rest_args) != 0:
+        usage(rest_args)
         return 2
-
-    process = rest_args[0]  # something like com.facebook.places.tests
 
     opts = dict(opt_list)
-
-    if "--apk" in opts:
-        # treat process as an apk instead
-        process = aapt.get_package(process)
-
-    should_perform_pull = "--no-pull" not in opts
-    bundle_results = "--bundle-results" in opts
 
     tolerance = None
     try:
         tolerance = float(opts.get("--tolerance"))
     except (TypeError, ValueError):
         pass
-
-    multiple_devices = opts.get("--multiple-devices")
-    device_calculator = (
-        DeviceNameCalculator() if multiple_devices else NoOpDeviceNameCalculator()
-    )
 
     base_puller_args = []
     if "-e" in opts:
@@ -689,19 +651,14 @@ def main(argv):
 
     for puller_args in puller_args_list:
         pull_screenshots(
-            process,
-            perform_pull=should_perform_pull,
+            source=opts.get("--source"),
             temp_dir=opts.get("--temp-dir"),
-            filter_name_regex=opts.get("--filter-name-regex"),
             opt_generate_png=opts.get("--generate-png"),
             record=opts.get("--record"),
             verify=opts.get("--verify"),
             tolerance=tolerance,
-            adb_puller=SimplePuller(puller_args),
-            device_name_calculator=device_calculator,
             failure_dir=opts.get("--failure-dir"),
             open_html=opts.get("--open-html"),
-            bundle_results=bundle_results,
         )
 
 
