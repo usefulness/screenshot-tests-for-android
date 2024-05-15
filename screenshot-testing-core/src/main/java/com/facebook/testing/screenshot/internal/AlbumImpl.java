@@ -17,7 +17,6 @@
 package com.facebook.testing.screenshot.internal;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.graphics.Bitmap;
 
 import java.io.ByteArrayOutputStream;
@@ -47,8 +46,8 @@ public class AlbumImpl implements Album {
     /**
      * Creates a "local" album that stores all the images on device.
      */
-    public static AlbumImpl create(Context context) {
-        return new AlbumImpl(new ScreenshotDirectories(context));
+    public static AlbumImpl create() {
+        return new AlbumImpl(new ScreenshotDirectories());
     }
 
     @Override
@@ -64,20 +63,6 @@ public class AlbumImpl implements Album {
         bitmap.compress(Bitmap.CompressFormat.PNG, COMPRESSION_QUALITY, os);
         mReportArtifactsManager.recordFile(filename, os.toByteArray());
         return tileName;
-    }
-
-    /**
-     * Delete all screenshots associated with this album
-     */
-    @Override
-    public void cleanup() {
-//        if (!mDir.exists()) {
-//             We probably failed to even create it, so nothing to clean up
-//            return;
-//        }
-//        for (File file : mDir.listFiles()) {
-//            new file.delete();
-//        }
     }
 
     /**

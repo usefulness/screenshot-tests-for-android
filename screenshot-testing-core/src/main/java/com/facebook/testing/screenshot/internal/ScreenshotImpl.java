@@ -17,8 +17,6 @@
 package com.facebook.testing.screenshot.internal;
 
 import android.app.Activity;
-import android.app.Instrumentation;
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -76,9 +74,8 @@ public class ScreenshotImpl {
      * Factory method that creates this instance based on what arguments are passed to the
      * instrumentation
      */
-    private static ScreenshotImpl create(Context context) {
-        Album album = AlbumImpl.create(context);
-        album.cleanup();
+    private static ScreenshotImpl create() {
+        Album album = AlbumImpl.create();
         return new ScreenshotImpl(album);
     }
 
@@ -95,9 +92,7 @@ public class ScreenshotImpl {
                 return sInstance;
             }
 
-            Instrumentation instrumentation = Registry.getRegistry().instrumentation;
-
-            sInstance = create(instrumentation.getContext());
+            sInstance = create();
 
             return sInstance;
         }

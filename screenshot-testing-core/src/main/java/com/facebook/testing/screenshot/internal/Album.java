@@ -37,11 +37,6 @@ public interface Album {
     void flush();
 
     /**
-     * Cleanup any disk state associated with this album.
-     */
-    void cleanup();
-
-    /**
      * Opens a stream to dump the view hierarchy into. This should be called before addRecord() is
      * called for the given name.
      *
