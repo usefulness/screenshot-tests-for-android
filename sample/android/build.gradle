@@ -10,9 +10,6 @@ android {
         namespace = "io.github.usefulness.testing.screenshot.sample"
     }
 }
-screenshots {
-    failureDirectory = layout.buildDirectory.dir("reports/failedScreenshots").get()
-}
 
 dependencies {
     implementation(libs.appcompat.core)
