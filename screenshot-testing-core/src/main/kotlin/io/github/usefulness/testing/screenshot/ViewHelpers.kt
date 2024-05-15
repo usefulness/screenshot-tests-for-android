@@ -7,7 +7,6 @@ import android.view.View
 import android.view.View.MeasureSpec
 import android.view.ViewGroup
 import android.widget.ListView
-import com.facebook.testing.screenshot.WindowAttachment
 
 /**
  * A collection of static utilities for measuring and pre-drawing a view, usually a pre-requirement

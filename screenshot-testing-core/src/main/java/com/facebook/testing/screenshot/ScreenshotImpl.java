@@ -39,6 +39,7 @@ import java.util.concurrent.Callable;
 
 import io.github.usefulness.testing.screenshot.TestMethodInfo;
 import io.github.usefulness.testing.screenshot.TestNameDetector;
+import io.github.usefulness.testing.screenshot.WindowAttachment;
 import io.github.usefulness.testing.screenshot.internal.Album;
 import io.github.usefulness.testing.screenshot.internal.AlbumImpl;
 import io.github.usefulness.testing.screenshot.internal.RecordBuilderImpl;
@@ -142,12 +143,11 @@ public class ScreenshotImpl {
      */
     public RecordBuilderImpl snap(final View measuredView) {
         TestMethodInfo testMethodInfo = TestNameDetector.getTestMethodInfo();
-        RecordBuilderImpl recordBuilder = new RecordBuilderImpl(this)
+
+        return new RecordBuilderImpl(this)
             .setView(measuredView)
             .setTestClass(testMethodInfo == null ? "unknown" : testMethodInfo.getClassName())
             .setTestName(testMethodInfo == null ? "unknown" : testMethodInfo.getMethodName());
-
-        return recordBuilder;
     }
 
     public void flush() {
