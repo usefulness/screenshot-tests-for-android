@@ -17,7 +17,7 @@ open class PullScreenshotsTask @Inject constructor(
 
     companion object {
         internal fun ProjectLayout.getReportDir(variantName: String): File =
-            buildDirectory.file("screenshots${variantName.replaceFirstChar(Char::titlecase)}").get().asFile
+            buildDirectory.file("reports/screenshots${variantName.replaceFirstChar(Char::titlecase)}").get().asFile
     }
 
     @Input
