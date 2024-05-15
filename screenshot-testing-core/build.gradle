@@ -4,10 +4,13 @@ plugins {
 }
 
 android {
-  namespace = "com.usefulness.testing.screenshot.tests"
+  namespace = "io.github.usefulness.testing.screenshot.tests"
   defaultConfig {
     minSdk 21
-    testInstrumentationRunner "com.usefulness.testing.screenshot.CustomScreenshotTestRunner"
+    testInstrumentationRunner "io.github.usefulness.testing.screenshot.CustomScreenshotTestRunner"
+  }
+  testOptions {
+    targetSdk = 33
   }
   publishing {
     singleVariant("release")

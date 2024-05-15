@@ -29,6 +29,8 @@ import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 
+import io.github.usefulness.testing.screenshot.Screenshot;
+
 /**
  * This is not really a test, this test is just a "fixture" for all the tests for the scripts
  * related to running tests and getting screenshots.

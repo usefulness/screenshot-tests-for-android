@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.facebook.testing.screenshot.internal;
+package com.facebook.testing.screenshot;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
@@ -25,9 +25,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
 
-import com.facebook.testing.screenshot.TestMethodInfo;
-import com.facebook.testing.screenshot.TestNameDetector;
-import com.facebook.testing.screenshot.WindowAttachment;
 import com.facebook.testing.screenshot.layouthierarchy.AccessibilityHierarchyDumper;
 import com.facebook.testing.screenshot.layouthierarchy.AccessibilityIssuesDumper;
 import com.facebook.testing.screenshot.layouthierarchy.AccessibilityUtil;
@@ -39,6 +36,13 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.concurrent.Callable;
+
+import io.github.usefulness.testing.screenshot.TestMethodInfo;
+import io.github.usefulness.testing.screenshot.TestNameDetector;
+import io.github.usefulness.testing.screenshot.internal.Album;
+import io.github.usefulness.testing.screenshot.internal.AlbumImpl;
+import io.github.usefulness.testing.screenshot.internal.RecordBuilderImpl;
+import io.github.usefulness.testing.screenshot.internal.Tiling;
 
 /**
  * Implementation for Screenshot class.
@@ -219,9 +223,6 @@ public class ScreenshotImpl {
 
         drawClippedView(measuredView, left, top, mCanvas);
         String tempName = mAlbum.writeBitmap(recordBuilder.getName(), i, j, mBitmap);
-        if (tempName == null) {
-            throw new NullPointerException();
-        }
         recordBuilder.getTiling().setAt(left / mTileSize, top / mTileSize, tempName);
     }
 
@@ -276,12 +277,12 @@ public class ScreenshotImpl {
             }
 
             mAlbum.addRecord(recordBuilder);
-        } catch (IOException | JSONException e) {
+        } catch (JSONException e) {
             throw new RuntimeException(e);
         }
     }
 
-    Bitmap getBitmap(RecordBuilderImpl recordBuilder) {
+    public Bitmap getBitmap(RecordBuilderImpl recordBuilder) {
         if (recordBuilder.getTiling().getAt(0, 0) != null) {
             throw new IllegalArgumentException("can't call getBitmap() after record()");
         }

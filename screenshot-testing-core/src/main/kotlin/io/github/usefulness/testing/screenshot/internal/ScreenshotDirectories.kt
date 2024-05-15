@@ -1,4 +1,4 @@
-package io.github.usefulness.testing.screenshot
+package io.github.usefulness.testing.screenshot.internal
 
 import androidx.annotation.OptIn
 import androidx.test.annotation.ExperimentalTestApi

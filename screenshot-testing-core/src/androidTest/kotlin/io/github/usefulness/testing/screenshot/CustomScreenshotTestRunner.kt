@@ -1,8 +1,7 @@
-package com.usefulness.testing.screenshot
+package io.github.usefulness.testing.screenshot
 
 import android.os.Bundle
 import androidx.test.runner.AndroidJUnitRunner
-import com.facebook.testing.screenshot.ScreenshotRunner
 
 @Suppress("unused")
 class CustomScreenshotTestRunner : AndroidJUnitRunner() {

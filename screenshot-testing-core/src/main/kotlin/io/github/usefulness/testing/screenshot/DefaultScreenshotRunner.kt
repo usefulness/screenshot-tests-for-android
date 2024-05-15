@@ -2,7 +2,6 @@ package io.github.usefulness.testing.screenshot
 
 import android.os.Bundle
 import androidx.test.runner.AndroidJUnitRunner
-import com.facebook.testing.screenshot.ScreenshotRunner
 
 class DefaultScreenshotRunner : AndroidJUnitRunner() {
 

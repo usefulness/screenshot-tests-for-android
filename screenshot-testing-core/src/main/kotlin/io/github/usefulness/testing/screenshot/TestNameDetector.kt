@@ -1,4 +1,4 @@
-package com.facebook.testing.screenshot
+package io.github.usefulness.testing.screenshot
 
 import java.lang.reflect.Method
 
