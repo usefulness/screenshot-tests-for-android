@@ -7,6 +7,7 @@ import org.junit.Test
 import sample.ScreenshotsSampleActivity
 
 class ScreenshotsSampleActivityTest {
+
     @get:Rule
     val rule = activityScenarioRule<ScreenshotsSampleActivity>()
 
