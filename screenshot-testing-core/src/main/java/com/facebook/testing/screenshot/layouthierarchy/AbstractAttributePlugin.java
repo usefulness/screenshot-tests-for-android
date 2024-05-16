@@ -22,6 +22,8 @@ import org.json.JSONObject;
 
 import androidx.annotation.NonNull;
 
+import io.github.usefulness.testing.screenshot.layouthierarchy.AttributePlugin;
+
 public abstract class AbstractAttributePlugin implements AttributePlugin {
 
     @NonNull

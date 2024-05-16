@@ -28,7 +28,7 @@ import android.view.View;
 import com.facebook.testing.screenshot.layouthierarchy.AccessibilityHierarchyDumper;
 import com.facebook.testing.screenshot.layouthierarchy.AccessibilityIssuesDumper;
 import com.facebook.testing.screenshot.layouthierarchy.AccessibilityUtil;
-import com.facebook.testing.screenshot.layouthierarchy.LayoutHierarchyDumper;
+import io.github.usefulness.testing.screenshot.layouthierarchy.LayoutHierarchyDumper;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -259,7 +259,7 @@ public class ScreenshotImpl {
         storeBitmap(recordBuilder);
         try {
             JSONObject dump = new JSONObject();
-            JSONObject viewDump = LayoutHierarchyDumper.create().dumpHierarchy(recordBuilder.getView());
+            JSONObject viewDump = LayoutHierarchyDumper.Companion.create().dumpHierarchy(recordBuilder.getView());
             dump.put("viewHierarchy", viewDump);
             dump.put("version", METADATA_VERSION);
 
