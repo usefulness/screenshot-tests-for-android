@@ -7,6 +7,8 @@ maven-kotlin = "1.9.24"
 maven-junit = "5.10.2"
 maven-assertj = "3.25.3"
 maven-insetter = "0.6.1"
+maven-binarycompatiblity = "0.14.0"
+maven-kotlin-serialization = "1.6.3"
 google-androidx-core = "1.13.1"
 google-androidx-annotation = "1.8.0"
 google-gson = "2.10.1"
@@ -36,8 +38,9 @@ espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref =
 appcompat-core = { module = "androidx.appcompat:appcompat", version.ref = "google-appcompat" }
 material-core = { module = "com.google.android.material:material", version.ref = "google-material" }
 coordinatorlayout-core = { module = "androidx.coordinatorlayout:coordinatorlayout", version.ref = "google-coordinatorlayout" }
-androidx-test-services = { module ="androidx.test.services:test-services", version.ref = "google-testServices" }
-chrisbanes-insetter = { module ="dev.chrisbanes.insetter:insetter", version.ref = "maven-insetter" }
+androidx-test-services = { module = "androidx.test.services:test-services", version.ref = "google-testServices" }
+chrisbanes-insetter = { module = "dev.chrisbanes.insetter:insetter", version.ref = "maven-insetter" }
+kotlinx-serialization-json-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "maven-kotlin-serialization" }
 
 [plugins]
 starter-config = { id = "com.starter.config", version.ref = "gradle-starter" }
@@ -47,3 +50,5 @@ starter-library-android = { id = "com.starter.library.android", version.ref = "g
 starter-application-android = { id = "com.starter.application.android", version.ref = "gradle-starter" }
 gradle-pluginpublish = { id = "com.gradle.plugin-publish", version.ref = "gradle-pluginpublish" }
 osacky-doctor = { id = "com.osacky.doctor", version.ref = "gradle-doctor" }
+kotlinx-binarycompatibility = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version.ref = "maven-binarycompatiblity" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "maven-kotlin" }
