@@ -16,19 +16,14 @@
 import codecs
 import getopt
 import json
-import os, platform, subprocess
+import os
 import shutil
 import sys
 import tempfile
-import urllib
-import xml.etree.ElementTree as ET
 import zipfile
 from os.path import abspath, join
 
-from . import aapt, common, metadata
-from .device_name_calculator import DeviceNameCalculator
-from .no_op_device_name_calculator import NoOpDeviceNameCalculator
-from .simple_puller import SimplePuller
+from . import common
 
 try:
     from Queue import Queue
@@ -67,43 +62,7 @@ def sort_screenshots(screenshots):
     return sorted(screenshots, key=sort_key)
 
 
-def show_old_result(
-        test_name,
-        html,
-        new_screenshot,
-        test_img_api,
-        old_imgs_data,
-):
-    try:
-        old_screenshot_url = get_old_screenshot_url(
-            test_name, test_img_api, old_imgs_data
-        )
-        html.write('<div class="img-block">Current')
-        html.write('<div class="img-wrapper">')
-        html.write('<img src="%s"></img>' % old_screenshot_url)
-        html.write("</div>")
-        html.write("</div>")
-    except Exception:
-        # Do nothing
-        pass
-
-
-def get_old_screenshot_url(test_name, test_img_api, old_imgs_data):
-    old_imgs_data["test"] = test_name
-    encoded_data = urllib.urlencode(old_imgs_data)
-    url = test_img_api + encoded_data
-    response = json.loads(urllib.urlopen(url).read().decode())
-    if "error" in response:
-        raise Exception
-    return response["url"]
-
-
-def generate_html(
-        output_dir,
-        test_img_api=None,
-        old_imgs_data=None,
-        diff=False,
-):
+def generate_html(output_dir):
     # Take in:
     # output_dir a directory with imgs and data outputted by the just-run test,
     # test_img_api a url that takes in the name of the test and a dict w/ data,
@@ -184,34 +143,13 @@ def generate_html(
                     ax_hierarchy = None
 
                 html.write('<div class="flex-wrapper">')
-                comparing = test_img_api is not None and old_imgs_data is not None
-                if comparing:
-                    show_old_result(
-                        canonical_name,
-                        html,
-                        screenshot,
-                        test_img_api,
-                        old_imgs_data,
-                    )
                 write_image(
                     hierarchy,
                     output_dir,
                     html,
                     screenshot,
                     screenshot_num,
-                    comparing,
                 )
-                if comparing and diff:
-                    try:
-                        old_screenshot_url = get_old_screenshot_url(
-                            canonical_name, test_img_api, old_imgs_data
-                        )
-                        write_image_diff(
-                            old_screenshot_url, output_dir, html, screenshot
-                        )
-                    except Exception:
-                        # Do nothing
-                        pass
                 html.write('<div class="command-wrapper">')
                 write_commands(html)
                 write_view_hierarchy(hierarchy, html, screenshot_num)
@@ -320,10 +258,8 @@ def get_view_hierarchy(dir, screenshot):
         return json.loads(dump.read())
 
 
-def write_image(hierarchy, dir, html, screenshot, parent_id, comparing):
+def write_image(hierarchy, dir, html, screenshot, parent_id):
     html.write('<div class="img-block">')
-    if comparing:
-        html.write("New Output")
     html.write('<div class="img-wrapper">')
     html.write("<table>")
     for y in range(int(screenshot["tileHeight"])):
@@ -341,56 +277,6 @@ def write_image(hierarchy, dir, html, screenshot, parent_id, comparing):
     html.write('<div class="hierarchy-overlay">')
     write_view_hierarchy_overlay_nodes(hierarchy, html, parent_id)
     html.write("</div></div></div>")
-
-
-def write_image_diff(old_screenshot_url, dir, html, screenshot):
-    from PIL import Image, ImageChops, ImageOps
-
-    html.write('<div class="img-block">')
-    html.write("Diff")
-    html.write('<div class="img-wrapper">')
-
-    old_image = Image.open(urllib.urlopen(old_screenshot_url))
-    new_image = Image.new(old_image.mode, (old_image.size[0], old_image.size[1]))
-
-    # combine all tiles back into one image to ease the comparison
-    x_offset = y_offset = height = 0
-    for y in range(int(screenshot["tileHeight"])):
-        for x in range(int(screenshot["tileWidth"])):
-            image_file = join(
-                dir, "./" + common.get_image_file_name(screenshot["name"], x, y)
-            )
-            if os.path.exists(image_file):
-                img = Image.open(image_file)
-                new_image.paste(img, (x_offset, y_offset))
-                x_offset += img.size[0]
-                height = img.size[1]
-        x_offset = 0
-        y_offset += height
-
-    difference = ImageChops.difference(old_image, new_image).convert("RGB")
-    difference = ImageOps.invert(difference)
-
-    with tempfile.NamedTemporaryFile(delete=False, suffix=".png") as fp:
-        difference.save(fp)
-        html.write('<img src="%s" />' % fp.name)
-    html.write("</div></div>")
-
-
-def test_for_wkhtmltoimage():
-    if subprocess.call(["which", "wkhtmltoimage"]) != 0:
-        raise RuntimeError(
-            """Could not find wkhtmltoimage in your path, we need this for generating pngs
-Download an appropriate version from:
-    http://wkhtmltopdf.org/downloads.html"""
-        )
-
-
-def generate_png(path_to_html, path_to_png):
-    test_for_wkhtmltoimage()
-    subprocess.check_call(
-        ["wkhtmltoimage", path_to_html, path_to_png], stdout=sys.stdout
-    )
 
 
 def copy_assets(destination):
@@ -426,94 +312,6 @@ def _copy_via_zip(src_zip, zip_path, dest):
         _copy_via_zip(head, tail if not zip_path else (tail + "/" + zip_path), dest)
 
 
-def _android_path_join_two(a, b):
-    if b.startswith("/"):
-        return b
-
-    if not a.endswith("/"):
-        a += "/"
-
-    return a + b
-
-
-def android_path_join(a, *args):
-    """Similar to os.path.join(), but might differ in behavior on Windows"""
-
-    if args == []:
-        return a
-
-    if len(args) == 1:
-        return _android_path_join_two(a, args[0])
-
-    return android_path_join(android_path_join(a, args[0]), *args[1:])
-
-
-def pull_metadata(package, dir, adb_puller):
-    root_screenshot_dir = adb_puller.get_external_data_dir()
-    metadata_file = android_path_join(root_screenshot_dir, "metadata.json")
-
-    if adb_puller.remote_file_exists(metadata_file):
-        adb_puller.pull(metadata_file, join(dir, "metadata.json"))
-    else:
-        create_empty_metadata_file(dir)
-
-    return metadata_file.replace("metadata.json", "")
-
-
-def create_empty_metadata_file(dir):
-    with open(join(dir, "metadata.json"), "w") as out:
-        out.write("{}")
-
-
-def pull_images(dir, device_dir, adb_puller, bundle_results=False):
-    if adb_puller.remote_file_exists(device_dir):
-        bundle_name_local_file = join(dir, os.path.basename("screenshot-tests-for-android-temp"))
-
-        # Optimization to pull down all the screenshots in a single pull.
-        # If this file exists, we assume all of the screenshots are inside it.
-        pulling_function = adb_puller.pull_folder if bundle_results else adb_puller.pull
-        pulling_function(
-            device_dir, bundle_name_local_file
-        )
-
-        move_all_files_to_different_directory(bundle_name_local_file, dir)
-        # clean up
-        shutil.rmtree(bundle_name_local_file)
-
-
-def pull_all(package, dir, adb_puller):
-    device_dir = pull_metadata(package, dir, adb_puller=adb_puller)
-    pull_images(dir, device_dir, adb_puller=adb_puller)
-
-
-def pull_filtered(
-        package,
-        dir,
-        adb_puller,
-        filter_name_regex=None,
-        bundle_results=False,
-):
-    device_dir = pull_metadata(package, dir, adb_puller=adb_puller)
-    _validate_metadata(dir)
-    metadata.filter_screenshots(
-        join(dir, "metadata.json"), name_regex=filter_name_regex
-    )
-    pull_images(
-        dir,
-        device_dir,
-        adb_puller=adb_puller,
-        bundle_results=bundle_results,
-    )
-
-
-def move_all_files_to_different_directory(source_dir, target_dir):
-    file_names = os.listdir(source_dir)
-    for file_name in file_names:
-        shutil.move(
-            os.path.join(source_dir, file_name), os.path.join(target_dir, file_name)
-        )
-
-
 def _summary(dir):
     with open(join(dir, "metadata.json")) as f:
         metadataJson = json.load(f)
@@ -537,13 +335,8 @@ def pull_screenshots(
         temp_dir=None,
         record=None,
         verify=None,
-        tolerance = None,
-        opt_generate_png=None,
-        test_img_api=None,
-        old_imgs_data=None,
+        tolerance=None,
         failure_dir=None,
-        diff=False,
-        open_html=False,
 ):
     temp_dir = temp_dir or tempfile.mkdtemp(prefix="screenshots")
 
@@ -553,12 +346,12 @@ def pull_screenshots(
     if not os.path.exists(source):
         raise RuntimeError("source does not exists. path = %s" % source)
 
-    shutil.copytree(source,temp_dir, dirs_exist_ok=True)
+    shutil.copytree(source, temp_dir, dirs_exist_ok=True)
     copy_assets(temp_dir)
 
     _validate_metadata(temp_dir)
 
-    path_to_html = generate_html(temp_dir, test_img_api, old_imgs_data, diff)
+    path_to_html = generate_html(temp_dir)
     record_dir = record
     verify_dir = verify
     tolerance = tolerance or 0.0
@@ -579,30 +372,13 @@ def pull_screenshots(
         else:
             recorder.record()
 
-    if opt_generate_png:
-        generate_png(path_to_html, opt_generate_png)
-        shutil.rmtree(temp_dir)
-    else:
-        print("\n\n")
-        _summary(temp_dir)
-        print("Open the following url in a browser to view the results: ")
-        full_path = "file://" + path_to_html
-        print("  %s" % full_path)
-        print("\n\n")
-        if open_html:
-            if platform.system() == "Darwin":  # macOS
-                subprocess.call(("open", full_path))
-            elif platform.system() == "Windows":  # Windows
-                os.startfile(full_path)
-
-
-def setup_paths():
-    android_home = common.get_android_sdk()
-    os.environ["PATH"] = os.environ["PATH"] + ":" + android_home + "/platform-tools/"
+    print("")
+    _summary(temp_dir)
+    print("Open the following url in a browser to view the results: ")
+    print("  file://%s" % path_to_html)
 
 
 def main(argv):
-    setup_paths()
     opt_list, rest_args = getopt.gnu_getopt(
         argv[1:],
         "eds:",
@@ -628,38 +404,14 @@ def main(argv):
     except (TypeError, ValueError):
         pass
 
-    base_puller_args = []
-    if "-e" in opts:
-        base_puller_args.append("-e")
-
-    if "-d" in opts:
-        base_puller_args.append("-d")
-
-    if "-s" in opts:
-        passed_serials = [opts["-s"]]
-    elif "ANDROID_SERIAL" in os.environ:
-        passed_serials = os.environ.get("ANDROID_SERIAL").split(",")
-    else:
-        passed_serials = common.get_connected_devices()
-
-    if passed_serials:
-        puller_args_list = [
-            base_puller_args + ["-s", serial] for serial in passed_serials
-        ]
-    else:
-        puller_args_list = [base_puller_args]
-
-    for puller_args in puller_args_list:
-        pull_screenshots(
-            source=opts.get("--source"),
-            temp_dir=opts.get("--temp-dir"),
-            opt_generate_png=opts.get("--generate-png"),
-            record=opts.get("--record"),
-            verify=opts.get("--verify"),
-            tolerance=tolerance,
-            failure_dir=opts.get("--failure-dir"),
-            open_html=opts.get("--open-html"),
-        )
+    pull_screenshots(
+        source=opts.get("--source"),
+        temp_dir=opts.get("--temp-dir"),
+        record=opts.get("--record"),
+        verify=opts.get("--verify"),
+        tolerance=tolerance,
+        failure_dir=opts.get("--failure-dir"),
+    )
 
 
 if __name__ == "__main__":
