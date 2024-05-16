@@ -41,6 +41,8 @@ coordinatorlayout-core = { module = "androidx.coordinatorlayout:coordinatorlayou
 androidx-test-services = { module = "androidx.test.services:test-services", version.ref = "google-testServices" }
 chrisbanes-insetter = { module = "dev.chrisbanes.insetter:insetter", version.ref = "maven-insetter" }
 kotlinx-serialization-json-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "maven-kotlin-serialization" }
+kotlinx-serialization-json-okio = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json-okio", version.ref = "maven-kotlin-serialization" }
+com-squareup-okio = "com.squareup.okio:okio:3.9.0"
 
 [plugins]
 starter-config = { id = "com.starter.config", version.ref = "gradle-starter" }

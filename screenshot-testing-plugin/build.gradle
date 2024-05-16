@@ -83,6 +83,8 @@ gradlePlugin {
 dependencies {
   compileOnly(libs.agp.gradle.impl)
   implementation(libs.kotlinx.serialization.json.core)
+  implementation(libs.kotlinx.serialization.json.okio)
+  implementation(libs.com.squareup.okio)
 
   testImplementation(libs.agp.gradle.api)
   testImplementation(gradleTestKit())

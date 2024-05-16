@@ -8,10 +8,8 @@ internal class Recorder(
 ) {
 
     fun record() {
-
     }
 
     fun verify(tolerance: Float) {
-
     }
 }
