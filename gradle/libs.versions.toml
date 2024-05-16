@@ -6,6 +6,7 @@ google-agp = "8.4.0"
 maven-kotlin = "1.9.24"
 maven-junit = "5.10.2"
 maven-assertj = "3.25.3"
+maven-insetter = "0.6.1"
 google-androidx-core = "1.13.1"
 google-androidx-annotation = "1.8.0"
 google-gson = "2.10.1"
@@ -16,11 +17,12 @@ google-espresso = "3.5.1"
 google-appcompat = "1.6.1"
 google-material = "1.12.0"
 google-coordinatorlayout = "1.2.0"
+google-testServices = "1.4.2"
 
 [libraries]
 agp-gradle-api = { module = "com.android.tools.build:gradle-api", version.ref = "google-agp" }
+agp-gradle-impl = { module = "com.android.tools.build:gradle", version.ref = "google-agp" }
 kotlin-gradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "maven-kotlin" }
-
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "maven-junit" }
 assertj-core = { module = "org.assertj:assertj-core", version.ref = "maven-assertj" }
 androidx-core = { module = "androidx.core:core", version.ref = "google-androidx-core" }
@@ -34,6 +36,8 @@ espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref =
 appcompat-core = { module = "androidx.appcompat:appcompat", version.ref = "google-appcompat" }
 material-core = { module = "com.google.android.material:material", version.ref = "google-material" }
 coordinatorlayout-core = { module = "androidx.coordinatorlayout:coordinatorlayout", version.ref = "google-coordinatorlayout" }
+androidx-test-services = { module ="androidx.test.services:test-services", version.ref = "google-testServices" }
+chrisbanes-insetter = { module ="dev.chrisbanes.insetter:insetter", version.ref = "maven-insetter" }
 
 [plugins]
 starter-config = { id = "com.starter.config", version.ref = "gradle-starter" }

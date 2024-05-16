@@ -10,14 +10,12 @@ android {
         namespace = "io.github.usefulness.testing.screenshot.sample"
     }
 }
-screenshots {
-    failureDir "$buildDir/reports/failedScreenshots"
-}
 
 dependencies {
     implementation(libs.appcompat.core)
     implementation(libs.material.core)
     implementation(libs.coordinatorlayout.core)
+    implementation(libs.chrisbanes.insetter)
 
     androidTestImplementation(libs.assertj.core)
     androidTestImplementation(libs.espresso.core)

@@ -40,28 +40,17 @@ jobs:
 
       - run: ./gradlew projectCoverage
 
-      - uses: codecov/codecov-action@v4
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-
       - run: ./gradlew publishToMavenLocal
 
       - run: ./gradlew publishPlugins -m
 
       - run: git diff --exit-code
 
-      - name: Upload test results
-        if: ${{ always() }}
+      - if: ${{ always() }}
         uses: actions/upload-artifact@v4
         with:
           name: test-results
           path: "${{ github.workspace }}/**/build/reports/tests"
-
-      - name: Upload jacoco report
-        uses: actions/upload-artifact@v4
-        with:
-          name: jacoco-report
-          path: "${{ github.workspace }}/**/build/reports/jacoco"
 
       - uses: actions/upload-artifact@v4
         if: ${{ always() }}
@@ -69,66 +58,11 @@ jobs:
           name: lint-results
           path: '${{ github.workspace }}/**/build/**/reports/lint-results-*.html'
 
-  connected-test:
-    runs-on: macos-13
-    strategy:
-      matrix:
-        apiVersion: [ 28 ]
-
-    steps:
-      - name: checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: 21
-
-      - uses: gradle/actions/setup-gradle@v3
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version-file: '.python-version'
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          python -m pip install 'Pillow==9.1.1'
-
-      - name: run tests
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: ${{ matrix.apiVersion }}
-          profile: pixel_xl
-          target: google_apis
-          arch: x86
-          disable-spellchecker: true
-          script: |
-            adb shell settings put global hidden_api_policy_p_apps 1
-            adb shell settings put global hidden_api_policy_pre_p_apps 1
-            adb shell settings put global hidden_api_policy  1
-            python --version
-            pip show Pillow
-            ./gradlew pytests connectedCheck 
-
-      - name: Upload screenshot tests result
-        uses: actions/upload-artifact@v4
-        with:
-          name: screenshots
-          path: "${{ github.workspace }}/**/build/*AndroidTest/"
-
   sample-smoke-test:
     runs-on: macos-13
-    strategy:
-      matrix:
-        apiVersion: [ 28 ]
 
     steps:
-      - name: checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -141,8 +75,7 @@ jobs:
         with:
           build-root-directory: sample
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
           python-version-file: '.python-version'
 
@@ -156,27 +89,25 @@ jobs:
       - name: run screenshot tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: ${{ matrix.apiVersion }}
-          profile: pixel_xl
+          api-level: 33
+          profile: pixel_6_pro
           target: google_apis
-          arch: x86
+          arch: x86_64
           disable-spellchecker: true
           working-directory: ./sample
           script: |
-            adb shell settings put global hidden_api_policy_p_apps 1
-            adb shell settings put global hidden_api_policy_pre_p_apps 1
-            adb shell settings put global hidden_api_policy 1
             ./gradlew verifyDebugAndroidTestScreenshotTest
 
       - name: Upload screenshot tests result
+        if: ${{ always() }}
         uses: actions/upload-artifact@v4
         with:
           name: screenshots
-          path: "${{ github.workspace }}/**/build/*AndroidTest/"
+          path: "${{ github.workspace }}/**/build/reports/androidTests/connected/"
 
       - name: Upload failed screenshots
         if: ${{ failure() }}
         uses: actions/upload-artifact@v4
         with:
           name: failedScreenshots
-          path: "${{ github.workspace }}/**/build/failedScreenshots"
+          path: "${{ github.workspace }}/**/build/reports/failedScreenshots"

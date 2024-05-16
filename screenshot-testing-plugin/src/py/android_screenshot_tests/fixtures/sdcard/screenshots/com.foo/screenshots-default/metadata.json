@@ -5,10 +5,7 @@
     "testClass": "com.facebook.testing.screenshot.ScriptsFixtureTest",
     "testName": "testGetTextViewScreenshot",
     "tileWidth": 1,
-    "tileHeight": 1,
-    "relativeFileNames": [
-      "com.foo.ScriptsFixtureTest_testGetTextViewScreenshot.png"
-    ],
+    "tileHeight": 1
     "viewHierarchy": "one_dump.json"
   },
   {
@@ -17,10 +14,7 @@
     "testClass": "com.facebook.testing.screenshot.ScriptsFixtureTest",
     "testName": "testSecondScreenshot",
     "tileWidth": 1,
-    "tileHeight": 1,
-    "relativeFileNames": [
-      "com.foo.ScriptsFixtureTest_testSecondScreenshot.png"
-    ]
+    "tileHeight": 1
   },
   {
     "description": null,
