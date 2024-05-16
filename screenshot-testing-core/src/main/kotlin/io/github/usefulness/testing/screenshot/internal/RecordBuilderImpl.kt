@@ -2,7 +2,6 @@ package io.github.usefulness.testing.screenshot.internal
 
 import android.graphics.Bitmap
 import android.view.View
-import com.facebook.testing.screenshot.ScreenshotImpl
 import io.github.usefulness.testing.screenshot.RecordBuilder
 import java.io.File
 import java.nio.charset.Charset

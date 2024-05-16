@@ -1,4 +1,4 @@
-package com.usefulness.testing.screenshot
+package io.github.usefulness.testing.screenshot
 
 import android.app.Activity
 
