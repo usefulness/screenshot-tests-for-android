@@ -20,6 +20,7 @@ import android.content.Context
 import android.os.Binder
 import android.os.Build
 import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.Display
 import android.view.View
@@ -65,9 +66,12 @@ object WindowAttachment {
     fun dispatchAttach(view: View): Detacher {
         if (view.windowToken != null || sAttachments.containsKey(view)) {
             // Screenshot tests can often be run against a View that's
-            // attached to a real activity, in which case we have nothing to
-            // do
+            // attached to a real activity, in which case we have nothing to do
             Log.i("WindowAttachment", "Skipping window attach hack since it's really attached")
+            return NoopDetacher()
+        }
+        // TODO this is not supported and it's unclear why it was
+        if (Build.VERSION.SDK_INT >= 28) {
             return NoopDetacher()
         }
 
@@ -109,7 +113,7 @@ object WindowAttachment {
     /**
      * Simulates the view as being attached.
      */
-    fun generateAttachInfo(view: View): Any {
+    fun generateAttachInfo(view: View): Any? {
         sAttachInfo?.let { return it }
 
         val cAttachInfo = Class.forName("android.view.View\$AttachInfo")
@@ -137,57 +141,51 @@ object WindowAttachment {
         val viewRootCtorValues: Array<Any>
 
         if (Build.VERSION.SDK_INT >= 26) {
-            viewRootImpl =
-                cViewRootImpl
-                    .getConstructor(Context::class.java, Display::class.java)
-                    .newInstance(context, display)
+            viewRootImpl = cViewRootImpl
+                .getConstructor(Context::class.java, Display::class.java)
+                .newInstance(context, display)
 
-            viewRootCtorParams =
-                arrayOf(
-                    cIWindowSession,
-                    cIWindow,
-                    Display::class.java,
-                    cViewRootImpl,
-                    Handler::class.java,
-                    cICallbacks,
-                    Context::class.java,
-                )
+            viewRootCtorParams = arrayOf(
+                cIWindowSession,
+                cIWindow,
+                Display::class.java,
+                cViewRootImpl,
+                Handler::class.java,
+                cICallbacks,
+                Context::class.java,
+            )
 
-            viewRootCtorValues =
-                arrayOf(
-                    stub(cIWindowSession),
-                    window,
-                    display,
-                    viewRootImpl,
-                    Handler(),
-                    stub(cICallbacks),
-                    context,
-                )
+            viewRootCtorValues = arrayOf(
+                stub(cIWindowSession),
+                window,
+                display,
+                viewRootImpl,
+                Handler(Looper.getMainLooper()),
+                stub(cICallbacks),
+                context,
+            )
         } else {
-            viewRootImpl =
-                cViewRootImpl
-                    .getConstructor(Context::class.java, Display::class.java)
-                    .newInstance(context, display)
+            viewRootImpl = cViewRootImpl
+                .getConstructor(Context::class.java, Display::class.java)
+                .newInstance(context, display)
 
-            viewRootCtorParams =
-                arrayOf(
-                    cIWindowSession,
-                    cIWindow,
-                    Display::class.java,
-                    cViewRootImpl,
-                    Handler::class.java,
-                    cICallbacks,
-                )
+            viewRootCtorParams = arrayOf(
+                cIWindowSession,
+                cIWindow,
+                Display::class.java,
+                cViewRootImpl,
+                Handler::class.java,
+                cICallbacks,
+            )
 
-            viewRootCtorValues =
-                arrayOf(
-                    stub(cIWindowSession),
-                    window,
-                    display,
-                    viewRootImpl,
-                    Handler(),
-                    stub(cICallbacks),
-                )
+            viewRootCtorValues = arrayOf(
+                stub(cIWindowSession),
+                window,
+                display,
+                viewRootImpl,
+                Handler(Looper.getMainLooper()),
+                stub(cICallbacks),
+            )
         }
 
         val attachInfo = invokeConstructor(cAttachInfo, viewRootCtorParams, viewRootCtorValues)
@@ -212,7 +210,7 @@ object WindowAttachment {
         val cIWindow = Class.forName("android.view.IWindow")
 
         // Since IWindow is an interface, I don't need dexmaker for this
-        val handler = InvocationHandler { proxy: Any?, method: Method, args: Array<Any?>? ->
+        val handler = InvocationHandler { _, method, _ ->
             if (method.name == "asBinder") {
                 return@InvocationHandler Binder()
             }

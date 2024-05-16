@@ -72,7 +72,7 @@ internal object ScreenshotImpl {
         }
 
         val measuredView = recordBuilder.view
-        if (measuredView!!.measuredHeight == 0 || measuredView.measuredWidth == 0) {
+        if (measuredView == null || measuredView.measuredHeight == 0 || measuredView.measuredWidth == 0) {
             error("Can't take a screenshot, since this view is not measured")
         }
 
@@ -140,19 +140,16 @@ internal object ScreenshotImpl {
     fun record(recordBuilder: RecordBuilderImpl) {
         storeBitmap(recordBuilder)
         val dump = JSONObject()
-        val viewDump = LayoutHierarchyDumper.create().dumpHierarchy(
-            recordBuilder.view!!,
-        )
+        val view = checkNotNull(recordBuilder.view)
+        val viewDump = LayoutHierarchyDumper.create().dumpHierarchy(view)
         dump.put("viewHierarchy", viewDump)
         dump.put("version", METADATA_VERSION)
 
-        val axTree =
-            if (recordBuilder.includeAccessibilityInfo
-            ) {
-                generateAccessibilityTree(recordBuilder.view!!)
-            } else {
-                null
-            }
+        val axTree = if (recordBuilder.includeAccessibilityInfo) {
+            generateAccessibilityTree(view)
+        } else {
+            null
+        }
         dump.put("axHierarchy", dumpHierarchy(axTree))
         mAlbum.writeViewHierarchyFile(recordBuilder.name, dump.toString(2))
 
@@ -166,12 +163,7 @@ internal object ScreenshotImpl {
     }
 
     fun getBitmap(recordBuilder: RecordBuilderImpl): Bitmap {
-        require(
-            recordBuilder.tiling.getAt(
-                0,
-                0,
-            ) == null,
-        ) { "can't call getBitmap() after record()" }
+        require(recordBuilder.tiling.getAt(0, 0) == null) { "can't call getBitmap() after record()" }
 
         val view = checkNotNull(recordBuilder.view)
         val bmp = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)

@@ -7,6 +7,6 @@
   <uses-permission android:name="android.permission.SET_ANIMATION_SCALE"/>
 
   <application android:debuggable="true">
-    <activity android:name="com.usefulness.testing.screenshot.MyActivity"/>
+    <activity android:name="io.github.usefulness.testing.screenshot.MyActivity"/>
   </application>
 </manifest>
