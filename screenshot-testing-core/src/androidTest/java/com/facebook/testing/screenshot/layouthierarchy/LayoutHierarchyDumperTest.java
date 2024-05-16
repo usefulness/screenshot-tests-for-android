@@ -26,6 +26,7 @@ import android.widget.TextView;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.runner.AndroidJUnit4;
 import io.github.usefulness.testing.screenshot.ViewHelpers;
+import io.github.usefulness.testing.screenshot.layouthierarchy.AbstractAttributePlugin;
 import io.github.usefulness.testing.screenshot.layouthierarchy.BaseViewAttributePlugin;
 import io.github.usefulness.testing.screenshot.layouthierarchy.AttributePlugin;
 import io.github.usefulness.testing.screenshot.layouthierarchy.BaseViewHierarchyPlugin;

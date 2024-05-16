@@ -448,7 +448,7 @@ object AccessibilityUtil {
     }
 
     class AXTreeNode(val view: View) {
-        val nodeInfo = createNodeInfoFromView(view)
+        val nodeInfo = checkNotNull(createNodeInfoFromView(view))
         private val mChildren: MutableList<AXTreeNode> = ArrayList()
 
         val children: List<AXTreeNode>
@@ -462,11 +462,7 @@ object AccessibilityUtil {
         }
 
         val allNodes: List<AXTreeNode>
-            get() {
-                val nodes: MutableList<AXTreeNode> = ArrayList()
-                addAllNodes(nodes)
-                return nodes
-            }
+            get() = mutableListOf<AXTreeNode>().apply(::addAllNodes)
 
         fun addAllNodes(nodes: MutableList<AXTreeNode>) {
             nodes.add(this)

@@ -17,7 +17,6 @@ package io.github.usefulness.testing.screenshot.layouthierarchy
 
 import android.graphics.Point
 import android.view.View
-import com.facebook.testing.screenshot.layouthierarchy.AbstractAttributePlugin
 import org.json.JSONObject
 
 /**

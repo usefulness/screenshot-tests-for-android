@@ -26,7 +26,7 @@ import android.os.Looper;
 import android.view.View;
 
 import com.facebook.testing.screenshot.layouthierarchy.AccessibilityHierarchyDumper;
-import com.facebook.testing.screenshot.layouthierarchy.AccessibilityIssuesDumper;
+import io.github.usefulness.testing.screenshot.layouthierarchy.AccessibilityIssuesDumper;
 import io.github.usefulness.testing.screenshot.layouthierarchy.AccessibilityUtil;
 import io.github.usefulness.testing.screenshot.layouthierarchy.LayoutHierarchyDumper;
 
@@ -272,7 +272,7 @@ public class ScreenshotImpl {
 
             if (axTree != null) {
                 JSONObject issues = new JSONObject();
-                issues.put("axIssues", AccessibilityIssuesDumper.dumpIssues(axTree));
+                issues.put("axIssues", AccessibilityIssuesDumper.INSTANCE.dumpIssues(axTree));
                 mAlbum.writeAxIssuesFile(recordBuilder.getName(), issues.toString(2));
             }
 
