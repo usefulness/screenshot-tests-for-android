@@ -2,7 +2,7 @@ package io.github.usefulness.testing.screenshot
 
 import android.app.Activity
 import android.view.View
-import com.facebook.testing.screenshot.ScreenshotImpl
+import io.github.usefulness.testing.screenshot.internal.ScreenshotImpl
 
 /**
  * A testing tool for taking a screenshot during an Activity instrumentation test. This is really
@@ -23,7 +23,7 @@ object Screenshot {
      * This method is thread safe.
      */
     @JvmStatic
-    fun snap(measuredView: View): RecordBuilder = ScreenshotImpl.getInstance().snap(measuredView)
+    fun snap(measuredView: View): RecordBuilder = ScreenshotImpl.snap(measuredView)
 
     /**
      * Take a snapshot of the activity and store it with the the testName. See the adb-logcat for how
@@ -33,7 +33,7 @@ object Screenshot {
      * This method is thread safe.
      */
     @JvmStatic
-    fun snap(activity: Activity): RecordBuilder = ScreenshotImpl.getInstance().snapActivity(activity)
+    fun snap(activity: Activity): RecordBuilder = ScreenshotImpl.snapActivity(activity)
 
-    val maxPixels = ScreenshotImpl.getMaxPixels()
+    const val MAX_PIXELS = ScreenshotImpl.MAX_PIXELS
 }

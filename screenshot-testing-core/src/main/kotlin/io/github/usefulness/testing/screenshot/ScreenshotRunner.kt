@@ -2,7 +2,7 @@ package io.github.usefulness.testing.screenshot
 
 import android.app.Instrumentation
 import android.os.Bundle
-import com.facebook.testing.screenshot.ScreenshotImpl
+import io.github.usefulness.testing.screenshot.internal.ScreenshotImpl
 
 /**
  * The ScreenshotRunner needs to be called from the top level Instrumentation test runner before and
@@ -16,7 +16,7 @@ object ScreenshotRunner {
      * Typically this will be in `AndroidJUnitRunner#onCreate()`
      */
     @Suppress("UNUSED_PARAMETER")
-    fun onCreate(instrumentation: Instrumentation?, arguments: Bundle?) = Unit
+    fun onCreate(instrumentation: Instrumentation, arguments: Bundle?) = Unit
 
     /**
      * Call this exactly once after all your tests have run.
@@ -24,8 +24,6 @@ object ScreenshotRunner {
      * Typically this can be in `AndroidJUnitRunner#finish()`
      */
     fun onDestroy() {
-        if (ScreenshotImpl.hasBeenCreated()) {
-            ScreenshotImpl.getInstance().flush()
-        }
+        ScreenshotImpl.flush()
     }
 }

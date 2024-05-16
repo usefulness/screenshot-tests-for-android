@@ -24,6 +24,7 @@ import android.util.Log
 import android.view.Display
 import android.view.View
 import android.view.WindowManager
+import androidx.core.content.getSystemService
 import java.lang.reflect.InvocationHandler
 import java.lang.reflect.Method
 import java.lang.reflect.Proxy
@@ -81,11 +82,7 @@ object WindowAttachment {
      * Similar to dispatchAttach, except dispatches to the corresponding detach.
      */
     private fun dispatchDetach(view: View) {
-        invoke(view, "dispatchDetachedFromWindow")
-    }
-
-    private fun invoke(view: View, methodName: String) {
-        invokeUnchecked(view, methodName)
+        invokeUnchecked(view, "dispatchDetachedFromWindow")
     }
 
     private fun invokeUnchecked(view: View, methodName: String) {
@@ -113,9 +110,7 @@ object WindowAttachment {
      * Simulates the view as being attached.
      */
     fun generateAttachInfo(view: View): Any {
-        if (sAttachInfo != null) {
-            return sAttachInfo!!
-        }
+        sAttachInfo?.let { return it }
 
         val cAttachInfo = Class.forName("android.view.View\$AttachInfo")
 
@@ -126,8 +121,14 @@ object WindowAttachment {
         val cICallbacks = Class.forName("android.view.View\$AttachInfo\$Callbacks")
 
         val context = view.context
-        val wm = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-        val display = wm.defaultDisplay
+        val display = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            context.display
+        } else {
+            val wm = context.getSystemService<WindowManager>()
+            @Suppress("DEPRECATION")
+            wm?.defaultDisplay
+        }
+            .let(::checkNotNull)
 
         val window = createIWindow()
 
