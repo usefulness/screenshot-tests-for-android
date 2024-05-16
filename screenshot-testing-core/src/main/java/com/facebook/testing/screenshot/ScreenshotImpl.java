@@ -27,7 +27,7 @@ import android.view.View;
 
 import com.facebook.testing.screenshot.layouthierarchy.AccessibilityHierarchyDumper;
 import com.facebook.testing.screenshot.layouthierarchy.AccessibilityIssuesDumper;
-import com.facebook.testing.screenshot.layouthierarchy.AccessibilityUtil;
+import io.github.usefulness.testing.screenshot.layouthierarchy.AccessibilityUtil;
 import io.github.usefulness.testing.screenshot.layouthierarchy.LayoutHierarchyDumper;
 
 import org.json.JSONException;
@@ -265,7 +265,7 @@ public class ScreenshotImpl {
 
             AccessibilityUtil.AXTreeNode axTree =
                 recordBuilder.getIncludeAccessibilityInfo()
-                    ? AccessibilityUtil.generateAccessibilityTree(recordBuilder.getView(), null)
+                    ? AccessibilityUtil.generateAccessibilityTree(recordBuilder.getView())
                     : null;
             dump.put("axHierarchy", AccessibilityHierarchyDumper.dumpHierarchy(axTree));
             mAlbum.writeViewHierarchyFile(recordBuilder.getName(), dump.toString(2));

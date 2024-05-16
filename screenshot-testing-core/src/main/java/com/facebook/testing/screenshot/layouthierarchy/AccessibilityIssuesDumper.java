@@ -18,11 +18,14 @@ package com.facebook.testing.screenshot.layouthierarchy;
 
 import android.view.View;
 import android.view.ViewGroup;
-import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
+import android.view.accessibility.AccessibilityNodeInfo;
+
 import androidx.annotation.Nullable;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import io.github.usefulness.testing.screenshot.layouthierarchy.AccessibilityUtil;
 
 public final class AccessibilityIssuesDumper {
 
@@ -54,7 +57,7 @@ public final class AccessibilityIssuesDumper {
         JSONArray elements = new JSONArray();
         for (AccessibilityUtil.AXTreeNode axTreeNode : axTree.getAllNodes()) {
             View view = axTreeNode.getView();
-            AccessibilityNodeInfoCompat nodeInfo = axTreeNode.getNodeInfo();
+            AccessibilityNodeInfo nodeInfo = axTreeNode.getNodeInfo();
             if (AccessibilityUtil.isTalkbackFocusable(view)
                     && !AccessibilityUtil.isSpeakingNode(nodeInfo, view)) {
                 JSONObject element = new JSONObject();

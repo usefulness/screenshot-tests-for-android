@@ -11,12 +11,7 @@ object BaseViewHierarchyPlugin : HierarchyPlugin {
 
     override fun accept(obj: Any?) = obj is View
 
-    override fun putHierarchy(
-        dumper: LayoutHierarchyDumper,
-        node: JSONObject,
-        obj: Any,
-        offset: Point,
-    ) {
+    override fun putHierarchy(dumper: LayoutHierarchyDumper, node: JSONObject, obj: Any, offset: Point) {
         if (obj !is ViewGroup) {
             return
         }

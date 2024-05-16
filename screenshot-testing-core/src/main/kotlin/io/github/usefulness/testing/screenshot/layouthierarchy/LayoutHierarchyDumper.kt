@@ -77,16 +77,12 @@ class LayoutHierarchyDumper internal constructor(
 
         fun create() = createWith(emptyList(), emptyList())
 
-        fun createWith(
-            hierarchyPlugins: List<HierarchyPlugin>,
-            attributePlugins: List<AttributePlugin>,
-        ): LayoutHierarchyDumper {
+        fun createWith(hierarchyPlugins: List<HierarchyPlugin>, attributePlugins: List<AttributePlugin>): LayoutHierarchyDumper {
             val allHierarchyPlugins = buildList(capacity = hierarchyPlugins.size + sGlobalHierarchyPlugins.size + 1) {
                 addAll(hierarchyPlugins)
                 addAll(sGlobalHierarchyPlugins)
                 add(BaseViewHierarchyPlugin)
             }
-
 
             val allAttributePlugins = buildList(capacity = attributePlugins.size + sGlobalAttributePlugins.size + 1) {
                 add(BaseViewAttributePlugin)
@@ -97,17 +93,11 @@ class LayoutHierarchyDumper internal constructor(
             return createWithOnly(allHierarchyPlugins, allAttributePlugins)
         }
 
-        fun createWithOnly(
-            hierarchyPlugins: List<HierarchyPlugin>,
-            attributePlugins: List<AttributePlugin>,
-        ): LayoutHierarchyDumper = LayoutHierarchyDumper(hierarchyPlugins, attributePlugins)
+        fun createWithOnly(hierarchyPlugins: List<HierarchyPlugin>, attributePlugins: List<AttributePlugin>): LayoutHierarchyDumper =
+            LayoutHierarchyDumper(hierarchyPlugins, attributePlugins)
 
-        fun getViewLeft(view: View): Int {
-            return view.left + view.translationX.toInt()
-        }
+        fun getViewLeft(view: View): Int = view.left + view.translationX.toInt()
 
-        fun getViewTop(view: View): Int {
-            return view.top + view.translationY.toInt()
-        }
+        fun getViewTop(view: View): Int = view.top + view.translationY.toInt()
     }
 }

@@ -17,16 +17,23 @@
 package com.facebook.testing.screenshot.layouthierarchy;
 
 import android.graphics.Rect;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
-import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
+import android.view.accessibility.AccessibilityNodeInfo;
+import android.view.accessibility.AccessibilityNodeInfo.AccessibilityAction;
+import android.view.accessibility.AccessibilityNodeInfo.CollectionInfo;
+
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat.AccessibilityActionCompat;
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat.CollectionInfoCompat;
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat.CollectionItemInfoCompat;
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat.RangeInfoCompat;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import io.github.usefulness.testing.screenshot.layouthierarchy.AccessibilityUtil;
 
 /**
  * Dumps information about the accessibility hierarchy into a JSON object
@@ -43,7 +50,7 @@ public final class AccessibilityHierarchyDumper {
         }
 
         View view = axTree.getView();
-        AccessibilityNodeInfoCompat nodeInfo = axTree.getNodeInfo();
+        AccessibilityNodeInfo nodeInfo = axTree.getNodeInfo();
 
         root.put("class", view.getClass().getName());
 
@@ -52,7 +59,7 @@ public final class AccessibilityHierarchyDumper {
                 root.put("actionList", JSONObject.NULL);
             } else {
                 JSONArray actionList = new JSONArray();
-                for (AccessibilityActionCompat action : nodeInfo.getActionList()) {
+                for (AccessibilityAction action : nodeInfo.getActionList()) {
                     actionList.put(action.getId());
                 }
                 root.put("actionList", actionList);
@@ -83,7 +90,7 @@ public final class AccessibilityHierarchyDumper {
                 root.put("collectionInfo", JSONObject.NULL);
             } else {
                 JSONObject collectionInfoObj = new JSONObject();
-                CollectionInfoCompat collectionInfo = nodeInfo.getCollectionInfo();
+                CollectionInfo collectionInfo = nodeInfo.getCollectionInfo();
                 collectionInfoObj.put("columnCount", collectionInfo.getColumnCount());
                 collectionInfoObj.put("rowCount", collectionInfo.getRowCount());
                 collectionInfoObj.put("selectionMode", collectionInfo.getSelectionMode());
@@ -95,7 +102,7 @@ public final class AccessibilityHierarchyDumper {
                 root.put("collectionItemInfo", JSONObject.NULL);
             } else {
                 JSONObject collectionItemInfoObj = new JSONObject();
-                CollectionItemInfoCompat collectionItemInfo = nodeInfo.getCollectionItemInfo();
+                AccessibilityNodeInfo.CollectionItemInfo collectionItemInfo = nodeInfo.getCollectionItemInfo();
                 collectionItemInfoObj.put("columnIndex", collectionItemInfo.getColumnIndex());
                 collectionItemInfoObj.put("columnSpan", collectionItemInfo.getColumnSpan());
                 collectionItemInfoObj.put("rowIndex", collectionItemInfo.getRowIndex());
@@ -124,7 +131,9 @@ public final class AccessibilityHierarchyDumper {
             root.put("isEditable", nodeInfo.isEditable());
             root.put("isEnabled", nodeInfo.isEnabled());
             root.put("isFocusable", nodeInfo.isFocusable());
-            root.put("isImportantForAccessibility", nodeInfo.isImportantForAccessibility());
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                root.put("isImportantForAccessibility", nodeInfo.isImportantForAccessibility());
+            }
             root.put("isLongClickable", nodeInfo.isLongClickable());
             root.put("isMultiLine", nodeInfo.isMultiLine());
             root.put("isPassword", nodeInfo.isPassword());
@@ -139,7 +148,7 @@ public final class AccessibilityHierarchyDumper {
                 root.put("rangeInfo", JSONObject.NULL);
             } else {
                 JSONObject rangeInfoObj = new JSONObject();
-                RangeInfoCompat rangeInfo = nodeInfo.getRangeInfo();
+                AccessibilityNodeInfo.RangeInfo rangeInfo = nodeInfo.getRangeInfo();
                 rangeInfoObj.put("current", rangeInfo.getCurrent());
                 rangeInfoObj.put("max", rangeInfo.getMax());
                 rangeInfoObj.put("min", rangeInfo.getMin());
@@ -167,7 +176,7 @@ public final class AccessibilityHierarchyDumper {
     }
 
     public static JSONObject dumpHierarchy(View view) throws JSONException {
-        return dumpHierarchy(AccessibilityUtil.generateAccessibilityTree(view, null));
+        return dumpHierarchy(AccessibilityUtil.generateAccessibilityTree(view));
     }
 
     private static Object jsonNullOr(Object obj) {
