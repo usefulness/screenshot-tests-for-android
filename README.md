@@ -19,7 +19,7 @@ class SampleTest {
 
     @Test
     fun foo() {
-        launchActivity<MainActivity>().onActivity(Screenshot::snapActivity)
+        launchActivity<MainActivity>().onActivity(Screenshot::snap)
     }
 }
 ```
