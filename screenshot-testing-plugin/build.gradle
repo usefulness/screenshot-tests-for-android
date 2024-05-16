@@ -4,8 +4,10 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
   id("java-gradle-plugin")
   alias(libs.plugins.starter.library.kotlin)
-  id("com.starter.publishing")
   alias(libs.plugins.gradle.pluginpublish)
+  alias(libs.plugins.kotlin.serialization)
+  alias(libs.plugins.kotlinx.binarycompatibility)
+  id("com.starter.publishing")
 }
 
 final GENERATED_PACKAGE_NAME = "io.github.usefulness.testing.screenshot.generated"
@@ -80,6 +82,7 @@ gradlePlugin {
 
 dependencies {
   compileOnly(libs.agp.gradle.impl)
+  implementation(libs.kotlinx.serialization.json.core)
 
   testImplementation(libs.agp.gradle.api)
   testImplementation(gradleTestKit())

@@ -1,0 +1,80 @@
+public final class io/github/usefulness/testing/screenshot/ScreenshotsPlugin : org/gradle/api/Plugin {
+	public static final field Companion Lio/github/usefulness/testing/screenshot/ScreenshotsPlugin$Companion;
+	public static final field DEPENDENCY_CORE Ljava/lang/String;
+	public static final field DEPENDENCY_GROUP Ljava/lang/String;
+	public static final field GROUP Ljava/lang/String;
+	public static final field TEST_RUNNER_CLASS Ljava/lang/String;
+	public fun <init> ()V
+	public synthetic fun apply (Ljava/lang/Object;)V
+	public fun apply (Lorg/gradle/api/Project;)V
+}
+
+public final class io/github/usefulness/testing/screenshot/ScreenshotsPlugin$Companion {
+}
+
+public class io/github/usefulness/testing/screenshot/ScreenshotsPluginExtension {
+	public fun <init> (Lorg/gradle/api/model/ObjectFactory;Lorg/gradle/api/file/ProjectLayout;)V
+	public final fun getAddDependencies ()Lorg/gradle/api/provider/Property;
+	public final fun getFailureDirectory ()Lorg/gradle/api/file/DirectoryProperty;
+	public final fun getPythonExecutable ()Lorg/gradle/api/provider/Property;
+	public final fun getReferenceDirectory ()Lorg/gradle/api/file/DirectoryProperty;
+	public final fun getTolerance ()Lorg/gradle/api/provider/Property;
+}
+
+public final class io/github/usefulness/testing/screenshot/generated/ScreenshotTestBuildConfig {
+	public static final field ANDROID_TEST_SERVICES_VERSION Ljava/lang/String;
+	public static final field INSTANCE Lio/github/usefulness/testing/screenshot/generated/ScreenshotTestBuildConfig;
+	public static final field PLUGIN_VERSION Ljava/lang/String;
+}
+
+public class io/github/usefulness/testing/screenshot/tasks/CleanScreenshotsTask : org/gradle/api/DefaultTask {
+	public static final field Companion Lio/github/usefulness/testing/screenshot/tasks/CleanScreenshotsTask$Companion;
+	public fun <init> (Lorg/gradle/api/model/ObjectFactory;Lorg/gradle/api/file/ProjectLayout;)V
+	public final fun cleanScreenshots ()V
+	public final fun getVariantName ()Lorg/gradle/api/provider/Property;
+}
+
+public final class io/github/usefulness/testing/screenshot/tasks/CleanScreenshotsTask$Companion {
+	public final fun taskName (Ljava/lang/String;)Ljava/lang/String;
+}
+
+public class io/github/usefulness/testing/screenshot/tasks/PullScreenshotsTask : io/github/usefulness/testing/screenshot/tasks/ScreenshotTask {
+	public static final field Companion Lio/github/usefulness/testing/screenshot/tasks/PullScreenshotsTask$Companion;
+	public fun <init> (Lorg/gradle/api/model/ObjectFactory;Lorg/gradle/api/file/ProjectLayout;Lorg/gradle/process/ExecOperations;)V
+	protected final fun getRecord ()Z
+	protected final fun getVerify ()Z
+	public final fun pullScreenshots ()V
+	protected final fun setRecord (Z)V
+	protected final fun setVerify (Z)V
+}
+
+public final class io/github/usefulness/testing/screenshot/tasks/PullScreenshotsTask$Companion {
+}
+
+public class io/github/usefulness/testing/screenshot/tasks/RecordScreenshotTestTask : io/github/usefulness/testing/screenshot/tasks/PullScreenshotsTask {
+	public static final field Companion Lio/github/usefulness/testing/screenshot/tasks/RecordScreenshotTestTask$Companion;
+	public fun <init> (Lorg/gradle/api/model/ObjectFactory;Lorg/gradle/api/file/ProjectLayout;Lorg/gradle/process/ExecOperations;)V
+}
+
+public final class io/github/usefulness/testing/screenshot/tasks/RecordScreenshotTestTask$Companion {
+	public final fun taskName (Ljava/lang/String;)Ljava/lang/String;
+}
+
+public abstract class io/github/usefulness/testing/screenshot/tasks/ScreenshotTask : org/gradle/api/DefaultTask {
+	public fun <init> (Lorg/gradle/api/model/ObjectFactory;)V
+}
+
+public class io/github/usefulness/testing/screenshot/tasks/VerifyScreenshotTestTask : io/github/usefulness/testing/screenshot/tasks/PullScreenshotsTask {
+	public static final field Companion Lio/github/usefulness/testing/screenshot/tasks/VerifyScreenshotTestTask$Companion;
+	public fun <init> (Lorg/gradle/api/model/ObjectFactory;Lorg/gradle/api/file/ProjectLayout;Lorg/gradle/process/ExecOperations;)V
+}
+
+public final class io/github/usefulness/testing/screenshot/tasks/VerifyScreenshotTestTask$Companion {
+	public final fun taskName (Ljava/lang/String;)Ljava/lang/String;
+}
+
+public final class io/github/usefulness/testing/screenshot/verification/VerificationKt {
+	public static final fun main ()V
+	public static synthetic fun main ([Ljava/lang/String;)V
+}
+
