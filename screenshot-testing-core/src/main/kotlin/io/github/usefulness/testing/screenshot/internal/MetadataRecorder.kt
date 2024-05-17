@@ -1,25 +1,19 @@
 package io.github.usefulness.testing.screenshot.internal
 
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import com.google.gson.stream.JsonReader
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.decodeFromStream
+import kotlinx.serialization.json.encodeToStream
 import java.io.FileNotFoundException
-import java.io.InputStreamReader
 
+@OptIn(ExperimentalSerializationApi::class)
 internal class MetadataRecorder(private val screenshotDirectories: ScreenshotDirectories) {
     private val metadataFileName = "metadata.json"
     private val metadata by lazy {
         try {
             screenshotDirectories.openInputFile(metadataFileName).use { metadataFile ->
-                val gson = Gson()
-                val jsonReader = JsonReader(InputStreamReader(metadataFile))
-                gson.fromJson<List<ScreenshotMetadata>>(
-                    jsonReader,
-                    object : TypeToken<List<ScreenshotMetadata?>?>() {
-                    }.type,
-                )
-                    .orEmpty()
-                    .toMutableList()
+                Json.decodeFromStream<List<ScreenshotMetadata>>(metadataFile).toMutableList()
             }
         } catch (ignored: FileNotFoundException) {
             mutableListOf()
@@ -97,13 +91,12 @@ internal class MetadataRecorder(private val screenshotDirectories: ScreenshotDir
     }
 
     private fun writeMetadata() {
-        val gson = Gson()
-        val json = gson.toJson(metadata)
         screenshotDirectories.openOutputFile(metadataFileName).use { output ->
-            output.write(json.toByteArray())
+            Json.encodeToStream<List<ScreenshotMetadata>>(value = metadata, stream = output)
         }
     }
 
+    @Serializable
     private class ScreenshotMetadata {
         var description: String? = null
         var name: String? = null
