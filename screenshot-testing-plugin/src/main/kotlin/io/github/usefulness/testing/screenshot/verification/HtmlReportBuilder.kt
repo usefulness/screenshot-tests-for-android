@@ -26,7 +26,7 @@ internal class HtmlReportBuilder(
         index.writeText(buildHtml(metadata))
 
         return Output(
-            numberOfScreenshots = 100,
+            numberOfScreenshots = metadata.size,
             reportEntrypoint = index,
         )
     }

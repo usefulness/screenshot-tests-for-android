@@ -1,6 +1,8 @@
 package io.github.usefulness.testing.screenshot.tasks
 
 import io.github.usefulness.testing.screenshot.ScreenshotsPlugin
+import io.github.usefulness.testing.screenshot.verification.HtmlReportBuilder
+import io.github.usefulness.testing.screenshot.verification.Recorder
 import org.gradle.api.file.ProjectLayout
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.tasks.Input
@@ -44,6 +46,24 @@ open class PullScreenshotsTask @Inject constructor(
         val emulatorSpecificFolder = testOutput.listFiles()?.singleOrNull()
             ?: error("Expected single folder under path=$testOutput, got=${testOutput.list()?.joinToString(separator = "\n")}")
 
+        val htmlReportBuilder = HtmlReportBuilder(
+            emulatorSpecificFolder = emulatorSpecificFolder,
+            reportDirectory = outputDir,
+        )
+        val htmlOutput = htmlReportBuilder.generate()
+
+        val recorder = Recorder(
+            emulatorSpecificFolder = emulatorSpecificFolder,
+            referenceDirectory = referenceDirectory.asFile.get(),
+        )
+        if (verify) {
+            recorder.verify(tolerance = tolerance.get())
+        } else if (record) {
+            recorder.record()
+        } else {
+            error("Unsupported mode")
+        }
+
         execOperations.exec { exec ->
             exec.executable = pythonExecutable.get()
             exec.environment("PYTHONPATH", jarFile)
@@ -79,7 +99,9 @@ open class PullScreenshotsTask @Inject constructor(
                     }
                 }
 
-            println(exec.args)
+            println("Found ${htmlOutput.numberOfScreenshots} screenshots")
+            println("Open the following url in a browser to view the results: ")
+            println("  file://${htmlOutput.reportEntrypoint}")
         }
     }
 }

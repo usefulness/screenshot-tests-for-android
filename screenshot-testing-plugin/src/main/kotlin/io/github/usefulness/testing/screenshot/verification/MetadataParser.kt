@@ -5,9 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.okio.decodeFromBufferedSource
-import okio.buffer
-import okio.source
+import kotlinx.serialization.json.decodeFromStream
 import java.io.File
 
 @OptIn(ExperimentalSerializationApi::class)
@@ -16,12 +14,19 @@ internal object MetadataParser {
     fun parseMetadata(source: File): List<ScreenshotMetadata> {
         require(source.exists()) { "metadata.json does not exist at ${source.absolutePath}" }
 
-        val rawInput = Json.decodeFromBufferedSource<List<ScreenshotMetadata>>(source.source().buffer())
+        val rawInput = runCatching { Json.decodeFromStream<List<ScreenshotMetadata>>(source.inputStream()) }
+            .getOrElse { cause ->
+                throw IllegalStateException(
+                    message = "Unable to parse metadata file, " +
+                        "this commonly happens if you did not call `ScreenshotRunner.onDestroy()` from your instrumentation",
+                    cause = cause,
+                )
+            }
 
         return rawInput.sortedWith(compareBy<ScreenshotMetadata> { it.group }.thenComparing(compareBy { it.name }))
     }
 
-    fun readViewHierarchy(source: File) = Json.decodeFromBufferedSource<ScreenshotHierarchyDump>(source.source().buffer())
+    fun readViewHierarchy(source: File) = Json.decodeFromStream<ScreenshotHierarchyDump>(source.inputStream())
 
     @Serializable
     data class ScreenshotMetadata(
