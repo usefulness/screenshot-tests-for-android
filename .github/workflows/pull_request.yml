@@ -81,7 +81,7 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
 
-      - name: run screenshot tests
+      - name: test verify alone
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 33
@@ -93,16 +93,45 @@ jobs:
           script: |
             ./gradlew verifyDebugAndroidTestScreenshotTest
 
-      - name: Upload screenshot tests result
+      - name: Upload screenshot tests result-1
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
         with:
-          name: screenshots
+          name: screenshots-1
           path: "${{ github.workspace }}/**/build/reports/androidTests/connected/"
 
-      - name: Upload failed screenshots
+      - name: Upload failed screenshots-1
         if: ${{ failure() }}
         uses: actions/upload-artifact@v4
         with:
-          name: failedScreenshots
+          name: failedScreenshots-1
+          path: "${{ github.workspace }}/**/build/reports/failedScreenshots"
+
+      - run: rm -r sample/android/screenshots
+
+      - name: test record + verify
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 33
+          profile: pixel_6_pro
+          target: google_apis
+          arch: x86_64
+          disable-spellchecker: true
+          working-directory: ./sample
+          script: |
+            ./gradlew record
+            ./gradlew verify
+
+      - name: Upload screenshot tests result-2
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots-2
+          path: "${{ github.workspace }}/**/build/reports/androidTests/connected/"
+
+      - name: Upload failed screenshots-2
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: failedScreenshots-2
           path: "${{ github.workspace }}/**/build/reports/failedScreenshots"
