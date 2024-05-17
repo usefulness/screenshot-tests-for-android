@@ -63,8 +63,3 @@ public final class io/github/usefulness/testing/screenshot/tasks/VerifyScreensho
 	public final fun taskName (Ljava/lang/String;)Ljava/lang/String;
 }
 
-public final class io/github/usefulness/testing/screenshot/verification/RecorderKt {
-	public static final fun main ()V
-	public static synthetic fun main ([Ljava/lang/String;)V
-}
-
