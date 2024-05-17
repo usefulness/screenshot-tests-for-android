@@ -39,17 +39,19 @@ internal class Recorder(
             error("Missing reference image(s) for: ${missingImages.keys.joinToString(prefix = "\n", separator = "\n")}")
         }
 
+        failureDirectory.deleteRecursively()
         val failures = mutableListOf<Mismatch.Item>()
         all.forEach { (key, input) ->
             val (existing, incoming) = input
             requireNotNull(incoming)
-            if (!existing.isSameAs(incoming, tolerance = tolerance)) {
-                failures.add(Mismatch.Item(key = key))
+            val diffRms = existing.getRootMeetSquare(incoming)
+            if (diffRms > tolerance) {
+                failureDirectory.mkdirs()
+                failures.add(Mismatch.Item(key = key, differenceRms = diffRms))
                 val inArgb = existing.copy(BufferedImage.TYPE_INT_ARGB)
                 val outArgb = incoming.copy(BufferedImage.TYPE_INT_ARGB)
                 val redDiff = inArgb.composite(RedComposite(1.0), outArgb)
                 val diffDiff = inArgb.composite(DifferenceComposite(0.8), outArgb)
-                failureDirectory.mkdirs()
                 existing.output(PngWriter.MaxCompression, failureDirectory.resolve("${key}_expected.png"))
                 incoming.output(PngWriter.MaxCompression, failureDirectory.resolve("${key}_actual.png"))
                 redDiff.output(PngWriter.MaxCompression, failureDirectory.resolve("${key}_diff_red.png"))
@@ -66,16 +68,16 @@ internal class Recorder(
 
         data class Mismatch(val items: List<Item>) : VerificationResult() {
 
-            data class Item(val key: String)
+            data class Item(val key: String, val differenceRms: Float)
         }
     }
 
-    private fun ImmutableImage.isSameAs(other: ImmutableImage, tolerance: Float): Boolean {
+    private fun ImmutableImage.getRootMeetSquare(other: ImmutableImage): Float {
         val oldScreenshotPixels = pixels()
         val newScreenshotPixels = other.pixels()
 
         if (oldScreenshotPixels.size != newScreenshotPixels.size) {
-            return false
+            return Float.NaN
         }
 
         val diff = List(newScreenshotPixels.size) {
@@ -87,7 +89,7 @@ internal class Recorder(
         }
         val histogram = diff.histogram()
 
-        return calculatedRootMeanSquare(histogram, dimensions()) <= tolerance
+        return calculatedRootMeanSquare(histogram, dimensions())
     }
 
     private fun List<Pixel>.histogram(): List<Int> {

@@ -65,9 +65,15 @@ open class PullScreenshotsTask @Inject constructor(
             when (val result = recorder.verify(tolerance = tolerance.get())) {
                 is VerificationResult.Mismatch -> {
                     result.items.forEach { item ->
-                        logger.warn("Image ${item.key} has changed")
+                        logger.warn("Image ${item.key} has changed. RMS=${item.differenceRms}")
                     }
-                    error("Verification failed. ${result.items} screenshots has changed")
+
+                    val message = when (result.items.size) {
+                        1 -> "One screenshot has changed"
+                        else -> "${result.items.size} screenshots have changed"
+                    }
+                    error("Verification failed - $message. tolerance=${tolerance.get()}\n" +
+                        "Open ${failureDirectory.asFile.get()} to review the diff")
                 }
 
                 VerificationResult.Success -> Unit
@@ -79,6 +85,6 @@ open class PullScreenshotsTask @Inject constructor(
         }
 
         logger.quiet("Open the following url in a browser to view the results: ")
-        logger.quiet("  file://${htmlOutput.reportEntrypoint}")
+        logger.quiet("  ${htmlOutput.reportEntrypoint}")
     }
 }
