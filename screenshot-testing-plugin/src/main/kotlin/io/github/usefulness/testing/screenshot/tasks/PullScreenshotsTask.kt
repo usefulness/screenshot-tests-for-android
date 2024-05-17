@@ -12,7 +12,7 @@ import org.gradle.api.tasks.TaskAction
 import java.io.File
 import javax.inject.Inject
 
-open class PullScreenshotsTask @Inject constructor(
+abstract class PullScreenshotsTask @Inject constructor(
     objectFactory: ObjectFactory,
     private val projectLayout: ProjectLayout,
 ) : ScreenshotTask(objectFactory = objectFactory) {
@@ -31,7 +31,6 @@ open class PullScreenshotsTask @Inject constructor(
     init {
         description = "Pull screenshots from your device"
         group = ScreenshotsPlugin.GROUP
-        outputs.upToDateWhen { false }
     }
 
     @TaskAction

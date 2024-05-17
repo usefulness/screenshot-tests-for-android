@@ -1,6 +1,7 @@
 package io.github.usefulness.testing.screenshot.tasks
 
 import org.gradle.api.DefaultTask
+import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputDirectory
@@ -22,8 +23,7 @@ abstract class ScreenshotTask(objectFactory: ObjectFactory) : DefaultTask() {
     @get:InputDirectory
     internal val connectedTestOutput = objectFactory.directoryProperty()
 
-    @get:OutputDirectory
-    internal val referenceDirectory = objectFactory.directoryProperty()
+    abstract val referenceDirectory: DirectoryProperty
 
     @get:OutputDirectory
     internal val failureDirectory = objectFactory.directoryProperty()
