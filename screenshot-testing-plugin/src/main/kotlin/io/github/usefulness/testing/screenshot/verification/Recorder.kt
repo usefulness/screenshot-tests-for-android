@@ -32,17 +32,21 @@ internal class Recorder(
     fun verify(tolerance: Float): VerificationResult {
         val reference = loadReferenceImages()
         val recorded = loadRecordedImages()
-        val all = reference.mapValues { (key, existing) -> existing to recorded[key] }
+        val all = (reference.keys + recorded.keys).associateWith { key -> reference[key] to recorded[key] }
 
-        val missingImages = all.filterValues { (_, incoming) -> incoming == null }
+        val missingImages = all.filterValues { (reference, incoming) -> reference == null || incoming == null }
         if (missingImages.isNotEmpty()) {
-            error("Missing reference image(s) for: ${missingImages.keys.joinToString(prefix = "\n", separator = "\n")}")
+            error(
+                "Missing image(s) for: ${missingImages.keys.joinToString(prefix = "\n", separator = "\n")}\n" +
+                    "Did you forget to call `record`?",
+            )
         }
 
         failureDirectory.deleteRecursively()
         val failures = mutableListOf<Mismatch.Item>()
         all.forEach { (key, input) ->
             val (existing, incoming) = input
+            requireNotNull(existing)
             requireNotNull(incoming)
             val diffRms = existing.getRootMeetSquare(incoming)
             if (diffRms > tolerance) {
@@ -68,7 +72,10 @@ internal class Recorder(
 
         data class Mismatch(val items: List<Item>) : VerificationResult() {
 
-            data class Item(val key: String, val differenceRms: Float)
+            data class Item(
+                val key: String,
+                val differenceRms: Float,
+            )
         }
     }
 

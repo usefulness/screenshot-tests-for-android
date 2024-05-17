@@ -1,11 +1,9 @@
 package io.github.usefulness.testing.screenshot.tasks
 
 import io.github.usefulness.testing.screenshot.ScreenshotsPlugin
-import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.ProjectLayout
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.tasks.InputDirectory
-import org.gradle.api.tasks.OutputDirectory
 import javax.inject.Inject
 
 open class VerifyScreenshotTestTask @Inject constructor(

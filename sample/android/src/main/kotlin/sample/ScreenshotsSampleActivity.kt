@@ -12,8 +12,10 @@ import io.github.usefulness.testing.screenshot.sample.R
 
 class ScreenshotsSampleActivity : AppCompatActivity() {
     private val status
-        get() = intent.getIntExtra("status", 0)
-            .let { Status.entries[it] }
+        get() =
+            intent
+                .getIntExtra("status", 0)
+                .let { Status.entries[it] }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

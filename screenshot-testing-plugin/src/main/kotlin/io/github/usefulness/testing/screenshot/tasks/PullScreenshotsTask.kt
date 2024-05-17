@@ -71,8 +71,10 @@ abstract class PullScreenshotsTask @Inject constructor(
                         1 -> "One screenshot has changed"
                         else -> "${result.items.size} screenshots have changed"
                     }
-                    error("Verification failed - $message. tolerance=${tolerance.get()}\n" +
-                        "Open ${failureDirectory.asFile.get()} to review the diff")
+                    error(
+                        "Verification failed - $message. tolerance=${tolerance.get()}\n" +
+                            "Open ${failureDirectory.asFile.get()} to review the diff",
+                    )
                 }
 
                 VerificationResult.Success -> Unit
