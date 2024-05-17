@@ -51,7 +51,7 @@ internal class Recorder(
                 val inArgb = existing.copy(BufferedImage.TYPE_INT_ARGB)
                 val outArgb = incoming.copy(BufferedImage.TYPE_INT_ARGB)
                 val redDiff = inArgb.composite(RedComposite(1.0), outArgb)
-                val diffDiff = inArgb.composite(DifferenceComposite(0.8), outArgb)
+                val diffDiff = inArgb.composite(DifferenceComposite(0.9), outArgb)
                 existing.output(PngWriter.MaxCompression, failureDirectory.resolve("${key}_expected.png"))
                 incoming.output(PngWriter.MaxCompression, failureDirectory.resolve("${key}_actual.png"))
                 redDiff.output(PngWriter.MaxCompression, failureDirectory.resolve("${key}_diff_red.png"))
