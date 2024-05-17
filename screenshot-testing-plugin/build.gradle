@@ -11,7 +11,7 @@ plugins {
 }
 
 final GENERATED_PACKAGE_NAME = "io.github.usefulness.testing.screenshot.generated"
-final GENERATED_BUILD_DIR = layout.buildDirectory.map { it.dir("generated/config/${GENERATED_PACKAGE_NAME.replace('.', '/')}")}
+final GENERATED_BUILD_DIR = layout.buildDirectory.map { it.dir("generated/config/${GENERATED_PACKAGE_NAME.replace('.', '/')}") }
 
 tasks.register("generateBuildConfig") {
   final pluginVersion = project.version
@@ -28,7 +28,7 @@ tasks.register("generateBuildConfig") {
       writer.writeLine("package $GENERATED_PACKAGE_NAME")
       writer.writeLine("")
       writer.writeLine("""
-        object $className { 
+        internal object $className { 
             const val PLUGIN_VERSION = \"${pluginVersion.toString()}\" 
             const val ANDROID_TEST_SERVICES_VERSION = \"${androidTestServicesVersion}\" 
         }
@@ -52,12 +52,6 @@ tasks.named("compileKotlin") {
   sourceSets {
     main {
       kotlin.srcDir(GENERATED_BUILD_DIR)
-      resources.srcDirs 'src/py'
-      resources {
-        exclude '**/*.pyc'
-        exclude '**/test_*.py'
-        exclude '**/fixtures/**'
-      }
     }
   }
 }

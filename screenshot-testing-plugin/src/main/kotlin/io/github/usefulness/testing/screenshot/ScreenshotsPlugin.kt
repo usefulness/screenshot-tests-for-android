@@ -14,7 +14,7 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 
 class ScreenshotsPlugin : Plugin<Project> {
-    companion object {
+    internal companion object {
         const val GROUP = "Screenshot Test"
         const val DEPENDENCY_GROUP = "io.github.usefulness"
         const val DEPENDENCY_CORE = "screenshot-testing-core"

@@ -1,14 +1,18 @@
 package io.github.usefulness.testing.screenshot.verification
 
+import com.sksamuel.scrimage.Dimension
 import com.sksamuel.scrimage.ImmutableImage
 import com.sksamuel.scrimage.color.Colors
 import com.sksamuel.scrimage.composite.DifferenceComposite
 import com.sksamuel.scrimage.composite.RedComposite
 import com.sksamuel.scrimage.nio.PngWriter
+import com.sksamuel.scrimage.pixels.Pixel
 import io.github.usefulness.testing.screenshot.verification.MetadataParser.ScreenshotMetadata
 import io.github.usefulness.testing.screenshot.verification.Recorder.VerificationResult.Mismatch
 import java.awt.image.BufferedImage
 import java.io.File
+import kotlin.math.abs
+import kotlin.math.sqrt
 
 internal class Recorder(
     private val emulatorSpecificFolder: File,
@@ -39,7 +43,7 @@ internal class Recorder(
         all.forEach { (key, input) ->
             val (existing, incoming) = input
             requireNotNull(incoming)
-            if (!existing.isSameAs(incoming)) {
+            if (!existing.isSameAs(incoming, tolerance = tolerance)) {
                 failures.add(Mismatch.Item(key = key))
                 val inArgb = existing.copy(BufferedImage.TYPE_INT_ARGB)
                 val outArgb = incoming.copy(BufferedImage.TYPE_INT_ARGB)
@@ -66,9 +70,7 @@ internal class Recorder(
         }
     }
 
-    private fun ImmutableImage.isSameAs(other: ImmutableImage): Boolean = arePixelsTheSame(other)
-
-    private fun ImmutableImage.arePixelsTheSame(other: ImmutableImage): Boolean {
+    private fun ImmutableImage.isSameAs(other: ImmutableImage, tolerance: Float): Boolean {
         val oldScreenshotPixels = pixels()
         val newScreenshotPixels = other.pixels()
 
@@ -76,13 +78,38 @@ internal class Recorder(
             return false
         }
 
-        oldScreenshotPixels.forEachIndexed { index, pixel ->
-            if (pixel != newScreenshotPixels[index]) {
-                return false
-            }
+        val diff = List(newScreenshotPixels.size) {
+            val new = newScreenshotPixels[it]
+            val old = oldScreenshotPixels[it]
+            check(new.x == old.x)
+            check(new.y == old.y)
+            Pixel(new.x, new.y, abs(new.argb - old.argb))
+        }
+        val histogram = diff.histogram()
+
+        return calculatedRootMeanSquare(histogram, dimensions()) <= tolerance
+    }
+
+    private fun List<Pixel>.histogram(): List<Int> {
+        val red = List(256) { it to 0 }.toMap().toMutableMap()
+        val green = List(256) { it to 0 }.toMap().toMutableMap()
+        val blue = List(256) { it to 0 }.toMap().toMutableMap()
+
+        forEach { pixel ->
+            red[pixel.red()] = red.getValue(pixel.red()) + 1
+            green[pixel.green()] = green.getValue(pixel.green()) + 1
+            blue[pixel.blue()] = blue.getValue(pixel.blue()) + 1
         }
 
-        return true
+        return red.values + green.values + blue.values
+    }
+
+    private fun calculatedRootMeanSquare(histogram: List<Int>, imageDimensions: Dimension): Float {
+        val sumOfSquares = histogram
+            .mapIndexed { index, value -> value * (index % 256) * (index % 256) }
+            .sum()
+
+        return sqrt(sumOfSquares.toFloat() / (imageDimensions.x * imageDimensions.y))
     }
 
     private fun loadRecordedImages() = metadata.associate { screenshot ->

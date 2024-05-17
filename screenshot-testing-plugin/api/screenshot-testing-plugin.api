@@ -1,5 +1,4 @@
 public final class io/github/usefulness/testing/screenshot/ScreenshotsPlugin : org/gradle/api/Plugin {
-	public static final field Companion Lio/github/usefulness/testing/screenshot/ScreenshotsPlugin$Companion;
 	public static final field DEPENDENCY_CORE Ljava/lang/String;
 	public static final field DEPENDENCY_GROUP Ljava/lang/String;
 	public static final field GROUP Ljava/lang/String;
@@ -9,9 +8,6 @@ public final class io/github/usefulness/testing/screenshot/ScreenshotsPlugin : o
 	public fun apply (Lorg/gradle/api/Project;)V
 }
 
-public final class io/github/usefulness/testing/screenshot/ScreenshotsPlugin$Companion {
-}
-
 public class io/github/usefulness/testing/screenshot/ScreenshotsPluginExtension {
 	public fun <init> (Lorg/gradle/api/model/ObjectFactory;Lorg/gradle/api/file/ProjectLayout;)V
 	public final fun getAddDependencies ()Lorg/gradle/api/provider/Property;
@@ -19,12 +15,6 @@ public class io/github/usefulness/testing/screenshot/ScreenshotsPluginExtension 
 	public final fun getPythonExecutable ()Lorg/gradle/api/provider/Property;
 	public final fun getReferenceDirectory ()Lorg/gradle/api/file/DirectoryProperty;
 	public final fun getTolerance ()Lorg/gradle/api/provider/Property;
-}
-
-public final class io/github/usefulness/testing/screenshot/generated/ScreenshotTestBuildConfig {
-	public static final field ANDROID_TEST_SERVICES_VERSION Ljava/lang/String;
-	public static final field INSTANCE Lio/github/usefulness/testing/screenshot/generated/ScreenshotTestBuildConfig;
-	public static final field PLUGIN_VERSION Ljava/lang/String;
 }
 
 public class io/github/usefulness/testing/screenshot/tasks/CleanScreenshotsTask : org/gradle/api/DefaultTask {
@@ -40,7 +30,7 @@ public final class io/github/usefulness/testing/screenshot/tasks/CleanScreenshot
 
 public class io/github/usefulness/testing/screenshot/tasks/PullScreenshotsTask : io/github/usefulness/testing/screenshot/tasks/ScreenshotTask {
 	public static final field Companion Lio/github/usefulness/testing/screenshot/tasks/PullScreenshotsTask$Companion;
-	public fun <init> (Lorg/gradle/api/model/ObjectFactory;Lorg/gradle/api/file/ProjectLayout;Lorg/gradle/process/ExecOperations;)V
+	public fun <init> (Lorg/gradle/api/model/ObjectFactory;Lorg/gradle/api/file/ProjectLayout;)V
 	protected final fun getRecord ()Z
 	protected final fun getVerify ()Z
 	public final fun pullScreenshots ()V
@@ -53,7 +43,7 @@ public final class io/github/usefulness/testing/screenshot/tasks/PullScreenshots
 
 public class io/github/usefulness/testing/screenshot/tasks/RecordScreenshotTestTask : io/github/usefulness/testing/screenshot/tasks/PullScreenshotsTask {
 	public static final field Companion Lio/github/usefulness/testing/screenshot/tasks/RecordScreenshotTestTask$Companion;
-	public fun <init> (Lorg/gradle/api/model/ObjectFactory;Lorg/gradle/api/file/ProjectLayout;Lorg/gradle/process/ExecOperations;)V
+	public fun <init> (Lorg/gradle/api/model/ObjectFactory;Lorg/gradle/api/file/ProjectLayout;)V
 }
 
 public final class io/github/usefulness/testing/screenshot/tasks/RecordScreenshotTestTask$Companion {
@@ -66,14 +56,14 @@ public abstract class io/github/usefulness/testing/screenshot/tasks/ScreenshotTa
 
 public class io/github/usefulness/testing/screenshot/tasks/VerifyScreenshotTestTask : io/github/usefulness/testing/screenshot/tasks/PullScreenshotsTask {
 	public static final field Companion Lio/github/usefulness/testing/screenshot/tasks/VerifyScreenshotTestTask$Companion;
-	public fun <init> (Lorg/gradle/api/model/ObjectFactory;Lorg/gradle/api/file/ProjectLayout;Lorg/gradle/process/ExecOperations;)V
+	public fun <init> (Lorg/gradle/api/model/ObjectFactory;Lorg/gradle/api/file/ProjectLayout;)V
 }
 
 public final class io/github/usefulness/testing/screenshot/tasks/VerifyScreenshotTestTask$Companion {
 	public final fun taskName (Ljava/lang/String;)Ljava/lang/String;
 }
 
-public final class io/github/usefulness/testing/screenshot/verification/VerificationKt {
+public final class io/github/usefulness/testing/screenshot/verification/RecorderKt {
 	public static final fun main ()V
 	public static synthetic fun main ([Ljava/lang/String;)V
 }
