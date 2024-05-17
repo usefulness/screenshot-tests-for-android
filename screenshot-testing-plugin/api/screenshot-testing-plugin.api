@@ -34,18 +34,12 @@ public abstract class io/github/usefulness/testing/screenshot/tasks/RunScreensho
 	public final fun getFailureDirectory ()Lorg/gradle/api/file/DirectoryProperty;
 	public final fun getTolerance ()Lorg/gradle/api/provider/Property;
 	public final fun getVariantName ()Lorg/gradle/api/provider/Property;
-	public final fun runScreenshotTests (Lio/github/usefulness/testing/screenshot/tasks/RunScreenshotTestsTask$RunMode;)V
-}
-
-public final class io/github/usefulness/testing/screenshot/tasks/RunScreenshotTestsTask$RunMode : java/lang/Enum {
-	public static final field Record Lio/github/usefulness/testing/screenshot/tasks/RunScreenshotTestsTask$RunMode;
-	public static final field Verify Lio/github/usefulness/testing/screenshot/tasks/RunScreenshotTestsTask$RunMode;
-	public static fun valueOf (Ljava/lang/String;)Lio/github/usefulness/testing/screenshot/tasks/RunScreenshotTestsTask$RunMode;
-	public static fun values ()[Lio/github/usefulness/testing/screenshot/tasks/RunScreenshotTestsTask$RunMode;
 }
 
 public class io/github/usefulness/testing/screenshot/tasks/VerifyScreenshotTestTask : io/github/usefulness/testing/screenshot/tasks/RunScreenshotTestsTask {
 	public fun <init> (Lorg/gradle/api/model/ObjectFactory;Lorg/gradle/api/file/ProjectLayout;)V
+	public fun getReferenceDirectory ()Lorg/gradle/api/file/DirectoryProperty;
+	public synthetic fun getReferenceDirectory$screenshot_testing_plugin ()Lorg/gradle/api/file/DirectoryProperty;
 	public final fun run ()V
 }
 

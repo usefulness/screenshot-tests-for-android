@@ -37,12 +37,12 @@ abstract class RunScreenshotTestsTask internal constructor(
     @get:OutputDirectory
     val failureDirectory: DirectoryProperty = objectFactory.directoryProperty()
 
-    enum class RunMode {
+    internal enum class RunMode {
         Record,
         Verify,
     }
 
-    fun runScreenshotTests(mode: RunMode) {
+    internal fun runScreenshotTests(mode: RunMode) {
         val outputDir = projectLayout.getReportDir(variantName.get())
 
         val testOutput = connectedTestOutput.asFile.get()
