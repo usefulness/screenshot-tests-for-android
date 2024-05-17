@@ -12,16 +12,12 @@ import java.io.File
 internal object MetadataParser {
 
     fun parseMetadata(source: File): List<ScreenshotMetadata> {
-        require(source.exists()) { "metadata.json does not exist at ${source.absolutePath}" }
+        require(source.exists()) {
+            "metadata.json does not exist at ${source.absolutePath}. " +
+                "This commonly happens if you did not call `ScreenshotRunner.onDestroy()` from your instrumentation"
+        }
 
-        val rawInput = runCatching { Json.decodeFromStream<List<ScreenshotMetadata>>(source.inputStream()) }
-            .getOrElse { cause ->
-                throw IllegalStateException(
-                    message = "Unable to parse metadata file, " +
-                        "this commonly happens if you did not call `ScreenshotRunner.onDestroy()` from your instrumentation",
-                    cause = cause,
-                )
-            }
+        val rawInput = Json.decodeFromStream<List<ScreenshotMetadata>>(source.inputStream())
 
         return rawInput.sortedWith(compareBy<ScreenshotMetadata> { it.group }.thenComparing(compareBy { it.name }))
     }

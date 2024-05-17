@@ -83,6 +83,7 @@ gradlePlugin {
 dependencies {
   compileOnly(libs.agp.gradle.impl)
   implementation(libs.kotlinx.serialization.json.core)
+  implementation(libs.sksamuel.scrimage.core)
 
   testImplementation(libs.agp.gradle.api)
   testImplementation(gradleTestKit())

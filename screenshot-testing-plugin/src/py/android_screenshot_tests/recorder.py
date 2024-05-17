@@ -16,10 +16,8 @@
 import json
 import os
 import shutil
-import sys
 import math
 import tempfile
-import xml.etree.ElementTree as ET
 from os.path import join
 
 from PIL import Image, ImageChops, ImageDraw

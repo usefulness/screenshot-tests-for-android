@@ -2,6 +2,7 @@ package io.github.usefulness.testing.screenshot.tasks
 
 import io.github.usefulness.testing.screenshot.ScreenshotsPlugin
 import io.github.usefulness.testing.screenshot.verification.HtmlReportBuilder
+import io.github.usefulness.testing.screenshot.verification.MetadataParser
 import io.github.usefulness.testing.screenshot.verification.Recorder
 import org.gradle.api.file.ProjectLayout
 import org.gradle.api.model.ObjectFactory
@@ -46,14 +47,18 @@ open class PullScreenshotsTask @Inject constructor(
         val emulatorSpecificFolder = testOutput.listFiles()?.singleOrNull()
             ?: error("Expected single folder under path=$testOutput, got=${testOutput.list()?.joinToString(separator = "\n")}")
 
+        val metadata = MetadataParser.parseMetadata(emulatorSpecificFolder.resolve("metadata.json"))
+
         val htmlReportBuilder = HtmlReportBuilder(
             emulatorSpecificFolder = emulatorSpecificFolder,
+            metadata = metadata,
             reportDirectory = outputDir,
         )
         val htmlOutput = htmlReportBuilder.generate()
 
         val recorder = Recorder(
             emulatorSpecificFolder = emulatorSpecificFolder,
+            metadata = metadata,
             referenceDirectory = referenceDirectory.asFile.get(),
         )
         if (verify) {

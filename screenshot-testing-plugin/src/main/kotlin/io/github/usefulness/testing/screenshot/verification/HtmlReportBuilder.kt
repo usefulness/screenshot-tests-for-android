@@ -12,10 +12,10 @@ import java.io.File
 internal class HtmlReportBuilder(
     private val emulatorSpecificFolder: File,
     private val reportDirectory: File,
+    private val metadata: List<ScreenshotMetadata>,
 ) {
 
     fun generate(): Output {
-        val metadata = MetadataParser.parseMetadata(emulatorSpecificFolder.resolve("metadata.json"))
         reportDirectory.deleteRecursively()
         reportDirectory.mkdirs()
 
@@ -155,7 +155,7 @@ internal class HtmlReportBuilder(
             appendLine("<tr>")
             repeat(screenshot.tileWidth) { x ->
                 appendLine("<td>")
-                val imageFile = screenshot.getTileName(x = x, y = y)
+                val imageFile = reportDirectory.resolve(screenshot.getTileName(x = x, y = y))
                 if (imageFile.exists()) {
                     appendLine("<img src=\"${imageFile.toRelativeString(reportDirectory)}\" />")
                 }
@@ -196,15 +196,6 @@ internal class HtmlReportBuilder(
         val className = node.className.replace(".", "-")
 
         return "node-$className-${node.left}-${node.top}-${node.width}-${node.height}"
-    }
-
-    private fun ScreenshotMetadata.getTileName(x: Int, y: Int): File {
-        val name = if (x == 0 && y == 0) {
-            "$name.png"
-        } else {
-            "${name}_${x}_$y.png"
-        }
-        return reportDirectory.resolve(name)
     }
 
     /**
