@@ -47,7 +47,10 @@ abstract class RunScreenshotTestsTask internal constructor(
 
         val testOutput = connectedTestOutput.asFile.get()
         val emulatorSpecificFolder = testOutput.listFiles()?.singleOrNull()
-            ?: error("Expected single folder under path=$testOutput, got=${testOutput.list()?.joinToString(separator = "\n")}")
+            ?: return logger.warn(
+                "Expected single folder under path=$testOutput, " +
+                    "got=${testOutput.list()?.joinToString(separator = "\n")}. Assuming the module does not have any tests",
+            )
 
         val metadata = MetadataParser.parseMetadata(emulatorSpecificFolder.resolve("metadata.json"))
 
