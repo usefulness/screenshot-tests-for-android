@@ -4,18 +4,17 @@ import io.github.usefulness.testing.screenshot.ScreenshotsPlugin
 import io.github.usefulness.testing.screenshot.verification.HtmlReportBuilder
 import io.github.usefulness.testing.screenshot.verification.MetadataParser
 import io.github.usefulness.testing.screenshot.verification.Recorder
+import io.github.usefulness.testing.screenshot.verification.Recorder.VerificationResult
 import org.gradle.api.file.ProjectLayout
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
-import org.gradle.process.ExecOperations
 import java.io.File
 import javax.inject.Inject
 
 open class PullScreenshotsTask @Inject constructor(
     objectFactory: ObjectFactory,
     private val projectLayout: ProjectLayout,
-    private val execOperations: ExecOperations,
 ) : ScreenshotTask(objectFactory = objectFactory) {
 
     companion object {
@@ -37,8 +36,6 @@ open class PullScreenshotsTask @Inject constructor(
 
     @TaskAction
     fun pullScreenshots() {
-        val codeSource = ScreenshotsPlugin::class.java.protectionDomain.codeSource
-        val jarFile = File(codeSource.location.toURI().path)
         val outputDir = projectLayout.getReportDir(variantName.get())
 
         assert(if (verify) outputDir.exists() else !outputDir.exists())
@@ -56,57 +53,32 @@ open class PullScreenshotsTask @Inject constructor(
         )
         val htmlOutput = htmlReportBuilder.generate()
 
+        logger.quiet("Found ${htmlOutput.numberOfScreenshots} screenshots")
+
         val recorder = Recorder(
             emulatorSpecificFolder = emulatorSpecificFolder,
             metadata = metadata,
             referenceDirectory = referenceDirectory.asFile.get(),
+            failureDirectory = failureDirectory.asFile.get(),
         )
         if (verify) {
-            recorder.verify(tolerance = tolerance.get())
+            when (val result = recorder.verify(tolerance = tolerance.get())) {
+                is VerificationResult.Mismatch -> {
+                    result.items.forEach { item ->
+                        logger.warn("Image ${item.key} has changed")
+                    }
+                    error("Verification failed. ${result.items} screenshots has changed")
+                }
+
+                VerificationResult.Success -> Unit
+            }
         } else if (record) {
             recorder.record()
         } else {
             error("Unsupported mode")
         }
 
-        execOperations.exec { exec ->
-            exec.executable = pythonExecutable.get()
-            exec.environment("PYTHONPATH", jarFile)
-
-            exec.args = mutableListOf(
-                "-m",
-                "android_screenshot_tests.pull_screenshots",
-                "--source",
-                emulatorSpecificFolder.absolutePath,
-                "--temp-dir",
-                outputDir.absolutePath,
-            )
-                .apply {
-                    if (verify) {
-                        add("--verify")
-                    } else if (record) {
-                        add("--record")
-                    }
-
-                    if (verify || record) {
-                        add(referenceDirectory.get().asFile.path)
-                    }
-
-                    if (verify) {
-                        add("--tolerance")
-                        add(tolerance.get().toString())
-                    }
-
-                    if (verify && failureDirectory.isPresent) {
-                        failureDirectory.get().asFile.deleteRecursively()
-                        add("--failure-dir")
-                        add(failureDirectory.asFile.get().path)
-                    }
-                }
-
-            println("Found ${htmlOutput.numberOfScreenshots} screenshots")
-            println("Open the following url in a browser to view the results: ")
-            println("  file://${htmlOutput.reportEntrypoint}")
-        }
+        logger.quiet("Open the following url in a browser to view the results: ")
+        logger.quiet("  file://${htmlOutput.reportEntrypoint}")
     }
 }

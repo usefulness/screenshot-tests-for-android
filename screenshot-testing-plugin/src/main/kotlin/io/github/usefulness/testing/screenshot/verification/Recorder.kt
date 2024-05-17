@@ -2,14 +2,19 @@ package io.github.usefulness.testing.screenshot.verification
 
 import com.sksamuel.scrimage.ImmutableImage
 import com.sksamuel.scrimage.color.Colors
+import com.sksamuel.scrimage.composite.DifferenceComposite
+import com.sksamuel.scrimage.composite.RedComposite
 import com.sksamuel.scrimage.nio.PngWriter
 import io.github.usefulness.testing.screenshot.verification.MetadataParser.ScreenshotMetadata
+import io.github.usefulness.testing.screenshot.verification.Recorder.VerificationResult.Mismatch
+import java.awt.image.BufferedImage
 import java.io.File
 
 internal class Recorder(
     private val emulatorSpecificFolder: File,
     private val metadata: List<ScreenshotMetadata>,
     private val referenceDirectory: File,
+    private val failureDirectory: File,
 ) {
 
     private val tileSize = 512
@@ -20,10 +25,64 @@ internal class Recorder(
         }
     }
 
-    fun verify(tolerance: Float) {
+    fun verify(tolerance: Float): VerificationResult {
         val reference = loadReferenceImages()
         val recorded = loadRecordedImages()
-        error("tolerance=$tolerance")
+        val all = reference.mapValues { (key, existing) -> existing to recorded[key] }
+
+        val missingImages = all.filterValues { (_, incoming) -> incoming == null }
+        if (missingImages.isNotEmpty()) {
+            error("Missing reference image(s) for: ${missingImages.keys.joinToString(prefix = "\n", separator = "\n")}")
+        }
+
+        val failures = mutableListOf<Mismatch.Item>()
+        all.forEach { (key, input) ->
+            val (existing, incoming) = input
+            requireNotNull(incoming)
+            if (!existing.isSameAs(incoming)) {
+                failures.add(Mismatch.Item(key = key))
+                val inArgb = existing.copy(BufferedImage.TYPE_INT_ARGB)
+                val outArgb = incoming.copy(BufferedImage.TYPE_INT_ARGB)
+                val redDiff = inArgb.composite(RedComposite(1.0), outArgb)
+                val diffDiff = inArgb.composite(DifferenceComposite(0.8), outArgb)
+                failureDirectory.mkdirs()
+                existing.output(PngWriter.MaxCompression, failureDirectory.resolve("${key}_expected.png"))
+                incoming.output(PngWriter.MaxCompression, failureDirectory.resolve("${key}_actual.png"))
+                redDiff.output(PngWriter.MaxCompression, failureDirectory.resolve("${key}_diff_red.png"))
+                diffDiff.output(PngWriter.MaxCompression, failureDirectory.resolve("${key}_diff_diff.png"))
+            }
+        }
+
+        return failures.takeIf { it.isNotEmpty() }?.let(VerificationResult::Mismatch) ?: VerificationResult.Success
+    }
+
+    sealed class VerificationResult {
+
+        object Success : VerificationResult()
+
+        data class Mismatch(val items: List<Item>) : VerificationResult() {
+
+            data class Item(val key: String)
+        }
+    }
+
+    private fun ImmutableImage.isSameAs(other: ImmutableImage): Boolean = arePixelsTheSame(other)
+
+    private fun ImmutableImage.arePixelsTheSame(other: ImmutableImage): Boolean {
+        val oldScreenshotPixels = pixels()
+        val newScreenshotPixels = other.pixels()
+
+        if (oldScreenshotPixels.size != newScreenshotPixels.size) {
+            return false
+        }
+
+        oldScreenshotPixels.forEachIndexed { index, pixel ->
+            if (pixel != newScreenshotPixels[index]) {
+                return false
+            }
+        }
+
+        return true
     }
 
     private fun loadRecordedImages() = metadata.associate { screenshot ->
@@ -45,22 +104,10 @@ internal class Recorder(
                 composedImage = composedImage.overlay(part, xPosition, yPosition)
             }
         }
+
         screenshot.name to composedImage
     }
 
     private fun loadReferenceImages() = referenceDirectory.listFiles().orEmpty()
-        .associate { it.name to ImmutableImage.loader().fromFile(it) }
-}
-
-fun main() {
-    val source = File(
-        "/Users/mateuszkwiecinski/sourcy/screenshot-tests-for-android/sample/android/build/outputs/" +
-            "connected_android_test_additional_output/debugAndroidTest/connected/Pixel_6_Pro_API_33(AVD) - 13",
-    )
-    val recorder = Recorder(
-        emulatorSpecificFolder = source,
-        metadata = MetadataParser.parseMetadata(source.resolve("metadata.json")),
-        referenceDirectory = File("/Users/mateuszkwiecinski/sourcy/screenshot-tests-for-android/sample/android/screenshots"),
-    )
-    recorder.verify(tolerance = 0f)
+        .associate { it.nameWithoutExtension to ImmutableImage.loader().fromFile(it) }
 }
