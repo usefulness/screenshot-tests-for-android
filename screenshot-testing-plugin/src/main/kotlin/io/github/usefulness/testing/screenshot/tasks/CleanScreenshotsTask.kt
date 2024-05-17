@@ -1,7 +1,7 @@
 package io.github.usefulness.testing.screenshot.tasks
 
 import io.github.usefulness.testing.screenshot.ScreenshotsPlugin
-import io.github.usefulness.testing.screenshot.tasks.PullScreenshotsTask.Companion.getReportDir
+import io.github.usefulness.testing.screenshot.tasks.RunScreenshotTestsTask.Companion.getReportDir
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.ProjectLayout
 import org.gradle.api.model.ObjectFactory
@@ -15,9 +15,9 @@ open class CleanScreenshotsTask @Inject constructor(
     private val projectLayout: ProjectLayout,
 ) : DefaultTask() {
 
-    companion object {
+    internal companion object {
 
-        fun taskName(variantName: String) = "clean${variantName.replaceFirstChar(Char::titlecase)}Screenshots"
+        internal fun taskName(variantName: String) = "clean${variantName.replaceFirstChar(Char::titlecase)}Screenshots"
     }
 
     @Input

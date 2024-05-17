@@ -1,5 +1,7 @@
 plugins {
   alias(libs.plugins.starter.library.android)
+  alias(libs.plugins.kotlin.serialization)
+  alias(libs.plugins.kotlinx.binarycompatibility)
   id("com.starter.publishing")
 }
 
@@ -36,8 +38,8 @@ tasks.withType(Test).configureEach {
 dependencies {
   implementation(libs.androidx.annotation)
   implementation(libs.androidx.core)
-  implementation(libs.gson)
   implementation(libs.androidtest.runner)
+  implementation(libs.kotlinx.serialization.json.core)
 
   testImplementation(libs.junit.jupiter)
   testImplementation(libs.assertj.core)

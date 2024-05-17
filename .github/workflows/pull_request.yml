@@ -10,7 +10,7 @@ on:
       - develop
       - maine
       - mane
-      
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
@@ -72,17 +72,6 @@ jobs:
           java-version: 21
 
       - uses: gradle/actions/setup-gradle@v3
-        with:
-          build-root-directory: sample
-
-      - uses: actions/setup-python@v5
-        with:
-          python-version-file: '.python-version'
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          python -m pip install 'Pillow==9.1.1'
 
       - run: cd sample && ./gradlew check
 
@@ -92,7 +81,7 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
 
-      - name: run screenshot tests
+      - name: test verify alone
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 33
@@ -104,16 +93,45 @@ jobs:
           script: |
             ./gradlew verifyDebugAndroidTestScreenshotTest
 
-      - name: Upload screenshot tests result
+      - name: Upload screenshot tests result-1
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
         with:
-          name: screenshots
+          name: screenshots-1
           path: "${{ github.workspace }}/**/build/reports/androidTests/connected/"
 
-      - name: Upload failed screenshots
+      - name: Upload failed screenshots-1
         if: ${{ failure() }}
         uses: actions/upload-artifact@v4
         with:
-          name: failedScreenshots
+          name: failedScreenshots-1
+          path: "${{ github.workspace }}/**/build/reports/failedScreenshots"
+
+      - run: rm -r sample/android/screenshots
+
+      - name: test record + verify
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 33
+          profile: pixel_6_pro
+          target: google_apis
+          arch: x86_64
+          disable-spellchecker: true
+          working-directory: ./sample
+          script: |
+            ./gradlew record
+            ./gradlew verify
+
+      - name: Upload screenshot tests result-2
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots-2
+          path: "${{ github.workspace }}/**/build/reports/androidTests/connected/"
+
+      - name: Upload failed screenshots-2
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: failedScreenshots-2
           path: "${{ github.workspace }}/**/build/reports/failedScreenshots"

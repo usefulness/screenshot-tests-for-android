@@ -14,8 +14,8 @@ class ScreenshotsSampleActivity : AppCompatActivity() {
     private val status
         get() =
             intent
-                ?.getIntExtra("status", 0)
-                ?.let { Status.entries[it] }
+                .getIntExtra("status", 0)
+                .let { Status.entries[it] }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,7 +23,7 @@ class ScreenshotsSampleActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(findViewById(R.id.toolbar))
         val text = findViewById<TextView>(R.id.text_view)
-        text.text = status?.name
+        text.text = status.name
 
         findViewById<View>(R.id.appBar).applyInsetter {
             type(statusBars = true) {

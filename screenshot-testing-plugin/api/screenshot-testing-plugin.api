@@ -1,0 +1,45 @@
+public final class io/github/usefulness/testing/screenshot/ScreenshotsPlugin : org/gradle/api/Plugin {
+	public static final field DEPENDENCY_CORE Ljava/lang/String;
+	public static final field DEPENDENCY_GROUP Ljava/lang/String;
+	public static final field GROUP Ljava/lang/String;
+	public static final field TEST_RUNNER_CLASS Ljava/lang/String;
+	public fun <init> ()V
+	public synthetic fun apply (Ljava/lang/Object;)V
+	public fun apply (Lorg/gradle/api/Project;)V
+}
+
+public class io/github/usefulness/testing/screenshot/ScreenshotsPluginExtension {
+	public fun <init> (Lorg/gradle/api/model/ObjectFactory;Lorg/gradle/api/file/ProjectLayout;)V
+	public final fun getAddDependencies ()Lorg/gradle/api/provider/Property;
+	public final fun getFailureDirectory ()Lorg/gradle/api/file/DirectoryProperty;
+	public final fun getReferenceDirectory ()Lorg/gradle/api/file/DirectoryProperty;
+	public final fun getTolerance ()Lorg/gradle/api/provider/Property;
+}
+
+public class io/github/usefulness/testing/screenshot/tasks/CleanScreenshotsTask : org/gradle/api/DefaultTask {
+	public fun <init> (Lorg/gradle/api/model/ObjectFactory;Lorg/gradle/api/file/ProjectLayout;)V
+	public final fun cleanScreenshots ()V
+	public final fun getVariantName ()Lorg/gradle/api/provider/Property;
+}
+
+public class io/github/usefulness/testing/screenshot/tasks/RecordScreenshotTestTask : io/github/usefulness/testing/screenshot/tasks/RunScreenshotTestsTask {
+	public fun <init> (Lorg/gradle/api/model/ObjectFactory;Lorg/gradle/api/file/ProjectLayout;)V
+	public fun getReferenceDirectory ()Lorg/gradle/api/file/DirectoryProperty;
+	public synthetic fun getReferenceDirectory$screenshot_testing_plugin ()Lorg/gradle/api/file/DirectoryProperty;
+	public final fun run ()V
+}
+
+public abstract class io/github/usefulness/testing/screenshot/tasks/RunScreenshotTestsTask : org/gradle/api/DefaultTask {
+	public final fun getConnectedTestOutput ()Lorg/gradle/api/file/DirectoryProperty;
+	public final fun getFailureDirectory ()Lorg/gradle/api/file/DirectoryProperty;
+	public final fun getTolerance ()Lorg/gradle/api/provider/Property;
+	public final fun getVariantName ()Lorg/gradle/api/provider/Property;
+}
+
+public class io/github/usefulness/testing/screenshot/tasks/VerifyScreenshotTestTask : io/github/usefulness/testing/screenshot/tasks/RunScreenshotTestsTask {
+	public fun <init> (Lorg/gradle/api/model/ObjectFactory;Lorg/gradle/api/file/ProjectLayout;)V
+	public fun getReferenceDirectory ()Lorg/gradle/api/file/DirectoryProperty;
+	public synthetic fun getReferenceDirectory$screenshot_testing_plugin ()Lorg/gradle/api/file/DirectoryProperty;
+	public final fun run ()V
+}
+
