@@ -12,40 +12,40 @@ public class io/github/usefulness/testing/screenshot/ScreenshotsPluginExtension 
 	public fun <init> (Lorg/gradle/api/model/ObjectFactory;Lorg/gradle/api/file/ProjectLayout;)V
 	public final fun getAddDependencies ()Lorg/gradle/api/provider/Property;
 	public final fun getFailureDirectory ()Lorg/gradle/api/file/DirectoryProperty;
-	public final fun getPythonExecutable ()Lorg/gradle/api/provider/Property;
 	public final fun getReferenceDirectory ()Lorg/gradle/api/file/DirectoryProperty;
 	public final fun getTolerance ()Lorg/gradle/api/provider/Property;
 }
 
 public class io/github/usefulness/testing/screenshot/tasks/CleanScreenshotsTask : org/gradle/api/DefaultTask {
-	public static final field Companion Lio/github/usefulness/testing/screenshot/tasks/CleanScreenshotsTask$Companion;
 	public fun <init> (Lorg/gradle/api/model/ObjectFactory;Lorg/gradle/api/file/ProjectLayout;)V
 	public final fun cleanScreenshots ()V
 	public final fun getVariantName ()Lorg/gradle/api/provider/Property;
 }
 
-public final class io/github/usefulness/testing/screenshot/tasks/CleanScreenshotsTask$Companion {
-	public final fun taskName (Ljava/lang/String;)Ljava/lang/String;
-}
-
-public class io/github/usefulness/testing/screenshot/tasks/PullScreenshotsTask : io/github/usefulness/testing/screenshot/tasks/ScreenshotTask {
+public class io/github/usefulness/testing/screenshot/tasks/RecordScreenshotTestTask : io/github/usefulness/testing/screenshot/tasks/RunScreenshotTestsTask {
 	public fun <init> (Lorg/gradle/api/model/ObjectFactory;Lorg/gradle/api/file/ProjectLayout;)V
-	protected final fun getRecord ()Z
-	protected final fun getVerify ()Z
-	public final fun pullScreenshots ()V
-	protected final fun setRecord (Z)V
-	protected final fun setVerify (Z)V
+	public fun getReferenceDirectory ()Lorg/gradle/api/file/DirectoryProperty;
+	public synthetic fun getReferenceDirectory$screenshot_testing_plugin ()Lorg/gradle/api/file/DirectoryProperty;
+	public final fun run ()V
 }
 
-public class io/github/usefulness/testing/screenshot/tasks/RecordScreenshotTestTask : io/github/usefulness/testing/screenshot/tasks/PullScreenshotsTask {
+public abstract class io/github/usefulness/testing/screenshot/tasks/RunScreenshotTestsTask : org/gradle/api/DefaultTask {
+	public final fun getConnectedTestOutput ()Lorg/gradle/api/file/DirectoryProperty;
+	public final fun getFailureDirectory ()Lorg/gradle/api/file/DirectoryProperty;
+	public final fun getTolerance ()Lorg/gradle/api/provider/Property;
+	public final fun getVariantName ()Lorg/gradle/api/provider/Property;
+	public final fun runScreenshotTests (Lio/github/usefulness/testing/screenshot/tasks/RunScreenshotTestsTask$RunMode;)V
+}
+
+public final class io/github/usefulness/testing/screenshot/tasks/RunScreenshotTestsTask$RunMode : java/lang/Enum {
+	public static final field Record Lio/github/usefulness/testing/screenshot/tasks/RunScreenshotTestsTask$RunMode;
+	public static final field Verify Lio/github/usefulness/testing/screenshot/tasks/RunScreenshotTestsTask$RunMode;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/usefulness/testing/screenshot/tasks/RunScreenshotTestsTask$RunMode;
+	public static fun values ()[Lio/github/usefulness/testing/screenshot/tasks/RunScreenshotTestsTask$RunMode;
+}
+
+public class io/github/usefulness/testing/screenshot/tasks/VerifyScreenshotTestTask : io/github/usefulness/testing/screenshot/tasks/RunScreenshotTestsTask {
 	public fun <init> (Lorg/gradle/api/model/ObjectFactory;Lorg/gradle/api/file/ProjectLayout;)V
-}
-
-public abstract class io/github/usefulness/testing/screenshot/tasks/ScreenshotTask : org/gradle/api/DefaultTask {
-	public fun <init> (Lorg/gradle/api/model/ObjectFactory;)V
-}
-
-public class io/github/usefulness/testing/screenshot/tasks/VerifyScreenshotTestTask : io/github/usefulness/testing/screenshot/tasks/PullScreenshotsTask {
-	public fun <init> (Lorg/gradle/api/model/ObjectFactory;Lorg/gradle/api/file/ProjectLayout;)V
+	public final fun run ()V
 }
 

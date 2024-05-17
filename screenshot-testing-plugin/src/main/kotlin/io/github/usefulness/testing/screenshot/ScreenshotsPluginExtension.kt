@@ -15,10 +15,6 @@ open class ScreenshotsPluginExtension @Inject constructor(
     val addDependencies: Property<Boolean> = objectFactory.property(Boolean::class.java)
         .value(true)
 
-    /** The python executable to use */
-    val pythonExecutable: Property<String> = objectFactory.property(String::class.java)
-        .value("python")
-
     /** The directory to store recorded screenshots in */
     val referenceDirectory: DirectoryProperty = objectFactory.directoryProperty()
         .value(projectLayout.projectDirectory.dir("screenshots"))

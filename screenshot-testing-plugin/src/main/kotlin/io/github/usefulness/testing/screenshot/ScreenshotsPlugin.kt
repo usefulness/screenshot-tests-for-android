@@ -8,7 +8,7 @@ import com.android.build.gradle.internal.scope.InternalArtifactType
 import io.github.usefulness.testing.screenshot.generated.ScreenshotTestBuildConfig
 import io.github.usefulness.testing.screenshot.tasks.CleanScreenshotsTask
 import io.github.usefulness.testing.screenshot.tasks.RecordScreenshotTestTask
-import io.github.usefulness.testing.screenshot.tasks.ScreenshotTask
+import io.github.usefulness.testing.screenshot.tasks.RunScreenshotTestsTask
 import io.github.usefulness.testing.screenshot.tasks.VerifyScreenshotTestTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -51,13 +51,12 @@ class ScreenshotsPlugin : Plugin<Project> {
         }
     }
 
-    private inline fun <reified T : ScreenshotTask> Project.registerTask(
+    private inline fun <reified T : RunScreenshotTestsTask> Project.registerTask(
         name: String,
         variant: AndroidTest,
         screenshotExtensions: ScreenshotsPluginExtension,
     ) = project.tasks.register(name, T::class.java) { task ->
         task.variantName.set(variant.name)
-        task.pythonExecutable.set(screenshotExtensions.pythonExecutable)
         task.tolerance.set(screenshotExtensions.tolerance)
         task.referenceDirectory.set(screenshotExtensions.referenceDirectory)
         task.failureDirectory.set(screenshotExtensions.failureDirectory)
