@@ -10,8 +10,8 @@ open class RecordScreenshotTestTask @Inject constructor(
     layout: ProjectLayout,
 ) : PullScreenshotsTask(objectFactory, layout) {
 
-    companion object {
-        fun taskName(variantName: String) = "record${variantName.replaceFirstChar(Char::titlecase)}ScreenshotTest"
+    internal companion object {
+        internal fun taskName(variantName: String) = "record${variantName.replaceFirstChar(Char::titlecase)}ScreenshotTest"
     }
 
     init {

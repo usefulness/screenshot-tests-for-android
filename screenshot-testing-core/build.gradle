@@ -42,7 +42,6 @@ dependencies {
   implementation(libs.androidtest.runner)
   implementation(libs.kotlinx.serialization.json.core)
 
-
   testImplementation(libs.junit.jupiter)
   testImplementation(libs.assertj.core)
 

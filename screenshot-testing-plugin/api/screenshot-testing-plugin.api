@@ -29,7 +29,6 @@ public final class io/github/usefulness/testing/screenshot/tasks/CleanScreenshot
 }
 
 public class io/github/usefulness/testing/screenshot/tasks/PullScreenshotsTask : io/github/usefulness/testing/screenshot/tasks/ScreenshotTask {
-	public static final field Companion Lio/github/usefulness/testing/screenshot/tasks/PullScreenshotsTask$Companion;
 	public fun <init> (Lorg/gradle/api/model/ObjectFactory;Lorg/gradle/api/file/ProjectLayout;)V
 	protected final fun getRecord ()Z
 	protected final fun getVerify ()Z
@@ -38,16 +37,8 @@ public class io/github/usefulness/testing/screenshot/tasks/PullScreenshotsTask :
 	protected final fun setVerify (Z)V
 }
 
-public final class io/github/usefulness/testing/screenshot/tasks/PullScreenshotsTask$Companion {
-}
-
 public class io/github/usefulness/testing/screenshot/tasks/RecordScreenshotTestTask : io/github/usefulness/testing/screenshot/tasks/PullScreenshotsTask {
-	public static final field Companion Lio/github/usefulness/testing/screenshot/tasks/RecordScreenshotTestTask$Companion;
 	public fun <init> (Lorg/gradle/api/model/ObjectFactory;Lorg/gradle/api/file/ProjectLayout;)V
-}
-
-public final class io/github/usefulness/testing/screenshot/tasks/RecordScreenshotTestTask$Companion {
-	public final fun taskName (Ljava/lang/String;)Ljava/lang/String;
 }
 
 public abstract class io/github/usefulness/testing/screenshot/tasks/ScreenshotTask : org/gradle/api/DefaultTask {
@@ -55,11 +46,6 @@ public abstract class io/github/usefulness/testing/screenshot/tasks/ScreenshotTa
 }
 
 public class io/github/usefulness/testing/screenshot/tasks/VerifyScreenshotTestTask : io/github/usefulness/testing/screenshot/tasks/PullScreenshotsTask {
-	public static final field Companion Lio/github/usefulness/testing/screenshot/tasks/VerifyScreenshotTestTask$Companion;
 	public fun <init> (Lorg/gradle/api/model/ObjectFactory;Lorg/gradle/api/file/ProjectLayout;)V
-}
-
-public final class io/github/usefulness/testing/screenshot/tasks/VerifyScreenshotTestTask$Companion {
-	public final fun taskName (Ljava/lang/String;)Ljava/lang/String;
 }
 
