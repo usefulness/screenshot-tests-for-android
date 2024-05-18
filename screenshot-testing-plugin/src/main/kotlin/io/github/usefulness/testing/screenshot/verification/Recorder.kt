@@ -30,7 +30,9 @@ internal class Recorder(
     fun verify(tolerance: Float): VerificationResult {
         val reference = loadReferenceImages()
         val recorded = loadRecordedImages()
-        val all = (reference.keys + recorded.keys).associateWith { key -> reference[key] to recorded[key] }
+
+        // Ignore files in referenceDirectory, turns out to be useful storing screenshots for multiple build variants in a single directory
+        val all = recorded.keys.associateWith { key -> reference[key] to recorded[key] }
 
         val missingImages = all.filterValues { (reference, incoming) -> reference == null || incoming == null }
         if (missingImages.isNotEmpty()) {
@@ -62,12 +64,18 @@ internal class Recorder(
             }
         }
 
-        return failures.takeIf { it.isNotEmpty() }?.let(VerificationResult::Mismatch) ?: VerificationResult.Success
+        return when {
+            failures.isNotEmpty() -> Mismatch(failures)
+            recorded.isEmpty() -> VerificationResult.NoImages
+            else -> VerificationResult.Success
+        }
     }
 
     sealed class VerificationResult {
 
         object Success : VerificationResult()
+
+        object NoImages : VerificationResult()
 
         data class Mismatch(val items: List<Item>) : VerificationResult() {
 
