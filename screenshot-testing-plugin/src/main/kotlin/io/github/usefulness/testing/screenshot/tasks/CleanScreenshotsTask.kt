@@ -10,7 +10,7 @@ import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
 import javax.inject.Inject
 
-open class CleanScreenshotsTask @Inject constructor(
+public open class CleanScreenshotsTask @Inject constructor(
     objectFactory: ObjectFactory,
     private val projectLayout: ProjectLayout,
 ) : DefaultTask() {
@@ -21,7 +21,7 @@ open class CleanScreenshotsTask @Inject constructor(
     }
 
     @Input
-    val variantName: Property<String> = objectFactory.property(String::class.java)
+    public val variantName: Property<String> = objectFactory.property(String::class.java)
 
     init {
         description = "Clean last generated screenshot report"
@@ -29,7 +29,7 @@ open class CleanScreenshotsTask @Inject constructor(
     }
 
     @TaskAction
-    fun cleanScreenshots() {
+    public fun cleanScreenshots() {
         val outputDir = projectLayout.getReportDir(variantName.get())
         outputDir.deleteRecursively()
     }

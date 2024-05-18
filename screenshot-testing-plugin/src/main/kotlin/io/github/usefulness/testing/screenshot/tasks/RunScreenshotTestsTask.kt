@@ -15,25 +15,25 @@ import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.OutputDirectory
 import java.io.File
 
-abstract class RunScreenshotTestsTask internal constructor(
+public abstract class RunScreenshotTestsTask internal constructor(
     objectFactory: ObjectFactory,
     private val projectLayout: ProjectLayout,
 ) : DefaultTask() {
 
     @get:Input
-    val variantName: Property<String> = objectFactory.property(String::class.java)
+    public val variantName: Property<String> = objectFactory.property(String::class.java)
 
     @get:Input
-    val tolerance: Property<Float> = objectFactory.property(Float::class.java)
+    public val tolerance: Property<Float> = objectFactory.property(Float::class.java)
 
     @get:InputDirectory
-    val connectedTestOutput: DirectoryProperty = objectFactory.directoryProperty()
+    public val connectedTestOutput: DirectoryProperty = objectFactory.directoryProperty()
 
     @get:Internal
     internal open val referenceDirectory: DirectoryProperty = objectFactory.directoryProperty()
 
     @get:OutputDirectory
-    val failureDirectory: DirectoryProperty = objectFactory.directoryProperty()
+    public val failureDirectory: DirectoryProperty = objectFactory.directoryProperty()
 
     internal enum class RunMode {
         Record,
@@ -86,6 +86,8 @@ abstract class RunScreenshotTestsTask internal constructor(
                                 "Open ${failureDirectory.asFile.get()} to review the diff",
                         )
                     }
+
+                    VerificationResult.NoImages -> logger.warn("Did not find any screenshots.")
 
                     VerificationResult.Success -> Unit
                 }
