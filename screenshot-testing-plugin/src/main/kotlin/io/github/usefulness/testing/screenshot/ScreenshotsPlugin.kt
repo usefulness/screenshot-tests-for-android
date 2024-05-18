@@ -13,22 +13,20 @@ import io.github.usefulness.testing.screenshot.tasks.VerifyScreenshotTestTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
-class ScreenshotsPlugin : Plugin<Project> {
+public class ScreenshotsPlugin : Plugin<Project> {
     internal companion object {
-        const val GROUP = "Screenshot Test"
-        const val DEPENDENCY_GROUP = "io.github.usefulness"
-        const val DEPENDENCY_CORE = "screenshot-testing-core"
-        const val TEST_RUNNER_CLASS = "io.github.usefulness.testing.screenshot.DefaultScreenshotRunner"
+        internal const val GROUP = "Screenshot Test"
+        internal const val TEST_RUNNER_CLASS = "io.github.usefulness.testing.screenshot.DefaultScreenshotRunner"
     }
 
-    override fun apply(project: Project) = with(project) {
+    public override fun apply(project: Project): Unit = with(project) {
         val screenshotExtensions = extensions.create("screenshots", ScreenshotsPluginExtension::class.java)
 
         afterEvaluate {
             if (screenshotExtensions.addDependencies.get()) {
                 it.dependencies.add(
                     "androidTestImplementation",
-                    "$DEPENDENCY_GROUP:$DEPENDENCY_CORE:${ScreenshotTestBuildConfig.PLUGIN_VERSION}",
+                    "io.github.usefulness:screenshot-testing-core:${ScreenshotTestBuildConfig.PLUGIN_VERSION}",
                 )
                 it.dependencies.add(
                     "androidTestUtil",

@@ -8,7 +8,7 @@ import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.TaskAction
 import javax.inject.Inject
 
-open class VerifyScreenshotTestTask @Inject constructor(
+public open class VerifyScreenshotTestTask @Inject constructor(
     objectFactory: ObjectFactory,
     layout: ProjectLayout,
 ) : RunScreenshotTestsTask(objectFactory, layout) {
@@ -26,5 +26,5 @@ open class VerifyScreenshotTestTask @Inject constructor(
     }
 
     @TaskAction
-    fun run() = runScreenshotTests(mode = RunMode.Verify)
+    public fun run(): Unit = runScreenshotTests(mode = RunMode.Verify)
 }
