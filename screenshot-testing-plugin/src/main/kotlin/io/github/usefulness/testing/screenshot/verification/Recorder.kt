@@ -21,8 +21,6 @@ internal class Recorder(
     private val failureDirectory: File,
 ) {
 
-    private val tileSize = 512
-
     fun record() {
         loadRecordedImages().forEach { (name, image) ->
             image.output(PngWriter.NoCompression, referenceDirectory.resolve("$name.png"))
@@ -48,6 +46,7 @@ internal class Recorder(
             val (existing, incoming) = input
             requireNotNull(existing)
             requireNotNull(incoming)
+
             val diffRms = existing.getRootMeetSquare(incoming)
             if (diffRms > tolerance) {
                 failureDirectory.mkdirs()
@@ -133,12 +132,14 @@ internal class Recorder(
             tiles.first().sumOf { it.height },
             Colors.Transparent.awt(),
         )
-        tiles.forEachIndexed { x, columns ->
-            columns.forEachIndexed { y, part ->
-                val xPosition = x * tileSize
-                val yPosition = y * tileSize
+        var xPosition = 0
+        tiles.forEach { columns ->
+            var yPosition = 0
+            columns.forEach { part ->
                 composedImage = composedImage.overlay(part, xPosition, yPosition)
+                yPosition += part.height
             }
+            xPosition += columns.first().width
         }
 
         screenshot.name to composedImage

@@ -12,7 +12,6 @@ import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.Internal
-import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputDirectory
 import java.io.File
 
@@ -27,7 +26,6 @@ abstract class RunScreenshotTestsTask internal constructor(
     @get:Input
     val tolerance: Property<Float> = objectFactory.property(Float::class.java)
 
-    @get:Optional
     @get:InputDirectory
     val connectedTestOutput: DirectoryProperty = objectFactory.directoryProperty()
 
@@ -70,9 +68,7 @@ abstract class RunScreenshotTestsTask internal constructor(
             failureDirectory = failureDirectory.asFile.get(),
         )
         when (mode) {
-            RunMode.Record -> {
-                recorder.record()
-            }
+            RunMode.Record -> recorder.record()
 
             RunMode.Verify -> {
                 when (val result = recorder.verify(tolerance = tolerance.get())) {
