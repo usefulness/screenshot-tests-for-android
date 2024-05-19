@@ -10,8 +10,8 @@ class TestMethodInfo(
 )
 
 object TestNameDetector {
-
-    private const val JUNIT_TEST = "org.junit.Test"
+    private const val JUNIT4_TEST = "org.junit.Test"
+    private const val JUNIT5_TEST = "org.junit.jupiter.api.Test"
 
     @JvmStatic
     @Suppress("ThrowingExceptionsWithoutMessageOrCause")
@@ -42,6 +42,8 @@ object TestNameDetector {
         }
     }
 
-    private fun isTestMethod(method: Method) =
-        method.annotations.any { it.annotationClass.qualifiedName.equals(JUNIT_TEST, ignoreCase = true) }
+    private fun isTestMethod(method: Method) = method.annotations.any {
+        val qualifiedName = it.annotationClass.qualifiedName
+        qualifiedName.equals(JUNIT5_TEST, ignoreCase = true) || qualifiedName.equals(JUNIT4_TEST, ignoreCase = true)
+    }
 }
