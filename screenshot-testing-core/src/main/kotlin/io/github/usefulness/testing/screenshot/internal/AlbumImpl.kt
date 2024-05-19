@@ -60,35 +60,27 @@ internal class AlbumImpl(private val screenshotDirectories: ScreenshotDirectorie
         )
     }
 
-    /**
-     * For a given screenshot, and a tile position, generates a name where we store the screenshot in
-     * the album.
-     *
-     *
-     * For backward compatibility with existing screenshot scripts, for the tile (0, 0) we use the
-     * name directly.
-     */
-    private fun generateTileName(name: String, i: Int, j: Int): String {
-        if (i == 0 && j == 0) {
-            return name
-        }
-
-        return "${name}_${i}_$j"
-    }
-
-    companion object {
+    internal companion object {
         private const val COMPRESSION_QUALITY = 90
 
-        /**
-         * Creates a "local" album that stores all the images on device.
-         */
-        @JvmStatic
         fun create(): AlbumImpl = AlbumImpl(ScreenshotDirectories())
 
         /**
-         * Same as the public getScreenshotFile() except it returns the File even if the screenshot
-         * doesn't exist.
+         * For a given screenshot, and a tile position, generates a name where we store the screenshot in
+         * the album.
+         *
+         *
+         * For backward compatibility with existing screenshot scripts, for the tile (0, 0) we use the
+         * name directly.
          */
+        private fun generateTileName(name: String, i: Int, j: Int): String {
+            if (i == 0 && j == 0) {
+                return name
+            }
+
+            return "${name}_${i}_$j"
+        }
+
         private fun getScreenshotFilenameInternal(name: String?): String = "$name.png"
 
         private fun getViewHierarchyFilename(name: String?): String = name + "_dump.json"
