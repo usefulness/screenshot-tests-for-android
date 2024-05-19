@@ -7,6 +7,8 @@ import android.view.View
 import android.view.View.MeasureSpec
 import android.view.ViewGroup
 import android.widget.ListView
+import androidx.annotation.DimenRes
+import androidx.annotation.Px
 
 /**
  * A collection of static utilities for measuring and pre-drawing a view, usually a pre-requirement
@@ -99,7 +101,7 @@ class ViewHelpers private constructor(private val mView: View) {
     /**
      * Configure the width in pixels
      */
-    fun setExactWidthPx(px: Int): ViewHelpers {
+    fun setExactWidthPx(@Px px: Int): ViewHelpers {
         mWidthMeasureSpec = MeasureSpec.makeMeasureSpec(px, MeasureSpec.EXACTLY)
         return this
     }
@@ -107,7 +109,7 @@ class ViewHelpers private constructor(private val mView: View) {
     /**
      * Configure the height in dip
      */
-    fun setExactWidthDp(dp: Int): ViewHelpers {
+    fun setExactWidthDp(@DimenRes dp: Int): ViewHelpers {
         setExactWidthPx(dpToPx(dp))
         return this
     }
@@ -115,7 +117,7 @@ class ViewHelpers private constructor(private val mView: View) {
     /**
      * Configure the width in dip
      */
-    fun setExactHeightDp(dp: Int): ViewHelpers {
+    fun setExactHeightDp(@DimenRes dp: Int): ViewHelpers {
         setExactHeightPx(dpToPx(dp))
         return this
     }
@@ -123,7 +125,7 @@ class ViewHelpers private constructor(private val mView: View) {
     /**
      * Configure the height in pixels
      */
-    fun setMaxHeightPx(px: Int): ViewHelpers {
+    fun setMaxHeightPx(@Px px: Int): ViewHelpers {
         mHeightMeasureSpec = MeasureSpec.makeMeasureSpec(px, MeasureSpec.AT_MOST)
         return this
     }
@@ -131,7 +133,7 @@ class ViewHelpers private constructor(private val mView: View) {
     /**
      * Configure the height in dip
      */
-    fun setMaxHeightDp(dp: Int): ViewHelpers {
+    fun setMaxHeightDp(@DimenRes dp: Int): ViewHelpers {
         setMaxHeightPx(dpToPx(dp))
         return this
     }
@@ -139,7 +141,7 @@ class ViewHelpers private constructor(private val mView: View) {
     /**
      * Configure the with in pixels
      */
-    fun setMaxWidthPx(px: Int): ViewHelpers {
+    fun setMaxWidthPx(@Px px: Int): ViewHelpers {
         mWidthMeasureSpec = MeasureSpec.makeMeasureSpec(px, MeasureSpec.AT_MOST)
         return this
     }
@@ -147,7 +149,7 @@ class ViewHelpers private constructor(private val mView: View) {
     /**
      * Configure the width in dip
      */
-    fun setMaxWidthDp(dp: Int): ViewHelpers {
+    fun setMaxWidthDp(@DimenRes dp: Int): ViewHelpers {
         setMaxWidthPx(dpToPx(dp))
         return this
     }
@@ -169,18 +171,16 @@ class ViewHelpers private constructor(private val mView: View) {
         }
 
         if (view is ViewGroup) {
-            val vg = view
-            for (i in 0 until vg.childCount) {
-                dispatchPreDraw(vg.getChildAt(i))
+            for (i in 0 until view.childCount) {
+                dispatchPreDraw(view.getChildAt(i))
             }
         }
     }
 
     private fun dispatchOnGlobalLayout(view: View) {
         if (view is ViewGroup) {
-            val vg = view
-            for (i in 0 until vg.childCount) {
-                dispatchOnGlobalLayout(vg.getChildAt(i))
+            for (i in 0 until view.childCount) {
+                dispatchOnGlobalLayout(view.getChildAt(i))
             }
         }
 

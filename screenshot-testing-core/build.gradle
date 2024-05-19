@@ -2,7 +2,12 @@ plugins {
   alias(libs.plugins.starter.library.android)
   alias(libs.plugins.kotlin.serialization)
   alias(libs.plugins.kotlinx.binarycompatibility)
+  alias(libs.plugins.drewhamilton.poko)
   id("com.starter.publishing")
+}
+
+poko {
+  pokoAnnotation.set "io.github.usefulness.testing.screenshot.internal.Poko"
 }
 
 android {
@@ -11,6 +16,7 @@ android {
     minSdk 21
     testInstrumentationRunner "io.github.usefulness.testing.screenshot.CustomScreenshotTestRunner"
   }
+  testBuildType = "release"
   testOptions {
     targetSdk = 33
   }
@@ -25,6 +31,9 @@ android {
 androidComponents {
   beforeVariants(selector().withBuildType("release")) { builder ->
     builder.enable = true
+  }
+  beforeVariants(selector().withBuildType("debug")) { builder ->
+    builder.enable = false
   }
 }
 

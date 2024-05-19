@@ -33,9 +33,7 @@ import java.util.WeakHashMap
 
 @SuppressLint("PrivateApi")
 object WindowAttachment {
-    /**
-     * Keep track of all the attached windows here so that we don't double attach them.
-     */
+
     private val sAttachments = WeakHashMap<View, Boolean>()
 
     private var sAttachInfo: Any? = null
@@ -113,7 +111,7 @@ object WindowAttachment {
     /**
      * Simulates the view as being attached.
      */
-    fun generateAttachInfo(view: View): Any? {
+    fun generateAttachInfo(view: View): Any {
         sAttachInfo?.let { return it }
 
         val cAttachInfo = Class.forName("android.view.View\$AttachInfo")
@@ -198,14 +196,12 @@ object WindowAttachment {
         return attachInfo
     }
 
-    @Throws(Exception::class)
     private fun invokeConstructor(clazz: Class<*>, params: Array<Class<*>>, values: Array<Any>): Any {
         val cons = clazz.getDeclaredConstructor(*params)
         cons.isAccessible = true
         return cons.newInstance(*values)
     }
 
-    @Throws(Exception::class)
     private fun createIWindow(): Any {
         val cIWindow = Class.forName("android.view.IWindow")
 
@@ -226,7 +222,6 @@ object WindowAttachment {
         return Proxy.newProxyInstance(klass.classLoader, arrayOf(klass), sInvocationHandler)
     }
 
-    @Throws(Exception::class)
     private fun setField(o: Any, fieldName: String, value: Any) {
         val clazz: Class<*> = o.javaClass
         val field = clazz.getDeclaredField(fieldName)

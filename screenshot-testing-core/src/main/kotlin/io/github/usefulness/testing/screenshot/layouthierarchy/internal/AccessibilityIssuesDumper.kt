@@ -1,13 +1,13 @@
-package io.github.usefulness.testing.screenshot.layouthierarchy
+package io.github.usefulness.testing.screenshot.layouthierarchy.internal
 
 import android.view.ViewGroup
-import io.github.usefulness.testing.screenshot.layouthierarchy.AccessibilityUtil.AXTreeNode
-import io.github.usefulness.testing.screenshot.layouthierarchy.AccessibilityUtil.isSpeakingNode
-import io.github.usefulness.testing.screenshot.layouthierarchy.AccessibilityUtil.isTalkbackFocusable
+import io.github.usefulness.testing.screenshot.layouthierarchy.internal.AccessibilityUtil.AXTreeNode
+import io.github.usefulness.testing.screenshot.layouthierarchy.internal.AccessibilityUtil.isSpeakingNode
+import io.github.usefulness.testing.screenshot.layouthierarchy.internal.AccessibilityUtil.isTalkbackFocusable
 import org.json.JSONArray
 import org.json.JSONObject
 
-object AccessibilityIssuesDumper {
+internal object AccessibilityIssuesDumper {
 
     fun dumpIssues(axTree: AXTreeNode): JSONArray {
         val root = JSONArray()

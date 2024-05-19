@@ -1,4 +1,4 @@
-package io.github.usefulness.testing.screenshot.layouthierarchy
+package io.github.usefulness.testing.screenshot.layouthierarchy.internal
 
 import android.app.Activity
 import android.content.ContextWrapper
@@ -15,7 +15,7 @@ import androidx.core.view.children
  * It is porting some of the checks from com.googlecode.eyesfree.utils.AccessibilityNodeInfoUtils, but has stripped many features which
  * are unnecessary here.
  */
-object AccessibilityUtil {
+internal object AccessibilityUtil {
     private const val NODE_INFO_CREATION_RETRY_COUNT = 3
 
     /**
@@ -25,7 +25,7 @@ object AccessibilityUtil {
      * @param view The View to check.
      * @return `AccessibilityRole` the defined role.
      */
-    fun getRole(view: View) = createNodeInfoFromView(view)?.let { getRole(it) } ?: AccessibilityRole.NONE
+    private fun getRole(view: View) = createNodeInfoFromView(view)?.let { getRole(it) } ?: AccessibilityRole.NONE
 
     /**
      * Gets the role from a given [AccessibilityNodeInfo]. If no role is defined it will
@@ -34,8 +34,9 @@ object AccessibilityUtil {
      * @param nodeInfo The node to check.
      * @return `AccessibilityRole` the defined role.
      */
-    fun getRole(nodeInfo: AccessibilityNodeInfo): AccessibilityRole {
-        val role = AccessibilityRole.fromValue(nodeInfo.className as String)
+
+    private fun getRole(nodeInfo: AccessibilityNodeInfo): AccessibilityRole {
+        val role = AccessibilityRole.fromValue(nodeInfo.className.toString())
         if (role == AccessibilityRole.IMAGE_BUTTON || role == AccessibilityRole.IMAGE) {
             return if (nodeInfo.isClickable) AccessibilityRole.IMAGE_BUTTON else AccessibilityRole.IMAGE
         }
@@ -93,7 +94,7 @@ object AccessibilityUtil {
      * @param node The node to check.
      * @return `true` if the node has text.
      */
-    fun hasText(node: AccessibilityNodeInfo) =
+    private fun hasText(node: AccessibilityNodeInfo) =
         node.collectionInfo == null && (!node.text.isNullOrEmpty() || !node.contentDescription.isNullOrEmpty())
 
     /**
@@ -104,7 +105,6 @@ object AccessibilityUtil {
      * @param node The [AccessibilityNodeInfoCompat] to evaluate
      * @return `true` if it meets the criterion for producing spoken feedback
      */
-    @JvmStatic
     fun isSpeakingNode(node: AccessibilityNodeInfo, view: View): Boolean {
         val important = view.importantForAccessibility
         if (important == View.IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS ||
@@ -128,7 +128,7 @@ object AccessibilityUtil {
      * @param view The [View] to evaluate
      * @return `true` if it has any non-actionable speaking descendants within its subtree
      */
-    fun hasNonActionableSpeakingDescendants(view: View): Boolean {
+    private fun hasNonActionableSpeakingDescendants(view: View): Boolean {
         val viewGroup = view as? ViewGroup ?: return false
 
         return viewGroup.children.any { childView ->
@@ -156,7 +156,7 @@ object AccessibilityUtil {
      * @param node The [AccessibilityNodeInfoCompat] to evaluate
      * @return `true` if it is possible to gain accessibility focus
      */
-    fun isAccessibilityFocusable(node: AccessibilityNodeInfo, view: View): Boolean {
+    private fun isAccessibilityFocusable(node: AccessibilityNodeInfo, view: View): Boolean {
         // Never focus invisible nodes.
         if (!node.isVisibleToUser) {
             return false
@@ -179,7 +179,7 @@ object AccessibilityUtil {
      * @param node The [AccessibilityNodeInfo] to evaluate
      * @return `true` if it is a top-level item in a scrollable container.
      */
-    fun isTopLevelScrollItem(node: AccessibilityNodeInfo, view: View): Boolean {
+    private fun isTopLevelScrollItem(node: AccessibilityNodeInfo, view: View): Boolean {
         val parent = view.parentForAccessibility as? View ?: return false
 
         if (node.isScrollable) {
@@ -214,7 +214,7 @@ object AccessibilityUtil {
      * @param node The [AccessibilityNodeInfo] to evaluate
      * @return `true` if node is actionable.
      */
-    fun isActionableForAccessibility(node: AccessibilityNodeInfo): Boolean {
+    private fun isActionableForAccessibility(node: AccessibilityNodeInfo): Boolean {
         if (node.isClickable || node.isLongClickable || node.isFocusable) {
             return true
         }
@@ -233,7 +233,7 @@ object AccessibilityUtil {
      * @param view The [View] to evaluate
      * @return `true` if an ancestor of may receive accessibility focus
      */
-    fun hasFocusableAncestor(view: View): Boolean {
+    private fun hasFocusableAncestor(view: View): Boolean {
         val parentView = view.parentForAccessibility as? View ?: return false
 
         val parentNode = createNodeInfoFromView(parentView) ?: return false
@@ -259,7 +259,7 @@ object AccessibilityUtil {
      * @param node The [AccessibilityNodeInfo] to evaluate
      * @return `true` if node has equal bounds to its containing Window
      */
-    fun areBoundsIdenticalToWindow(node: AccessibilityNodeInfo, view: View): Boolean {
+    private fun areBoundsIdenticalToWindow(node: AccessibilityNodeInfo, view: View): Boolean {
         var window: Window? = null
         var context = view.context
         while (context is ContextWrapper) {
@@ -294,7 +294,7 @@ object AccessibilityUtil {
      * @param view The [View] to evaluate
      * @return `true` if node has any visible children
      */
-    fun hasVisibleChildren(view: View): Boolean {
+    private fun hasVisibleChildren(view: View): Boolean {
         val viewGroup = view as? ViewGroup ?: return false
         val childCount = viewGroup.childCount
         for (i in 0 until childCount) {
@@ -315,7 +315,6 @@ object AccessibilityUtil {
      * @param view The [View] to evaluate.
      * @return `boolean` if the view will be ignored by TalkBack.
      */
-    @JvmStatic
     fun isTalkbackFocusable(view: View): Boolean {
         val important = view.importantForAccessibility
         if (important == View.IMPORTANT_FOR_ACCESSIBILITY_NO ||
@@ -378,14 +377,12 @@ object AccessibilityUtil {
         return false
     }
 
-    @JvmStatic
     fun generateAccessibilityTree(view: View): AXTreeNode {
         val axTree = AXTreeNode(view)
 
         if (view is ViewGroup) {
-            val viewGroup = view
-            for (i in 0 until viewGroup.childCount) {
-                val descendantTree = generateAccessibilityTree(viewGroup.getChildAt(i))
+            for (i in 0 until view.childCount) {
+                val descendantTree = generateAccessibilityTree(view.getChildAt(i))
                 axTree.addChild(descendantTree)
             }
         }
@@ -398,7 +395,7 @@ object AccessibilityUtil {
      * date with their implementation. Details can be seen in their source code here:
      *
      *
-     * https://github.com/google/talkback/blob/master/utils/src/main/java/Role.java
+     * https://github.com/google/talkback/blob/master/utils/src/main/java/com/google/android/accessibility/utils/Role.java#L131
      */
     enum class AccessibilityRole(val value: String?) {
         NONE(null),
@@ -433,40 +430,34 @@ object AccessibilityUtil {
         SCROLL_VIEW("android.widget.ScrollView"),
         HORIZONTAL_SCROLL_VIEW("android.widget.HorizontalScrollView"),
         KEYBOARD_KEY("android.inputmethodservice.Keyboard\$Key"),
+        ROLE_STAGGERED_GRID("androidx.recyclerview.widget.StaggeredGridLayoutManager"),
         ;
 
         companion object {
-            fun fromValue(value: String): AccessibilityRole {
-                for (role in entries) {
-                    if (role.value != null && role.value == value) {
-                        return role
-                    }
-                }
-                return NONE
-            }
+            fun fromValue(value: String) = entries.firstOrNull { it.value == value } ?: NONE
         }
     }
 
     class AXTreeNode(val view: View) {
         val nodeInfo = checkNotNull(createNodeInfoFromView(view))
-        private val mChildren: MutableList<AXTreeNode> = ArrayList()
+        private val _children = mutableListOf<AXTreeNode>()
 
-        val children: List<AXTreeNode>
-            get() = mChildren
+        val children
+            get() = _children.toList()
 
-        val childCount: Int
-            get() = mChildren.size
+        val childCount
+            get() = _children.size
 
         fun addChild(child: AXTreeNode) {
-            mChildren.add(child)
+            _children.add(child)
         }
 
         val allNodes: List<AXTreeNode>
             get() = mutableListOf<AXTreeNode>().apply(::addAllNodes)
 
-        fun addAllNodes(nodes: MutableList<AXTreeNode>) {
+        private fun addAllNodes(nodes: MutableList<AXTreeNode>) {
             nodes.add(this)
-            for (child in mChildren) {
+            for (child in _children) {
                 child.addAllNodes(nodes)
             }
         }
@@ -480,7 +471,7 @@ object AccessibilityUtil {
         private fun toStringInner(sb: StringBuilder, indent: String) {
             sb.append(view.javaClass.simpleName)
             val nextIndent = "$indent  "
-            for (child in mChildren) {
+            for (child in _children) {
                 sb.append('\n')
                 sb.append(indent)
                 sb.append("-> ")

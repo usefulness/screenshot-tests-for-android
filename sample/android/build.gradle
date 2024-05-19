@@ -9,6 +9,9 @@ android {
         applicationId = "io.github.usefulness.testing.screenshot.sample"
         namespace = "io.github.usefulness.testing.screenshot.sample"
     }
+    buildTypes.named("debug") {
+        matchingFallbacks = ['release']
+    }
 }
 
 dependencies {

@@ -11,7 +11,6 @@ maven-binarycompatiblity = "0.14.0"
 maven-kotlin-serialization = "1.6.3"
 google-androidx-core = "1.13.1"
 google-androidx-annotation = "1.8.0"
-google-gson = "2.10.1"
 google-androidtest = "1.5.0"
 google-androidtestRunner = "1.5.2"
 google-androidtestext = "1.1.5"
@@ -20,6 +19,7 @@ google-appcompat = "1.6.1"
 google-material = "1.12.0"
 google-coordinatorlayout = "1.2.0"
 google-testServices = "1.4.2"
+maven-poko = "0.15.2"
 
 [libraries]
 agp-gradle-api = { module = "com.android.tools.build:gradle-api", version.ref = "google-agp" }
@@ -29,7 +29,6 @@ junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "mav
 assertj-core = { module = "org.assertj:assertj-core", version.ref = "maven-assertj" }
 androidx-core = { module = "androidx.core:core-ktx", version.ref = "google-androidx-core" }
 androidx-annotation = { module = "androidx.annotation:annotation", version.ref = "google-androidx-annotation" }
-gson = { module = "com.google.code.gson:gson", version.ref = "google-gson" }
 androidtest-core = { module = "androidx.test:core", version.ref = "google-androidtest" }
 androidtest-runner = { module = "androidx.test:runner", version.ref = "google-androidtestRunner" }
 androidtest-rules = { module = "androidx.test:rules", version.ref = "google-androidtest" }
@@ -53,3 +52,4 @@ gradle-pluginpublish = { id = "com.gradle.plugin-publish", version.ref = "gradle
 osacky-doctor = { id = "com.osacky.doctor", version.ref = "gradle-doctor" }
 kotlinx-binarycompatibility = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version.ref = "maven-binarycompatiblity" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "maven-kotlin" }
+drewhamilton-poko = { id = "dev.drewhamilton.poko", version.ref = "maven-poko" }

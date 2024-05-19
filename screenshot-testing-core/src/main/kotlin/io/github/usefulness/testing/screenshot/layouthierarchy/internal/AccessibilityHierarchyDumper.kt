@@ -1,17 +1,17 @@
-package io.github.usefulness.testing.screenshot.layouthierarchy
+package io.github.usefulness.testing.screenshot.layouthierarchy.internal
 
 import android.graphics.Rect
 import android.os.Build
 import android.view.View
-import io.github.usefulness.testing.screenshot.layouthierarchy.AccessibilityUtil.AXTreeNode
-import io.github.usefulness.testing.screenshot.layouthierarchy.AccessibilityUtil.generateAccessibilityTree
+import io.github.usefulness.testing.screenshot.layouthierarchy.internal.AccessibilityUtil.AXTreeNode
+import io.github.usefulness.testing.screenshot.layouthierarchy.internal.AccessibilityUtil.generateAccessibilityTree
 import org.json.JSONArray
 import org.json.JSONObject
 
 /**
  * Dumps information about the accessibility hierarchy into a JSON object
  */
-object AccessibilityHierarchyDumper {
+internal object AccessibilityHierarchyDumper {
 
     fun dumpHierarchy(axTree: AXTreeNode?): JSONObject {
         val root = JSONObject()

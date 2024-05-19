@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  >
-
-  <uses-permission android:name="android.permission.DISABLE_KEYGUARD"/>
-  <uses-permission android:name="android.permission.SET_ANIMATION_SCALE"/>
+  xmlns:android="http://schemas.android.com/apk/res/android">
 
   <application android:debuggable="true">
-    <activity android:name="io.github.usefulness.testing.screenshot.MyActivity"/>
+    <activity android:name="io.github.usefulness.testing.screenshot.MyActivity" />
   </application>
 </manifest>
