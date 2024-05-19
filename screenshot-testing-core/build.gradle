@@ -11,6 +11,7 @@ android {
     minSdk 21
     testInstrumentationRunner "io.github.usefulness.testing.screenshot.CustomScreenshotTestRunner"
   }
+  testBuildType = "release"
   testOptions {
     targetSdk = 33
   }
@@ -25,6 +26,9 @@ android {
 androidComponents {
   beforeVariants(selector().withBuildType("release")) { builder ->
     builder.enable = true
+  }
+  beforeVariants(selector().withBuildType("debug")) { builder ->
+    builder.enable = false
   }
 }
 
