@@ -1,24 +1,24 @@
 package io.github.usefulness.testing.screenshot.internal
 
-import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import java.io.ByteArrayOutputStream
 
 internal class AlbumImpl(screenshotDirectories: ScreenshotDirectories) : Album {
-    private val mAllNames: MutableSet<String> = HashSet()
-    private val mMetadataRecorder = MetadataRecorder(screenshotDirectories)
-    private val mReportArtifactsManager = ReportArtifactsManager(screenshotDirectories)
+    private val metadataRecorder = MetadataRecorder(screenshotDirectories)
+    private val reportArtifactsManager = ReportArtifactsManager(screenshotDirectories)
 
     override fun flush() {
-        mMetadataRecorder.flush()
+        metadataRecorder.flush()
     }
 
     override fun writeBitmap(name: String, tilei: Int, tilej: Int, bitmap: Bitmap): String {
         val tileName = generateTileName(name, tilei, tilej)
         val filename = getScreenshotFilenameInternal(tileName)
-        val os = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.PNG, COMPRESSION_QUALITY, os)
-        mReportArtifactsManager.recordFile(filename, os.toByteArray())
+        val tileBytes = ByteArrayOutputStream().use { os ->
+            bitmap.compress(Bitmap.CompressFormat.PNG, COMPRESSION_QUALITY, os)
+            os.toByteArray()
+        }
+        reportArtifactsManager.recordFile(filename, tileBytes)
         return tileName
     }
 
@@ -32,50 +32,36 @@ internal class AlbumImpl(screenshotDirectories: ScreenshotDirectories) : Album {
 
     private fun writeMetadataFile(name: String, data: String) {
         val out = data.toByteArray()
-        mReportArtifactsManager.recordFile(name, out)
+        reportArtifactsManager.recordFile(name, out)
     }
 
-    /**
-     * Add the given record to the album. This is called by RecordBuilderImpl#record() and so is an
-     * internal detail.
-     */
-    @SuppressLint("SetWorldReadable")
     override fun addRecord(recordBuilder: RecordBuilderImpl) {
         recordBuilder.checkState()
-        if (mAllNames.contains(recordBuilder.name)) {
+        if (metadataRecorder.snapshot().any { it.name == recordBuilder.name }) {
             if (recordBuilder.hasExplicitName()) {
-                throw AssertionError(
-                    "Can't create multiple screenshots with the same name: " + recordBuilder.name,
-                )
+                error("Can't create multiple screenshots with the same name: ${recordBuilder.name}")
             }
 
-            throw AssertionError(
-                "Can't create multiple screenshots from the same test, or " +
-                    "use .setName() to name each screenshot differently",
-            )
+            error("Can't create multiple screenshots from the same test, or use .setName() to name each screenshot differently")
         }
 
         val tiling = recordBuilder.tiling
 
-        val screenshotNode =
-            mMetadataRecorder
-                .addNewScreenshot()
-                .withDescription(recordBuilder.description)
-                .withName(recordBuilder.name)
-                .withTestClass(recordBuilder.testClass)
-                .withTestName(recordBuilder.testName)
-                .withTileWidth(tiling.width)
-                .withTileHeight(tiling.height)
-                .withViewHierarchy(getViewHierarchyFilename(recordBuilder.name))
-                .withAxIssues(getAxIssuesFilename(recordBuilder.name))
-                .withExtras(recordBuilder.extras)
-
-        recordBuilder.error?.let { screenshotNode.withError(it) }
-        recordBuilder.group?.let { screenshotNode.withGroup(it) }
-
-        mAllNames.add(recordBuilder.name)
-
-        screenshotNode.save()
+        metadataRecorder.addNew(
+            screenshot = MetadataRecorder.ScreenshotMetadata(
+                description = recordBuilder.description,
+                name = recordBuilder.name,
+                testClass = recordBuilder.testClass,
+                testName = recordBuilder.testName,
+                tileWidth = tiling.width,
+                tileHeight = tiling.height,
+                viewHierarchy = getViewHierarchyFilename(recordBuilder.name),
+                axIssues = getAxIssuesFilename(recordBuilder.name),
+                extras = recordBuilder.extras,
+                error = recordBuilder.error,
+                group = recordBuilder.group,
+            ),
+        )
     }
 
     /**
