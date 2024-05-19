@@ -13,6 +13,8 @@ import java.awt.image.BufferedImage
 import java.io.File
 import kotlin.math.abs
 import kotlin.math.sqrt
+import kotlin.system.measureTimeMillis
+import kotlin.time.Duration.Companion.milliseconds
 
 internal class Recorder(
     private val emulatorSpecificFolder: File,
@@ -156,4 +158,19 @@ internal class Recorder(
     private fun loadReferenceImages() = referenceDirectory.listFiles().orEmpty()
         .filter { it.extension == "png" } // ignore `.DS_Store` file
         .associate { it.nameWithoutExtension to ImmutableImage.loader().fromFile(it) }
+}
+
+public fun main() {
+    val source = File("android/dupa/debugAndroidTest/connected/Pixel_6_Pro_API_33(AVD) - 13")
+    val recorder = Recorder(
+        emulatorSpecificFolder = source,
+        metadata = MetadataParser.parseMetadata(source.resolve("metadata.json")),
+        referenceDirectory = File("android/screenshots"),
+        failureDirectory = File("android/failedScreenshots"),
+    )
+    val time = measureTimeMillis {
+        println(recorder.verify(tolerance = 0f))
+        println(recorder.record())
+    }
+    println("Execution time: ${time.milliseconds}")
 }
