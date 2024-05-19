@@ -1,10 +1,12 @@
 package io.github.usefulness.testing.screenshot
 
+import com.android.build.api.AndroidPluginVersion
 import com.android.build.api.dsl.CommonExtension
 import com.android.build.api.variant.AndroidComponentsExtension
 import com.android.build.api.variant.AndroidTest
 import com.android.build.api.variant.HasAndroidTest
 import com.android.build.gradle.internal.scope.InternalArtifactType
+import com.android.build.gradle.internal.tasks.DeviceProviderInstrumentTestTask
 import io.github.usefulness.testing.screenshot.generated.ScreenshotTestBuildConfig
 import io.github.usefulness.testing.screenshot.tasks.CleanScreenshotsTask
 import io.github.usefulness.testing.screenshot.tasks.RecordScreenshotTestTask
@@ -12,6 +14,7 @@ import io.github.usefulness.testing.screenshot.tasks.RunScreenshotTestsTask
 import io.github.usefulness.testing.screenshot.tasks.VerifyScreenshotTestTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.configurationcache.extensions.capitalized
 
 public class ScreenshotsPlugin : Plugin<Project> {
     internal companion object {
@@ -44,49 +47,69 @@ public class ScreenshotsPlugin : Plugin<Project> {
         androidComponents.onVariants { variant ->
             val androidTest = (variant as? HasAndroidTest)?.androidTest
             if (androidTest != null) {
-                generateTasksFor(androidTest, screenshotExtensions)
+                generateTasksFor(
+                    variant = androidTest,
+                    screenshotExtensions = screenshotExtensions,
+                    pluginVersion = androidComponents.pluginVersion,
+                )
             }
         }
     }
 
     private inline fun <reified T : RunScreenshotTestsTask> Project.registerTask(
         name: String,
-        variant: AndroidTest,
+        variantName: String,
         screenshotExtensions: ScreenshotsPluginExtension,
     ) = project.tasks.register(name, T::class.java) { task ->
-        task.variantName.set(variant.name)
+        task.variantName.set(variantName)
         task.tolerance.set(screenshotExtensions.tolerance)
         task.referenceDirectory.set(screenshotExtensions.referenceDirectory)
         task.failureDirectory.set(screenshotExtensions.failureDirectory)
 
-        val androidTestTask = "connected${variant.name.replaceFirstChar(Char::titlecase)}"
-        task.dependsOn(androidTestTask)
-        task.mustRunAfter(androidTestTask)
-
-        task.dependsOn(CleanScreenshotsTask.taskName(variant.name))
+        task.dependsOn(CleanScreenshotsTask.taskName(variantName))
     }
 
-    private fun Project.generateTasksFor(variant: AndroidTest, screenshotExtensions: ScreenshotsPluginExtension) {
+    private fun Project.generateTasksFor(
+        variant: AndroidTest,
+        screenshotExtensions: ScreenshotsPluginExtension,
+        pluginVersion: AndroidPluginVersion,
+    ) {
         val variantName = variant.name
 
         tasks.register(CleanScreenshotsTask.taskName(variantName))
         val record = registerTask<RecordScreenshotTestTask>(
             name = RecordScreenshotTestTask.taskName(variantName),
-            variant = variant,
+            variantName = variantName,
             screenshotExtensions = screenshotExtensions,
         )
         val verify = registerTask<VerifyScreenshotTestTask>(
             name = VerifyScreenshotTestTask.taskName(variantName),
-            variant = variant,
+            variantName = variantName,
             screenshotExtensions = screenshotExtensions,
         )
 
-        variant.artifacts.use(record)
-            .wiredWith(RecordScreenshotTestTask::connectedTestOutput)
-            .toListenTo(InternalArtifactType.CONNECTED_ANDROID_TEST_ADDITIONAL_OUTPUT)
+        if (pluginVersion >= AndroidPluginVersion(8, 3, 0)) {
+            variant.artifacts.use(record)
+                .wiredWith(RecordScreenshotTestTask::connectedTestOutput)
+                .toListenTo(InternalArtifactType.CONNECTED_ANDROID_TEST_ADDITIONAL_OUTPUT)
 
-        variant.artifacts.use(verify)
-            .wiredWith(VerifyScreenshotTestTask::connectedTestOutput)
-            .toListenTo(InternalArtifactType.CONNECTED_ANDROID_TEST_ADDITIONAL_OUTPUT)
+            variant.artifacts.use(verify)
+                .wiredWith(VerifyScreenshotTestTask::connectedTestOutput)
+                .toListenTo(InternalArtifactType.CONNECTED_ANDROID_TEST_ADDITIONAL_OUTPUT)
+        } else {
+            val agpTask = "connected${variantName.capitalized()}"
+            record.configure { task ->
+                task.dependsOn(agpTask)
+                task.connectedTestOutput.set(
+                    tasks.named(agpTask).flatMap { (it as DeviceProviderInstrumentTestTask).additionalTestOutputDir },
+                )
+            }
+            verify.configure { task ->
+                task.dependsOn(agpTask)
+                task.connectedTestOutput.set(
+                    tasks.named(agpTask).flatMap { (it as DeviceProviderInstrumentTestTask).additionalTestOutputDir },
+                )
+            }
+        }
     }
 }
