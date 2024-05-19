@@ -1,11 +1,9 @@
 package io.github.usefulness.testing.screenshot.internal
 
 import android.graphics.Bitmap
-import java.io.ByteArrayOutputStream
 
-internal class AlbumImpl(screenshotDirectories: ScreenshotDirectories) : Album {
+internal class AlbumImpl(private val screenshotDirectories: ScreenshotDirectories) : Album {
     private val metadataRecorder = MetadataRecorder(screenshotDirectories)
-    private val reportArtifactsManager = ReportArtifactsManager(screenshotDirectories)
 
     override fun flush() {
         metadataRecorder.flush()
@@ -14,11 +12,9 @@ internal class AlbumImpl(screenshotDirectories: ScreenshotDirectories) : Album {
     override fun writeBitmap(name: String, tilei: Int, tilej: Int, bitmap: Bitmap): String {
         val tileName = generateTileName(name, tilei, tilej)
         val filename = getScreenshotFilenameInternal(tileName)
-        val tileBytes = ByteArrayOutputStream().use { os ->
-            bitmap.compress(Bitmap.CompressFormat.PNG, COMPRESSION_QUALITY, os)
-            os.toByteArray()
+        screenshotDirectories.openOutputFile(filename).use {
+            bitmap.compress(Bitmap.CompressFormat.PNG, COMPRESSION_QUALITY, it)
         }
-        reportArtifactsManager.recordFile(filename, tileBytes)
         return tileName
     }
 
@@ -31,8 +27,8 @@ internal class AlbumImpl(screenshotDirectories: ScreenshotDirectories) : Album {
     }
 
     private fun writeMetadataFile(name: String, data: String) {
-        val out = data.toByteArray()
-        reportArtifactsManager.recordFile(name, out)
+        screenshotDirectories.openOutputFile(name)
+            .use { it.write(data.toByteArray()) }
     }
 
     override fun addRecord(recordBuilder: RecordBuilderImpl) {

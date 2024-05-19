@@ -23,17 +23,13 @@ internal class MetadataRecorder(private val screenshotDirectories: ScreenshotDir
     fun snapshot() = metadata.asSequence()
 
     fun flush() {
-        writeMetadata()
+        screenshotDirectories.openOutputFile(metadataFileName).use { output ->
+            Json.encodeToStream<List<ScreenshotMetadata>>(value = metadata, stream = output)
+        }
     }
 
     fun addNew(screenshot: ScreenshotMetadata) {
         metadata.add(screenshot)
-    }
-
-    private fun writeMetadata() {
-        screenshotDirectories.openOutputFile(metadataFileName).use { output ->
-            Json.encodeToStream<List<ScreenshotMetadata>>(value = metadata, stream = output)
-        }
     }
 
     @Serializable
