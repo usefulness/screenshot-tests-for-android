@@ -154,5 +154,6 @@ internal class Recorder(
     }
 
     private fun loadReferenceImages() = referenceDirectory.listFiles().orEmpty()
+        .filter { it.extension == "png" } // ignore `.DS_Store` file
         .associate { it.nameWithoutExtension to ImmutableImage.loader().fromFile(it) }
 }
