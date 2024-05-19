@@ -2,7 +2,12 @@ plugins {
   alias(libs.plugins.starter.library.android)
   alias(libs.plugins.kotlin.serialization)
   alias(libs.plugins.kotlinx.binarycompatibility)
+  alias(libs.plugins.drewhamilton.poko)
   id("com.starter.publishing")
+}
+
+poko {
+  pokoAnnotation.set "io.github.usefulness.testing.screenshot.internal.Poko"
 }
 
 android {

@@ -30,10 +30,6 @@ public final class io/github/usefulness/testing/screenshot/ScreenshotRunner {
 
 public final class io/github/usefulness/testing/screenshot/TestMethodInfo {
 	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
-	public final fun component1 ()Ljava/lang/String;
-	public final fun component2 ()Ljava/lang/String;
-	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Lio/github/usefulness/testing/screenshot/TestMethodInfo;
-	public static synthetic fun copy$default (Lio/github/usefulness/testing/screenshot/TestMethodInfo;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lio/github/usefulness/testing/screenshot/TestMethodInfo;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getClassName ()Ljava/lang/String;
 	public final fun getMethodName ()Ljava/lang/String;
@@ -90,90 +86,6 @@ public abstract class io/github/usefulness/testing/screenshot/layouthierarchy/Ab
 	protected final fun putRequired (Lorg/json/JSONObject;Ljava/lang/String;IIII)V
 }
 
-public final class io/github/usefulness/testing/screenshot/layouthierarchy/AccessibilityHierarchyDumper {
-	public static final field INSTANCE Lio/github/usefulness/testing/screenshot/layouthierarchy/AccessibilityHierarchyDumper;
-	public final fun dumpHierarchy (Landroid/view/View;)Lorg/json/JSONObject;
-	public final fun dumpHierarchy (Lio/github/usefulness/testing/screenshot/layouthierarchy/AccessibilityUtil$AXTreeNode;)Lorg/json/JSONObject;
-}
-
-public final class io/github/usefulness/testing/screenshot/layouthierarchy/AccessibilityIssuesDumper {
-	public static final field INSTANCE Lio/github/usefulness/testing/screenshot/layouthierarchy/AccessibilityIssuesDumper;
-	public final fun dumpIssues (Lio/github/usefulness/testing/screenshot/layouthierarchy/AccessibilityUtil$AXTreeNode;)Lorg/json/JSONArray;
-}
-
-public final class io/github/usefulness/testing/screenshot/layouthierarchy/AccessibilityUtil {
-	public static final field INSTANCE Lio/github/usefulness/testing/screenshot/layouthierarchy/AccessibilityUtil;
-	public final fun areBoundsIdenticalToWindow (Landroid/view/accessibility/AccessibilityNodeInfo;Landroid/view/View;)Z
-	public static final fun generateAccessibilityTree (Landroid/view/View;)Lio/github/usefulness/testing/screenshot/layouthierarchy/AccessibilityUtil$AXTreeNode;
-	public final fun getRole (Landroid/view/View;)Lio/github/usefulness/testing/screenshot/layouthierarchy/AccessibilityUtil$AccessibilityRole;
-	public final fun getRole (Landroid/view/accessibility/AccessibilityNodeInfo;)Lio/github/usefulness/testing/screenshot/layouthierarchy/AccessibilityUtil$AccessibilityRole;
-	public final fun hasFocusableAncestor (Landroid/view/View;)Z
-	public final fun hasNonActionableSpeakingDescendants (Landroid/view/View;)Z
-	public final fun hasText (Landroid/view/accessibility/AccessibilityNodeInfo;)Z
-	public final fun hasVisibleChildren (Landroid/view/View;)Z
-	public final fun isAccessibilityFocusable (Landroid/view/accessibility/AccessibilityNodeInfo;Landroid/view/View;)Z
-	public final fun isActionableForAccessibility (Landroid/view/accessibility/AccessibilityNodeInfo;)Z
-	public static final fun isSpeakingNode (Landroid/view/accessibility/AccessibilityNodeInfo;Landroid/view/View;)Z
-	public static final fun isTalkbackFocusable (Landroid/view/View;)Z
-	public final fun isTopLevelScrollItem (Landroid/view/accessibility/AccessibilityNodeInfo;Landroid/view/View;)Z
-}
-
-public final class io/github/usefulness/testing/screenshot/layouthierarchy/AccessibilityUtil$AXTreeNode {
-	public fun <init> (Landroid/view/View;)V
-	public final fun addAllNodes (Ljava/util/List;)V
-	public final fun addChild (Lio/github/usefulness/testing/screenshot/layouthierarchy/AccessibilityUtil$AXTreeNode;)V
-	public final fun getAllNodes ()Ljava/util/List;
-	public final fun getChildCount ()I
-	public final fun getChildren ()Ljava/util/List;
-	public final fun getNodeInfo ()Landroid/view/accessibility/AccessibilityNodeInfo;
-	public final fun getView ()Landroid/view/View;
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class io/github/usefulness/testing/screenshot/layouthierarchy/AccessibilityUtil$AccessibilityRole : java/lang/Enum {
-	public static final field ACTION_BAR_TAB Lio/github/usefulness/testing/screenshot/layouthierarchy/AccessibilityUtil$AccessibilityRole;
-	public static final field BUTTON Lio/github/usefulness/testing/screenshot/layouthierarchy/AccessibilityUtil$AccessibilityRole;
-	public static final field CHECKED_TEXT_VIEW Lio/github/usefulness/testing/screenshot/layouthierarchy/AccessibilityUtil$AccessibilityRole;
-	public static final field CHECK_BOX Lio/github/usefulness/testing/screenshot/layouthierarchy/AccessibilityUtil$AccessibilityRole;
-	public static final field Companion Lio/github/usefulness/testing/screenshot/layouthierarchy/AccessibilityUtil$AccessibilityRole$Companion;
-	public static final field DATE_PICKER Lio/github/usefulness/testing/screenshot/layouthierarchy/AccessibilityUtil$AccessibilityRole;
-	public static final field DATE_PICKER_DIALOG Lio/github/usefulness/testing/screenshot/layouthierarchy/AccessibilityUtil$AccessibilityRole;
-	public static final field DRAWER_LAYOUT Lio/github/usefulness/testing/screenshot/layouthierarchy/AccessibilityUtil$AccessibilityRole;
-	public static final field DROP_DOWN_LIST Lio/github/usefulness/testing/screenshot/layouthierarchy/AccessibilityUtil$AccessibilityRole;
-	public static final field EDIT_TEXT Lio/github/usefulness/testing/screenshot/layouthierarchy/AccessibilityUtil$AccessibilityRole;
-	public static final field GRID Lio/github/usefulness/testing/screenshot/layouthierarchy/AccessibilityUtil$AccessibilityRole;
-	public static final field HORIZONTAL_SCROLL_VIEW Lio/github/usefulness/testing/screenshot/layouthierarchy/AccessibilityUtil$AccessibilityRole;
-	public static final field ICON_MENU Lio/github/usefulness/testing/screenshot/layouthierarchy/AccessibilityUtil$AccessibilityRole;
-	public static final field IMAGE Lio/github/usefulness/testing/screenshot/layouthierarchy/AccessibilityUtil$AccessibilityRole;
-	public static final field IMAGE_BUTTON Lio/github/usefulness/testing/screenshot/layouthierarchy/AccessibilityUtil$AccessibilityRole;
-	public static final field KEYBOARD_KEY Lio/github/usefulness/testing/screenshot/layouthierarchy/AccessibilityUtil$AccessibilityRole;
-	public static final field LIST Lio/github/usefulness/testing/screenshot/layouthierarchy/AccessibilityUtil$AccessibilityRole;
-	public static final field NONE Lio/github/usefulness/testing/screenshot/layouthierarchy/AccessibilityUtil$AccessibilityRole;
-	public static final field NUMBER_PICKER Lio/github/usefulness/testing/screenshot/layouthierarchy/AccessibilityUtil$AccessibilityRole;
-	public static final field PAGER Lio/github/usefulness/testing/screenshot/layouthierarchy/AccessibilityUtil$AccessibilityRole;
-	public static final field PROGRESS_BAR Lio/github/usefulness/testing/screenshot/layouthierarchy/AccessibilityUtil$AccessibilityRole;
-	public static final field RADIO_BUTTON Lio/github/usefulness/testing/screenshot/layouthierarchy/AccessibilityUtil$AccessibilityRole;
-	public static final field SCROLL_VIEW Lio/github/usefulness/testing/screenshot/layouthierarchy/AccessibilityUtil$AccessibilityRole;
-	public static final field SEEK_CONTROL Lio/github/usefulness/testing/screenshot/layouthierarchy/AccessibilityUtil$AccessibilityRole;
-	public static final field SLIDING_DRAWER Lio/github/usefulness/testing/screenshot/layouthierarchy/AccessibilityUtil$AccessibilityRole;
-	public static final field SWITCH Lio/github/usefulness/testing/screenshot/layouthierarchy/AccessibilityUtil$AccessibilityRole;
-	public static final field TAB_BAR Lio/github/usefulness/testing/screenshot/layouthierarchy/AccessibilityUtil$AccessibilityRole;
-	public static final field TIME_PICKER Lio/github/usefulness/testing/screenshot/layouthierarchy/AccessibilityUtil$AccessibilityRole;
-	public static final field TIME_PICKER_DIALOG Lio/github/usefulness/testing/screenshot/layouthierarchy/AccessibilityUtil$AccessibilityRole;
-	public static final field TOAST Lio/github/usefulness/testing/screenshot/layouthierarchy/AccessibilityUtil$AccessibilityRole;
-	public static final field TOGGLE_BUTTON Lio/github/usefulness/testing/screenshot/layouthierarchy/AccessibilityUtil$AccessibilityRole;
-	public static final field VIEW_GROUP Lio/github/usefulness/testing/screenshot/layouthierarchy/AccessibilityUtil$AccessibilityRole;
-	public static final field WEB_VIEW Lio/github/usefulness/testing/screenshot/layouthierarchy/AccessibilityUtil$AccessibilityRole;
-	public static fun getEntries ()Lkotlin/enums/EnumEntries;
-	public final fun getValue ()Ljava/lang/String;
-	public static fun valueOf (Ljava/lang/String;)Lio/github/usefulness/testing/screenshot/layouthierarchy/AccessibilityUtil$AccessibilityRole;
-	public static fun values ()[Lio/github/usefulness/testing/screenshot/layouthierarchy/AccessibilityUtil$AccessibilityRole;
-}
-
-public final class io/github/usefulness/testing/screenshot/layouthierarchy/AccessibilityUtil$AccessibilityRole$Companion {
-	public final fun fromValue (Ljava/lang/String;)Lio/github/usefulness/testing/screenshot/layouthierarchy/AccessibilityUtil$AccessibilityRole;
-}
-
 public abstract interface class io/github/usefulness/testing/screenshot/layouthierarchy/AttributePlugin {
 	public static final field Companion Lio/github/usefulness/testing/screenshot/layouthierarchy/AttributePlugin$Companion;
 	public static final field KEY_CLASS Ljava/lang/String;
@@ -220,17 +132,17 @@ public final class io/github/usefulness/testing/screenshot/layouthierarchy/Hiera
 
 public final class io/github/usefulness/testing/screenshot/layouthierarchy/LayoutHierarchyDumper {
 	public static final field Companion Lio/github/usefulness/testing/screenshot/layouthierarchy/LayoutHierarchyDumper$Companion;
-	public final fun dumpAttributes (Ljava/lang/Object;Landroid/graphics/Point;)Lorg/json/JSONObject;
-	public final fun dumpHierarchy (Landroid/view/View;)Lorg/json/JSONObject;
-	public final fun dumpHierarchy (Ljava/lang/Object;Landroid/graphics/Point;)Lorg/json/JSONObject;
+	public static final fun addGlobalAttributePlugin (Lio/github/usefulness/testing/screenshot/layouthierarchy/AttributePlugin;)V
+	public static final fun addGlobalHierarchyPlugin (Lio/github/usefulness/testing/screenshot/layouthierarchy/HierarchyPlugin;)V
+	public static final fun getViewLeft (Landroid/view/View;)I
+	public static final fun getViewTop (Landroid/view/View;)I
+	public static final fun removeGlobalAttributePlugin (Lio/github/usefulness/testing/screenshot/layouthierarchy/AttributePlugin;)V
+	public static final fun removeGlobalHierarchyPlugin (Lio/github/usefulness/testing/screenshot/layouthierarchy/HierarchyPlugin;)V
 }
 
 public final class io/github/usefulness/testing/screenshot/layouthierarchy/LayoutHierarchyDumper$Companion {
 	public final fun addGlobalAttributePlugin (Lio/github/usefulness/testing/screenshot/layouthierarchy/AttributePlugin;)V
 	public final fun addGlobalHierarchyPlugin (Lio/github/usefulness/testing/screenshot/layouthierarchy/HierarchyPlugin;)V
-	public final fun create ()Lio/github/usefulness/testing/screenshot/layouthierarchy/LayoutHierarchyDumper;
-	public final fun createWith (Ljava/util/List;Ljava/util/List;)Lio/github/usefulness/testing/screenshot/layouthierarchy/LayoutHierarchyDumper;
-	public final fun createWithOnly (Ljava/util/List;Ljava/util/List;)Lio/github/usefulness/testing/screenshot/layouthierarchy/LayoutHierarchyDumper;
 	public final fun getViewLeft (Landroid/view/View;)I
 	public final fun getViewTop (Landroid/view/View;)I
 	public final fun removeGlobalAttributePlugin (Lio/github/usefulness/testing/screenshot/layouthierarchy/AttributePlugin;)V

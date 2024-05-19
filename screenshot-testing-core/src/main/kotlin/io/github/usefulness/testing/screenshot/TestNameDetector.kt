@@ -1,8 +1,10 @@
 package io.github.usefulness.testing.screenshot
 
+import io.github.usefulness.testing.screenshot.internal.Poko
 import java.lang.reflect.Method
 
-data class TestMethodInfo(
+@Poko
+class TestMethodInfo(
     val className: String,
     val methodName: String,
 )

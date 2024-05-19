@@ -10,9 +10,9 @@ import android.os.Looper
 import android.view.View
 import io.github.usefulness.testing.screenshot.TestNameDetector.getTestMethodInfo
 import io.github.usefulness.testing.screenshot.WindowAttachment.dispatchAttach
-import io.github.usefulness.testing.screenshot.layouthierarchy.AccessibilityHierarchyDumper.dumpHierarchy
-import io.github.usefulness.testing.screenshot.layouthierarchy.AccessibilityIssuesDumper.dumpIssues
-import io.github.usefulness.testing.screenshot.layouthierarchy.AccessibilityUtil.generateAccessibilityTree
+import io.github.usefulness.testing.screenshot.layouthierarchy.internal.AccessibilityHierarchyDumper.dumpHierarchy
+import io.github.usefulness.testing.screenshot.layouthierarchy.internal.AccessibilityIssuesDumper.dumpIssues
+import io.github.usefulness.testing.screenshot.layouthierarchy.internal.AccessibilityUtil.generateAccessibilityTree
 import io.github.usefulness.testing.screenshot.layouthierarchy.LayoutHierarchyDumper
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.completeWith
