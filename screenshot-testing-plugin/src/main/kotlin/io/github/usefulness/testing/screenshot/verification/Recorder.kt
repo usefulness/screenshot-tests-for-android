@@ -95,7 +95,7 @@ internal class Recorder(
         val newScreenshotPixels = other.pixels()
 
         if (oldScreenshotPixels.size != newScreenshotPixels.size) {
-            return Float.NaN
+            return Float.MAX_VALUE
         }
 
         val diff = List(newScreenshotPixels.size) {
