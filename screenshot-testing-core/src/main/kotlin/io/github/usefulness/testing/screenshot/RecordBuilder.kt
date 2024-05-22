@@ -53,7 +53,7 @@ interface RecordBuilder {
      * Set the maximum number of pixels this screenshot should produce. Producing any number higher
      * will throw an exception.
      *
-     * @param maxPixels Maximum number of pixels this screenshot should produce. Specify zero or a
+     * [maxPixels] Maximum number of pixels this screenshot should produce. Specify zero or a
      * negative number for no limit.
      */
     fun setMaxPixels(maxPixels: Long): RecordBuilder

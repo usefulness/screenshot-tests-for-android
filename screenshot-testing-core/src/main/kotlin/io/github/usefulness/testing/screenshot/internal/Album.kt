@@ -13,11 +13,6 @@ internal interface Album {
     fun writeBitmap(name: String, tilei: Int, tilej: Int, bitmap: Bitmap): String
 
     /**
-     * Call after all the screenshots are done.
-     */
-    fun flush()
-
-    /**
      * Opens a stream to dump the view hierarchy into. This should be called before addRecord() is
      * called for the given name.
      *

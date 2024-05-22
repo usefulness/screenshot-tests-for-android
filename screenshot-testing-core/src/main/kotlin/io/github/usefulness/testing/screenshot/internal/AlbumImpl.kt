@@ -2,17 +2,12 @@ package io.github.usefulness.testing.screenshot.internal
 
 import android.graphics.Bitmap
 
-internal class AlbumImpl(private val screenshotDirectories: ScreenshotDirectories) : Album {
-    private val metadataRecorder = MetadataRecorder(screenshotDirectories)
-
-    override fun flush() {
-        metadataRecorder.flush()
-    }
+internal class AlbumImpl : Album {
 
     override fun writeBitmap(name: String, tilei: Int, tilej: Int, bitmap: Bitmap): String {
         val tileName = generateTileName(name, tilei, tilej)
         val filename = getScreenshotFilenameInternal(tileName)
-        screenshotDirectories.openOutputFile(filename).use {
+        ScreenshotDirectories.openOutputFile(filename).use {
             bitmap.compress(Bitmap.CompressFormat.PNG, COMPRESSION_QUALITY, it)
         }
         return tileName
@@ -27,13 +22,13 @@ internal class AlbumImpl(private val screenshotDirectories: ScreenshotDirectorie
     }
 
     private fun writeMetadataFile(name: String, data: String) {
-        screenshotDirectories.openOutputFile(name)
+        ScreenshotDirectories.openOutputFile(name)
             .use { it.write(data.toByteArray()) }
     }
 
     override fun addRecord(recordBuilder: RecordBuilderImpl) {
         recordBuilder.checkState()
-        if (metadataRecorder.snapshot().any { it.name == recordBuilder.name }) {
+        if (MetadataRecorder.snapshot().any { it.name == recordBuilder.name }) {
             if (recordBuilder.hasExplicitName()) {
                 error("Can't create multiple screenshots with the same name: ${recordBuilder.name}")
             }
@@ -43,7 +38,7 @@ internal class AlbumImpl(private val screenshotDirectories: ScreenshotDirectorie
 
         val tiling = recordBuilder.tiling
 
-        metadataRecorder.addNew(
+        MetadataRecorder.addNew(
             screenshot = MetadataRecorder.ScreenshotMetadata(
                 description = recordBuilder.description,
                 name = recordBuilder.name,
@@ -60,10 +55,9 @@ internal class AlbumImpl(private val screenshotDirectories: ScreenshotDirectorie
         )
     }
 
-    internal companion object {
-        private const val COMPRESSION_QUALITY = 90
+    companion object {
 
-        fun create(): AlbumImpl = AlbumImpl(ScreenshotDirectories())
+        private const val COMPRESSION_QUALITY = 90
 
         /**
          * For a given screenshot, and a tile position, generates a name where we store the screenshot in

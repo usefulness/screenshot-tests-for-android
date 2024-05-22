@@ -15,25 +15,31 @@ import io.github.usefulness.testing.screenshot.internal.ScreenshotImpl
  */
 object Screenshot {
 
+    var defaultConfig = ScreenshotConfig()
+
     /**
-     * Take a snapshot of an already measured and layout-ed view. See adb-logcat for how to pull the
-     * screenshot.
+     * Take a snapshot of an already measured and layout-ed view.
      *
      *
      * This method is thread safe.
      */
     @JvmStatic
-    fun snap(measuredView: View): RecordBuilder = ScreenshotImpl.snap(measuredView)
+    @JvmOverloads
+    fun snap(measuredView: View, config: ScreenshotConfig = defaultConfig): RecordBuilder =
+        ScreenshotImpl(config = config).snap(measuredView)
 
     /**
-     * Take a snapshot of the activity and store it with the the testName. See the adb-logcat for how
-     * to pull the screenshot.
+     * Take a snapshot of the activity and store it with the the testName.
      *
      *
      * This method is thread safe.
      */
     @JvmStatic
-    fun snap(activity: Activity): RecordBuilder = ScreenshotImpl.snapActivity(activity)
+    @JvmOverloads
+    fun snap(activity: Activity, config: ScreenshotConfig = defaultConfig): RecordBuilder =
+        ScreenshotImpl(config = config).snapActivity(activity)
 
-    const val MAX_PIXELS = ScreenshotImpl.MAX_PIXELS
+    @JvmField
+    @Deprecated("Scheduled for removal in next major release")
+    val MAX_PIXELS = ScreenshotConfig().maxPixels
 }

@@ -8,11 +8,11 @@ import kotlinx.serialization.json.encodeToStream
 import java.io.FileNotFoundException
 
 @OptIn(ExperimentalSerializationApi::class)
-internal class MetadataRecorder(private val screenshotDirectories: ScreenshotDirectories) {
-    private val metadataFileName = "metadata.json"
+internal object MetadataRecorder {
+    private const val metadataFileName = "metadata.json"
     private val metadata by lazy {
         try {
-            screenshotDirectories.openInputFile(metadataFileName).use { metadataFile ->
+            ScreenshotDirectories.openInputFile(metadataFileName).use { metadataFile ->
                 Json.decodeFromStream<List<ScreenshotMetadata>>(metadataFile).toMutableList()
             }
         } catch (ignored: FileNotFoundException) {
@@ -23,7 +23,7 @@ internal class MetadataRecorder(private val screenshotDirectories: ScreenshotDir
     fun snapshot() = metadata.asSequence()
 
     fun flush() {
-        screenshotDirectories.openOutputFile(metadataFileName).use { output ->
+        ScreenshotDirectories.openOutputFile(metadataFileName).use { output ->
             Json.encodeToStream<List<ScreenshotMetadata>>(value = metadata, stream = output)
         }
     }

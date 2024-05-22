@@ -3,10 +3,14 @@ package io.github.usefulness.testing.screenshot.internal
 import android.graphics.Bitmap
 import android.view.View
 import io.github.usefulness.testing.screenshot.RecordBuilder
+import io.github.usefulness.testing.screenshot.ScreenshotConfig
 import java.io.File
 import java.nio.charset.Charset
 
-internal class RecordBuilderImpl(private val mScreenshotImpl: ScreenshotImpl) : RecordBuilder {
+internal class RecordBuilderImpl(
+    private val mScreenshotImpl: ScreenshotImpl,
+    config: ScreenshotConfig,
+) : RecordBuilder {
     private val mExtras: MutableMap<String, String> = HashMap()
     var description: String? = null
         private set
@@ -33,7 +37,7 @@ internal class RecordBuilderImpl(private val mScreenshotImpl: ScreenshotImpl) : 
     /**
      * @return The maximum number of pixels that is expected to be produced by this screenshot
      */
-    var maxPixels: Long = DEFAULT_MAX_PIXELS
+    var maxPixels: Long = config.maxPixels
         private set
 
     override fun setDescription(description: String): RecordBuilderImpl {
@@ -72,7 +76,7 @@ internal class RecordBuilderImpl(private val mScreenshotImpl: ScreenshotImpl) : 
         return this
     }
 
-    override val bitmap: Bitmap?
+    override val bitmap: Bitmap
         get() = mScreenshotImpl.getBitmap(this)
 
     override fun setMaxPixels(maxPixels: Long): RecordBuilderImpl {
