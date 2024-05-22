@@ -7,7 +7,7 @@ import java.io.InputStream
 import java.io.OutputStream
 
 @OptIn(ExperimentalTestApi::class)
-internal class ScreenshotDirectories {
+internal object ScreenshotDirectories {
 
     fun openOutputFile(name: String): OutputStream = PlatformTestStorageRegistry.getInstance().openOutputFile(name)
 

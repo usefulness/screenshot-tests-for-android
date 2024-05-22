@@ -2,6 +2,7 @@ package io.github.usefulness.testing.screenshot.verification
 
 import com.sksamuel.scrimage.Dimension
 import com.sksamuel.scrimage.ImmutableImage
+import com.sksamuel.scrimage.canvas.drawables.Rect
 import com.sksamuel.scrimage.color.Colors
 import com.sksamuel.scrimage.composite.DifferenceComposite
 import com.sksamuel.scrimage.composite.RedComposite
@@ -9,6 +10,7 @@ import com.sksamuel.scrimage.nio.PngWriter
 import com.sksamuel.scrimage.pixels.Pixel
 import io.github.usefulness.testing.screenshot.verification.MetadataParser.ScreenshotMetadata
 import io.github.usefulness.testing.screenshot.verification.Recorder.VerificationResult.Mismatch
+import java.awt.Color
 import java.awt.image.BufferedImage
 import java.io.File
 import kotlin.math.abs
@@ -56,11 +58,13 @@ internal class Recorder(
                 val inArgb = existing.copy(BufferedImage.TYPE_INT_ARGB)
                 val outArgb = incoming.copy(BufferedImage.TYPE_INT_ARGB)
                 val redDiff = inArgb.composite(RedComposite(1.0), outArgb)
-                val diffDiff = inArgb.composite(DifferenceComposite(0.9), outArgb)
-                existing.output(PngWriter.MaxCompression, failureDirectory.resolve("${key}_expected.png"))
-                incoming.output(PngWriter.MaxCompression, failureDirectory.resolve("${key}_actual.png"))
-                redDiff.output(PngWriter.MaxCompression, failureDirectory.resolve("${key}_diff_red.png"))
-                diffDiff.output(PngWriter.MaxCompression, failureDirectory.resolve("${key}_diff_diff.png"))
+                val diffDiff = inArgb.composite(DifferenceComposite(0.98), outArgb)
+                val redBorder = createRedBorder(existing = inArgb, incoming = outArgb)
+                existing.output(PngWriter.NoCompression, failureDirectory.resolve("${key}_expected.png"))
+                incoming.output(PngWriter.NoCompression, failureDirectory.resolve("${key}_actual.png"))
+                redDiff.output(PngWriter.NoCompression, failureDirectory.resolve("${key}_diff_red.png"))
+                diffDiff.output(PngWriter.NoCompression, failureDirectory.resolve("${key}_diff_diff.png"))
+                redBorder.output(PngWriter.NoCompression, failureDirectory.resolve("${key}_diff_border.png"))
             }
         }
 
@@ -91,7 +95,7 @@ internal class Recorder(
         val newScreenshotPixels = other.pixels()
 
         if (oldScreenshotPixels.size != newScreenshotPixels.size) {
-            return Float.NaN
+            return Float.MAX_VALUE
         }
 
         val diff = List(newScreenshotPixels.size) {
@@ -126,6 +130,32 @@ internal class Recorder(
             .sum()
 
         return sqrt(sumOfSquares.toFloat() / (imageDimensions.x * imageDimensions.y))
+    }
+
+    private fun createRedBorder(existing: ImmutableImage, incoming: ImmutableImage): ImmutableImage {
+        val oldScreenshotPixels = existing.pixels()
+        val newScreenshotPixels = incoming.pixels()
+        val differentPixels = List(newScreenshotPixels.size) {
+            val new = newScreenshotPixels[it]
+            val old = oldScreenshotPixels.getOrNull(it)
+            val difference = if (old == null) {
+                Int.MAX_VALUE
+            } else {
+                abs(new.argb - old.argb)
+            }
+            Pixel(new.x, new.y, difference)
+        }
+            .asSequence()
+            .filter { it.argb > 0 }
+        val (startX, startY) = differentPixels.minOf { it.x } to differentPixels.minOf { it.y }
+        val (endX, endY) = differentPixels.maxOf { it.x } to differentPixels.maxOf { it.y }
+
+        return incoming.toCanvas().draw(
+            Rect(startX, startY, endX - startX, endY - startY) { g2 ->
+                g2.setBasicStroke(5f)
+                g2.color = Color.RED
+            },
+        ).image
     }
 
     private fun loadRecordedImages() = metadata.associate { screenshot ->

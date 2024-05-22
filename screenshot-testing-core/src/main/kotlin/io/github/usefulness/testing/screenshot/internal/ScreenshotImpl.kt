@@ -8,25 +8,25 @@ import android.graphics.PorterDuff
 import android.os.Handler
 import android.os.Looper
 import android.view.View
+import io.github.usefulness.testing.screenshot.ScreenshotConfig
 import io.github.usefulness.testing.screenshot.TestNameDetector.getTestMethodInfo
 import io.github.usefulness.testing.screenshot.WindowAttachment.dispatchAttach
+import io.github.usefulness.testing.screenshot.layouthierarchy.LayoutHierarchyDumper
 import io.github.usefulness.testing.screenshot.layouthierarchy.internal.AccessibilityHierarchyDumper.dumpHierarchy
 import io.github.usefulness.testing.screenshot.layouthierarchy.internal.AccessibilityIssuesDumper.dumpIssues
 import io.github.usefulness.testing.screenshot.layouthierarchy.internal.AccessibilityUtil.generateAccessibilityTree
-import io.github.usefulness.testing.screenshot.layouthierarchy.LayoutHierarchyDumper
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.completeWith
 import kotlinx.coroutines.runBlocking
 import org.json.JSONObject
 import kotlin.math.min
 
-internal object ScreenshotImpl {
-    private val mAlbum: Album = AlbumImpl.create()
-
-    private const val TILE_SIZE = 512
+internal class ScreenshotImpl(private val config: ScreenshotConfig) {
+    private val mAlbum: Album = AlbumImpl()
+    private val tileSize = config.tileSize
 
     private val mBitmap by lazy {
-        Bitmap.createBitmap(TILE_SIZE, TILE_SIZE, Bitmap.Config.ARGB_8888)
+        Bitmap.createBitmap(tileSize, tileSize, Bitmap.Config.ARGB_8888)
     }
 
     /**
@@ -50,14 +50,10 @@ internal object ScreenshotImpl {
     fun snap(measuredView: View): RecordBuilderImpl {
         val testMethodInfo = getTestMethodInfo()
 
-        return RecordBuilderImpl(this)
+        return RecordBuilderImpl(this, config = config)
             .setView(measuredView)
             .setTestClass(testMethodInfo?.className ?: "unknown")
             .setTestName(testMethodInfo?.methodName ?: "unknown")
-    }
-
-    fun flush() {
-        mAlbum.flush()
     }
 
     private fun storeBitmap(recordBuilder: RecordBuilderImpl) {
@@ -82,8 +78,8 @@ internal object ScreenshotImpl {
 
             assertNotTooLarge(width, height, recordBuilder)
 
-            val maxi = (width + TILE_SIZE - 1) / TILE_SIZE
-            val maxj = (height + TILE_SIZE - 1) / TILE_SIZE
+            val maxi = (width + tileSize - 1) / tileSize
+            val maxj = (height + tileSize - 1) / tileSize
             recordBuilder.setTiling(Tiling(maxi, maxj))
 
             for (i in 0 until maxi) {
@@ -99,10 +95,10 @@ internal object ScreenshotImpl {
     private fun drawTile(measuredView: View, i: Int, j: Int, recordBuilder: RecordBuilderImpl) {
         val width = measuredView.width
         val height = measuredView.height
-        val left = i * TILE_SIZE
-        val top = j * TILE_SIZE
-        val right = min((left + TILE_SIZE).toDouble(), width.toDouble()).toInt()
-        val bottom = min((top + TILE_SIZE).toDouble(), height.toDouble()).toInt()
+        val left = i * tileSize
+        val top = j * tileSize
+        val right = min((left + tileSize).toDouble(), width.toDouble()).toInt()
+        val bottom = min((top + tileSize).toDouble(), height.toDouble()).toInt()
 
         mBitmap.reconfigure(right - left, bottom - top, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(mBitmap)
@@ -110,7 +106,7 @@ internal object ScreenshotImpl {
 
         drawClippedView(measuredView, left, top, canvas)
         val tempName = mAlbum.writeBitmap(recordBuilder.name, i, j, mBitmap)
-        recordBuilder.tiling.setAt(left / TILE_SIZE, top / TILE_SIZE, tempName)
+        recordBuilder.tiling.setAt(left / tileSize, top / tileSize, tempName)
     }
 
     private fun clearCanvas(canvas: Canvas) {
@@ -176,34 +172,35 @@ internal object ScreenshotImpl {
         return bmp
     }
 
-    private val isUiThread: Boolean
-        get() = Looper.getMainLooper().thread === Thread.currentThread()
+    companion object {
 
-    private fun <T> runCallableOnUiThread(callable: () -> T): T {
-        val completableDeferred = CompletableDeferred<T>()
-        val handler = Handler(Looper.getMainLooper())
+        private val isUiThread: Boolean
+            get() = Looper.getMainLooper().thread === Thread.currentThread()
 
-        handler.post {
-            completableDeferred.completeWith(runCatching(callable))
+        private fun <T> runCallableOnUiThread(callable: () -> T): T {
+            val completableDeferred = CompletableDeferred<T>()
+            val handler = Handler(Looper.getMainLooper())
+
+            handler.post {
+                completableDeferred.completeWith(runCatching(callable))
+            }
+
+            return runBlocking { completableDeferred.await() }
         }
 
-        return runBlocking { completableDeferred.await() }
-    }
-
-    /**
-     * The version of the metadata file generated. This should be bumped whenever the structure of the
-     * metadata file changes in such a way that would cause a comparison between old and new files to
-     * be invalid or not useful.
-     */
-    private const val METADATA_VERSION = 1
-
-    private fun assertNotTooLarge(width: Int, height: Int, recordBuilder: RecordBuilderImpl) {
-        val maxPixels = recordBuilder.maxPixels
-        if (maxPixels <= 0) {
-            return
+        private fun assertNotTooLarge(width: Int, height: Int, recordBuilder: RecordBuilderImpl) {
+            val maxPixels = recordBuilder.maxPixels
+            if (maxPixels <= 0) {
+                return
+            }
+            check((width.toLong()) * height <= maxPixels) { "View too large: ($width, $height)" }
         }
-        check((width.toLong()) * height <= maxPixels) { "View too large: ($width, $height)" }
-    }
 
-    const val MAX_PIXELS = RecordBuilderImpl.DEFAULT_MAX_PIXELS
+        /**
+         * The version of the metadata file generated. This should be bumped whenever the structure of the
+         * metadata file changes in such a way that would cause a comparison between old and new files to
+         * be invalid or not useful.
+         */
+        private const val METADATA_VERSION = 1
+    }
 }

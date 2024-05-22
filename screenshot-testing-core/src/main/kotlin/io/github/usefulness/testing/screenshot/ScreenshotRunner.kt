@@ -2,7 +2,7 @@ package io.github.usefulness.testing.screenshot
 
 import android.app.Instrumentation
 import android.os.Bundle
-import io.github.usefulness.testing.screenshot.internal.ScreenshotImpl
+import io.github.usefulness.testing.screenshot.internal.MetadataRecorder
 
 /**
  * The ScreenshotRunner needs to be called from the top level Instrumentation test runner before and
@@ -10,6 +10,7 @@ import io.github.usefulness.testing.screenshot.internal.ScreenshotImpl
  */
 
 object ScreenshotRunner {
+
     /**
      * Call this exactly once in your process before any screenshots are generated.
      *
@@ -24,6 +25,6 @@ object ScreenshotRunner {
      * Typically this can be in `AndroidJUnitRunner#finish()`
      */
     fun onDestroy() {
-        ScreenshotImpl.flush()
+        MetadataRecorder.flush()
     }
 }

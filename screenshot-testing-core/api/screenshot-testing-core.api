@@ -18,8 +18,25 @@ public abstract interface class io/github/usefulness/testing/screenshot/RecordBu
 public final class io/github/usefulness/testing/screenshot/Screenshot {
 	public static final field INSTANCE Lio/github/usefulness/testing/screenshot/Screenshot;
 	public static final field MAX_PIXELS J
+	public final fun getDefaultConfig ()Lio/github/usefulness/testing/screenshot/ScreenshotConfig;
+	public final fun setDefaultConfig (Lio/github/usefulness/testing/screenshot/ScreenshotConfig;)V
 	public static final fun snap (Landroid/app/Activity;)Lio/github/usefulness/testing/screenshot/RecordBuilder;
+	public static final fun snap (Landroid/app/Activity;Lio/github/usefulness/testing/screenshot/ScreenshotConfig;)Lio/github/usefulness/testing/screenshot/RecordBuilder;
 	public static final fun snap (Landroid/view/View;)Lio/github/usefulness/testing/screenshot/RecordBuilder;
+	public static final fun snap (Landroid/view/View;Lio/github/usefulness/testing/screenshot/ScreenshotConfig;)Lio/github/usefulness/testing/screenshot/RecordBuilder;
+	public static synthetic fun snap$default (Landroid/app/Activity;Lio/github/usefulness/testing/screenshot/ScreenshotConfig;ILjava/lang/Object;)Lio/github/usefulness/testing/screenshot/RecordBuilder;
+	public static synthetic fun snap$default (Landroid/view/View;Lio/github/usefulness/testing/screenshot/ScreenshotConfig;ILjava/lang/Object;)Lio/github/usefulness/testing/screenshot/RecordBuilder;
+}
+
+public final class io/github/usefulness/testing/screenshot/ScreenshotConfig {
+	public fun <init> ()V
+	public fun <init> (IJ)V
+	public synthetic fun <init> (IJILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getMaxPixels ()J
+	public final fun getTileSize ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
 }
 
 public final class io/github/usefulness/testing/screenshot/ScreenshotRunner {
