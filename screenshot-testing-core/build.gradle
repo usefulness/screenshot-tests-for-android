@@ -7,7 +7,7 @@ plugins {
 }
 
 poko {
-  pokoAnnotation.set "io.github.usefulness.testing.screenshot.internal.Poko"
+  pokoAnnotation.set "io/github/usefulness/testing/screenshot/internal/Poko"
 }
 
 android {
