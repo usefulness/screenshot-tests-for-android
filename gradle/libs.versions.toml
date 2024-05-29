@@ -19,7 +19,7 @@ google-appcompat = "1.6.1"
 google-material = "1.12.0"
 google-coordinatorlayout = "1.2.0"
 google-testServices = "1.4.2"
-maven-poko = "0.16.0-beta01"
+maven-poko = "0.16.0"
 
 [libraries]
 agp-gradle-api = { module = "com.android.tools.build:gradle-api", version.ref = "google-agp" }
