@@ -62,7 +62,7 @@ public class ScreenshotsPlugin : Plugin<Project> {
         screenshotExtensions: ScreenshotsPluginExtension,
     ) = project.tasks.register(name, T::class.java) { task ->
         task.variantName.set(variantName)
-        task.tolerance.set(screenshotExtensions.tolerance)
+        task.comparisonMethod.set(screenshotExtensions.comparisonMethod)
         task.referenceDirectory.set(screenshotExtensions.referenceDirectory)
         task.failureDirectory.set(screenshotExtensions.failureDirectory)
 

@@ -1,5 +1,6 @@
 package io.github.usefulness.testing.screenshot.tasks
 
+import io.github.usefulness.testing.screenshot.ComparisonMethod
 import io.github.usefulness.testing.screenshot.verification.HtmlReportBuilder
 import io.github.usefulness.testing.screenshot.verification.MetadataParser
 import io.github.usefulness.testing.screenshot.verification.Recorder
@@ -24,7 +25,7 @@ public abstract class RunScreenshotTestsTask internal constructor(
     public val variantName: Property<String> = objectFactory.property(String::class.java)
 
     @get:Input
-    public val tolerance: Property<Float> = objectFactory.property(Float::class.java)
+    public val comparisonMethod: Property<ComparisonMethod> = objectFactory.property(ComparisonMethod::class.java)
 
     @get:InputDirectory
     public val connectedTestOutput: DirectoryProperty = objectFactory.directoryProperty()
@@ -71,20 +72,17 @@ public abstract class RunScreenshotTestsTask internal constructor(
             RunMode.Record -> recorder.record()
 
             RunMode.Verify -> {
-                when (val result = recorder.verify(tolerance = tolerance.get())) {
+                when (val result = recorder.verify(comparisonMethod = comparisonMethod.get())) {
                     is VerificationResult.Mismatch -> {
                         result.items.forEach { item ->
-                            logger.warn("Image ${item.key} has changed. RMS=${item.differenceRms}")
+                            logger.warn("Image ${item.key} has changed. difference=${item.difference}")
                         }
 
                         val message = when (result.items.size) {
                             1 -> "One screenshot has changed"
                             else -> "${result.items.size} screenshots have changed"
                         }
-                        error(
-                            "Verification failed - $message. tolerance=${tolerance.get()}\n" +
-                                "Open ${failureDirectory.asFile.get()} to review the diff",
-                        )
+                        error("Verification failed - $message. Open ${failureDirectory.asFile.get()} to review the diff")
                     }
 
                     VerificationResult.NoImages -> logger.warn("Did not find any screenshots.")
