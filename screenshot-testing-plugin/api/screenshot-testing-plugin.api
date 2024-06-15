@@ -1,3 +1,36 @@
+public abstract interface class io/github/usefulness/testing/screenshot/ComparisonMethod {
+}
+
+public final class io/github/usefulness/testing/screenshot/ComparisonMethod$DropboxDiffer : io/github/usefulness/testing/screenshot/ComparisonMethod {
+	public fun <init> ()V
+	public fun <init> (FII)V
+	public synthetic fun <init> (FIIILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()F
+	public final fun component2 ()I
+	public final fun component3 ()I
+	public final fun copy (FII)Lio/github/usefulness/testing/screenshot/ComparisonMethod$DropboxDiffer;
+	public static synthetic fun copy$default (Lio/github/usefulness/testing/screenshot/ComparisonMethod$DropboxDiffer;FIIILjava/lang/Object;)Lio/github/usefulness/testing/screenshot/ComparisonMethod$DropboxDiffer;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getHShift ()I
+	public final fun getMaxDistance ()F
+	public final fun getVShift ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/usefulness/testing/screenshot/ComparisonMethod$RootMeanSquareErrorValue : io/github/usefulness/testing/screenshot/ComparisonMethod {
+	public fun <init> ()V
+	public fun <init> (F)V
+	public synthetic fun <init> (FILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()F
+	public final fun copy (F)Lio/github/usefulness/testing/screenshot/ComparisonMethod$RootMeanSquareErrorValue;
+	public static synthetic fun copy$default (Lio/github/usefulness/testing/screenshot/ComparisonMethod$RootMeanSquareErrorValue;FILjava/lang/Object;)Lio/github/usefulness/testing/screenshot/ComparisonMethod$RootMeanSquareErrorValue;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getTolerance ()F
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
 public final class io/github/usefulness/testing/screenshot/ScreenshotsPlugin : org/gradle/api/Plugin {
 	public fun <init> ()V
 	public synthetic fun apply (Ljava/lang/Object;)V
@@ -7,6 +40,7 @@ public final class io/github/usefulness/testing/screenshot/ScreenshotsPlugin : o
 public class io/github/usefulness/testing/screenshot/ScreenshotsPluginExtension {
 	public fun <init> (Lorg/gradle/api/model/ObjectFactory;Lorg/gradle/api/file/ProjectLayout;)V
 	public final fun getAddDependencies ()Lorg/gradle/api/provider/Property;
+	public final fun getComparisonMethod ()Lorg/gradle/api/provider/Property;
 	public final fun getFailureDirectory ()Lorg/gradle/api/file/DirectoryProperty;
 	public final fun getReferenceDirectory ()Lorg/gradle/api/file/DirectoryProperty;
 	public final fun getTolerance ()Lorg/gradle/api/provider/Property;
@@ -28,8 +62,6 @@ public class io/github/usefulness/testing/screenshot/tasks/RecordScreenshotTestT
 public abstract class io/github/usefulness/testing/screenshot/tasks/RunScreenshotTestsTask : org/gradle/api/DefaultTask {
 	public final fun getConnectedTestOutput ()Lorg/gradle/api/file/DirectoryProperty;
 	public final fun getFailureDirectory ()Lorg/gradle/api/file/DirectoryProperty;
-	public final fun getTolerance ()Lorg/gradle/api/provider/Property;
-	public final fun getVariantName ()Lorg/gradle/api/provider/Property;
 }
 
 public class io/github/usefulness/testing/screenshot/tasks/VerifyScreenshotTestTask : io/github/usefulness/testing/screenshot/tasks/RunScreenshotTestsTask {

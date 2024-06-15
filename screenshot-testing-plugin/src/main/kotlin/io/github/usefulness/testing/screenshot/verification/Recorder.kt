@@ -1,13 +1,14 @@
 package io.github.usefulness.testing.screenshot.verification
 
+import com.dropbox.differ.Image
+import com.dropbox.differ.SimpleImageComparator
 import com.sksamuel.scrimage.Dimension
 import com.sksamuel.scrimage.ImmutableImage
 import com.sksamuel.scrimage.canvas.drawables.Rect
 import com.sksamuel.scrimage.color.Colors
-import com.sksamuel.scrimage.composite.DifferenceComposite
-import com.sksamuel.scrimage.composite.RedComposite
 import com.sksamuel.scrimage.nio.PngWriter
 import com.sksamuel.scrimage.pixels.Pixel
+import io.github.usefulness.testing.screenshot.ComparisonMethod
 import io.github.usefulness.testing.screenshot.verification.MetadataParser.ScreenshotMetadata
 import io.github.usefulness.testing.screenshot.verification.Recorder.VerificationResult.Mismatch
 import java.awt.Color
@@ -29,7 +30,7 @@ internal class Recorder(
         }
     }
 
-    fun verify(tolerance: Float): VerificationResult {
+    fun verify(comparisonMethod: ComparisonMethod): VerificationResult {
         val reference = loadReferenceImages()
         val recorded = loadRecordedImages()
 
@@ -44,6 +45,26 @@ internal class Recorder(
             )
         }
 
+        val comparator: (ImmutableImage, ImmutableImage) -> Number = when (comparisonMethod) {
+            is ComparisonMethod.DropboxDiffer -> { existing, incoming ->
+                val comparator = SimpleImageComparator(
+                    maxDistance = comparisonMethod.maxDistance,
+                    hShift = comparisonMethod.hShift,
+                    vShift = comparisonMethod.vShift,
+                )
+                val result = comparator.compare(
+                    left = existing.dropbox(),
+                    right = incoming.dropbox(),
+                )
+
+                result.pixelDifferences
+            }
+
+            is ComparisonMethod.RootMeanSquareErrorValue -> { existing, incoming ->
+                existing.getRootMeetSquare(incoming)
+            }
+        }
+
         failureDirectory.deleteRecursively()
         val failures = mutableListOf<Mismatch.Item>()
         all.forEach { (key, input) ->
@@ -51,19 +72,17 @@ internal class Recorder(
             requireNotNull(existing)
             requireNotNull(incoming)
 
-            val diffRms = existing.getRootMeetSquare(incoming)
-            if (diffRms > tolerance) {
+            val difference = comparator(existing, incoming)
+            if (difference.toDouble() > 0) {
                 failureDirectory.mkdirs()
-                failures.add(Mismatch.Item(key = key, differenceRms = diffRms))
+                failures.add(Mismatch.Item(key = key, difference = difference))
                 val inArgb = existing.copy(BufferedImage.TYPE_INT_ARGB)
                 val outArgb = incoming.copy(BufferedImage.TYPE_INT_ARGB)
-                val redDiff = inArgb.composite(RedComposite(1.0), outArgb)
-                val diffDiff = inArgb.composite(DifferenceComposite(0.98), outArgb)
+                val redDiff = createRedPixels(existing = inArgb, incoming = outArgb)
                 val redBorder = createRedBorder(existing = inArgb, incoming = outArgb)
                 existing.output(PngWriter.NoCompression, failureDirectory.resolve("${key}_expected.png"))
                 incoming.output(PngWriter.NoCompression, failureDirectory.resolve("${key}_actual.png"))
                 redDiff.output(PngWriter.NoCompression, failureDirectory.resolve("${key}_diff_red.png"))
-                diffDiff.output(PngWriter.NoCompression, failureDirectory.resolve("${key}_diff_diff.png"))
                 redBorder.output(PngWriter.NoCompression, failureDirectory.resolve("${key}_diff_border.png"))
             }
         }
@@ -85,7 +104,7 @@ internal class Recorder(
 
             data class Item(
                 val key: String,
-                val differenceRms: Float,
+                val difference: Number,
             )
         }
     }
@@ -97,13 +116,17 @@ internal class Recorder(
         if (oldScreenshotPixels.size != newScreenshotPixels.size) {
             return Float.MAX_VALUE
         }
-
         val diff = List(newScreenshotPixels.size) {
             val new = newScreenshotPixels[it]
             val old = oldScreenshotPixels[it]
             check(new.x == old.x)
             check(new.y == old.y)
-            Pixel(new.x, new.y, abs(new.argb - old.argb))
+
+            val redDiff = abs(new.red() - old.red())
+            val greenDiff = abs(new.green() - old.green())
+            val blueDiff = abs(new.green() - old.green())
+
+            Pixel(new.x, new.y, redDiff, greenDiff, blueDiff, 0)
         }
         val histogram = diff.histogram()
 
@@ -130,6 +153,16 @@ internal class Recorder(
             .sum()
 
         return sqrt(sumOfSquares.toFloat() / (imageDimensions.x * imageDimensions.y))
+    }
+
+    private fun createRedPixels(existing: ImmutableImage, incoming: ImmutableImage) = incoming.map { new ->
+        val old = runCatching { existing.pixel(new.x, new.y) }.getOrNull()
+
+        if (new != old) {
+            Color.RED
+        } else {
+            new.toColor().awt()
+        }
     }
 
     private fun createRedBorder(existing: ImmutableImage, incoming: ImmutableImage): ImmutableImage {
@@ -186,4 +219,20 @@ internal class Recorder(
     private fun loadReferenceImages() = referenceDirectory.listFiles().orEmpty()
         .filter { it.extension == "png" } // ignore `.DS_Store` file
         .associate { it.nameWithoutExtension to ImmutableImage.loader().fromFile(it) }
+}
+
+private fun ImmutableImage.dropbox() = object : Image {
+    override val height = this@dropbox.height
+    override val width = this@dropbox.width
+
+    override fun getPixel(x: Int, y: Int): com.dropbox.differ.Color {
+        val pixel = pixel(x, y)
+
+        return com.dropbox.differ.Color(
+            r = pixel.red(),
+            g = pixel.green(),
+            b = pixel.blue(),
+            a = pixel.alpha(),
+        )
+    }
 }

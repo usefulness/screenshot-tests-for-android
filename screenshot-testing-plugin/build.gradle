@@ -82,6 +82,7 @@ dependencies {
   compileOnly(libs.agp.gradle.impl)
   implementation(libs.kotlinx.serialization.json.core)
   implementation(libs.sksamuel.scrimage.core)
+  implementation(libs.dropbox.differ)
 
   testImplementation(libs.agp.gradle.api)
   testImplementation(gradleTestKit())
