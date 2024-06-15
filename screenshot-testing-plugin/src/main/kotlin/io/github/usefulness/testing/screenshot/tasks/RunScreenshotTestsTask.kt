@@ -10,7 +10,6 @@ import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.ProjectLayout
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.Property
-import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.OutputDirectory
@@ -21,11 +20,11 @@ public abstract class RunScreenshotTestsTask internal constructor(
     private val projectLayout: ProjectLayout,
 ) : DefaultTask() {
 
-    @get:Input
-    public val variantName: Property<String> = objectFactory.property(String::class.java)
+    @get:Internal
+    internal val variantName: Property<String> = objectFactory.property(String::class.java)
 
-    @get:Input
-    public val comparisonMethod: Property<ComparisonMethod> = objectFactory.property(ComparisonMethod::class.java)
+    @get:Internal
+    internal val comparisonMethod: Property<ComparisonMethod> = objectFactory.property(ComparisonMethod::class.java)
 
     @get:InputDirectory
     public val connectedTestOutput: DirectoryProperty = objectFactory.directoryProperty()

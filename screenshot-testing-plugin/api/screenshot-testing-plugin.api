@@ -60,10 +60,8 @@ public class io/github/usefulness/testing/screenshot/tasks/RecordScreenshotTestT
 }
 
 public abstract class io/github/usefulness/testing/screenshot/tasks/RunScreenshotTestsTask : org/gradle/api/DefaultTask {
-	public final fun getComparisonMethod ()Lorg/gradle/api/provider/Property;
 	public final fun getConnectedTestOutput ()Lorg/gradle/api/file/DirectoryProperty;
 	public final fun getFailureDirectory ()Lorg/gradle/api/file/DirectoryProperty;
-	public final fun getVariantName ()Lorg/gradle/api/provider/Property;
 }
 
 public class io/github/usefulness/testing/screenshot/tasks/VerifyScreenshotTestTask : io/github/usefulness/testing/screenshot/tasks/RunScreenshotTestsTask {
