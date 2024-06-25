@@ -18,7 +18,7 @@ google-espresso = "3.6.0"
 google-appcompat = "1.7.0"
 google-material = "1.12.0"
 google-coordinatorlayout = "1.2.0"
-google-testServices = "1.4.2"
+google-testServices = "1.5.0"
 maven-poko = "0.16.0"
 
 [libraries]
