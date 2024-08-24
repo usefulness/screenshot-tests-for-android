@@ -1,5 +1,5 @@
 [versions]
-gradle-starter = "0.76.0"
+gradle-starter = "0.77.0"
 gradle-pluginpublish = "1.2.1"
 gradle-doctor = "0.10.0"
 google-agp = "8.5.2"
@@ -19,7 +19,7 @@ google-appcompat = "1.7.0"
 google-material = "1.12.0"
 google-coordinatorlayout = "1.2.0"
 google-testServices = "1.5.0"
-maven-poko = "0.16.0"
+maven-poko = "0.17.0"
 
 [libraries]
 agp-gradle-api = { module = "com.android.tools.build:gradle-api", version.ref = "google-agp" }
