@@ -1,7 +1,6 @@
 [versions]
 gradle-starter = "0.77.0"
 gradle-pluginpublish = "1.2.2"
-gradle-doctor = "0.10.0"
 google-agp = "8.6.0"
 maven-kotlin = "2.0.20"
 maven-junit = "5.11.0"
@@ -50,7 +49,6 @@ starter-library-kotlin = { id = "com.starter.library.kotlin", version.ref = "gra
 starter-library-android = { id = "com.starter.library.android", version.ref = "gradle-starter" }
 starter-application-android = { id = "com.starter.application.android", version.ref = "gradle-starter" }
 gradle-pluginpublish = { id = "com.gradle.plugin-publish", version.ref = "gradle-pluginpublish" }
-osacky-doctor = { id = "com.osacky.doctor", version.ref = "gradle-doctor" }
 kotlinx-binarycompatibility = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version.ref = "maven-binarycompatiblity" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "maven-kotlin" }
 drewhamilton-poko = { id = "dev.drewhamilton.poko", version.ref = "maven-poko" }
