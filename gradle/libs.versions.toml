@@ -40,7 +40,7 @@ androidx-test-services = { module = "androidx.test.services:test-services", vers
 chrisbanes-insetter = { module = "dev.chrisbanes.insetter:insetter", version.ref = "maven-insetter" }
 kotlinx-serialization-json-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "maven-kotlin-serialization" }
 sksamuel-scrimage-core = "com.sksamuel.scrimage:scrimage-core:4.2.0"
-dropbox-differ = "com.dropbox.differ:differ:0.0.2"
+dropbox-differ = "com.dropbox.differ:differ:0.3.0"
 
 [plugins]
 starter-config = { id = "com.starter.config", version.ref = "gradle-starter" }
