@@ -17,20 +17,6 @@ pluginManagement {
     }
 }
 
-plugins {
-    id("com.gradle.develocity") version "3.18.1"
-}
-
-develocity {
-    buildScan {
-        termsOfUseUrl = "https://gradle.com/terms-of-service"
-        termsOfUseAgree = "yes"
-
-        uploadInBackground = System.getenv("CI") == null
-        publishing { onlyIf {  System.getenv("CI") != null } }
-    }
-}
-
 rootProject.name = "io.github.usefulness.testing.screenshot.sample"
 
 include "android"
