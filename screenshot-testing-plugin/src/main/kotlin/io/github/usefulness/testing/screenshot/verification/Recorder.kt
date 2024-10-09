@@ -61,7 +61,12 @@ internal class Recorder(
             }
 
             is ComparisonMethod.RootMeanSquareErrorValue -> { existing, incoming ->
-                existing.getRootMeetSquare(incoming)
+                val rms = existing.getRootMeetSquare(incoming)
+                if (rms > comparisonMethod.tolerance) {
+                    rms
+                } else {
+                    0
+                }
             }
         }
 
