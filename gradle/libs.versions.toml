@@ -39,7 +39,7 @@ coordinatorlayout-core = { module = "androidx.coordinatorlayout:coordinatorlayou
 androidx-test-services = { module = "androidx.test.services:test-services", version.ref = "google-testServices" }
 chrisbanes-insetter = { module = "dev.chrisbanes.insetter:insetter", version.ref = "maven-insetter" }
 kotlinx-serialization-json-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "maven-kotlin-serialization" }
-sksamuel-scrimage-core = "com.sksamuel.scrimage:scrimage-core:4.3.1"
+sksamuel-scrimage-core = "com.sksamuel.scrimage:scrimage-core:4.3.2"
 dropbox-differ = "com.dropbox.differ:differ:0.3.0"
 
 [plugins]
