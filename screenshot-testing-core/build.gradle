@@ -20,9 +20,6 @@ android {
   testOptions {
     targetSdk = 36
   }
-  publishing {
-    singleVariant("release")
-  }
   lint {
     disable += "UnknownNullness"
   }

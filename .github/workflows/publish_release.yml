@@ -9,11 +9,11 @@ jobs:
   build:
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-      OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
-      SIGNING_KEY_ID: ${{ secrets.SIGNING_KEY_ID }}
-      SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
-      SIGNING_SECRET_KEY_RING_FILE: ${{ secrets.SIGNING_SECRET_KEY_RING_FILE }}
+      ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.OSSRH_USERNAME }}
+      ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.OSSRH_PASSWORD }}
+      ORG_GRADLE_PROJECT_signingInMemoryKeyId: ${{ secrets.SIGNING_KEY_ID }}
+      ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_PASSWORD }}
+      ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.GPG_KEY_CONTENTS }}
 
     runs-on: ubuntu-latest
     steps:
@@ -30,21 +30,12 @@ jobs:
 
       - run: ./gradlew assemble
 
-      - name: Unwrap GPG key
-        env:
-          GPG_KEY_CONTENTS: ${{ secrets.GPG_KEY_CONTENTS }}
-          SIGNING_SECRET_KEY_RING_FILE: ${{ secrets.SIGNING_SECRET_KEY_RING_FILE }}
-        run: sudo bash -c "echo '$GPG_KEY_CONTENTS' | base64 -d > '$SIGNING_SECRET_KEY_RING_FILE'"
-
       - run: git status
+
       - run: ./gradlew currentVersion
-      - run: ./gradlew :screenshot-testing-core:publishReleasePublicationToGithubRepository
-      - run: ./gradlew :screenshot-testing-core:publishReleasePublicationToMavenCentralRepository
 
-      - run: ./gradlew :screenshot-testing-plugin:publishPluginMavenPublicationToMavenCentralRepository
-      - run: ./gradlew :screenshot-testing-plugin:publishScreenshotTestingPluginMarkerMavenPublicationToMavenCentralRepository
+      - run: ./gradlew publishAllPublicationsToGithubRepository
 
-      - run: ./gradlew :screenshot-testing-plugin:publishPluginMavenPublicationToGithubRepository
-      - run: ./gradlew :screenshot-testing-plugin:publishScreenshotTestingPluginMarkerMavenPublicationToGithubRepository
+      - run: ./gradlew publishAllPublicationsToMavenCentralRepository
 
       - run: ./gradlew publishPlugins -Pgradle.publish.key=${{ secrets.gradle_publish_key }} -Pgradle.publish.secret=${{ secrets.gradle_publish_secret }}

@@ -6,6 +6,8 @@ plugins {
 dependencies {
   implementation(libs.kotlin.gradle)
   implementation(libs.agp.gradle.api)
+  implementation(libs.jetbrains.dokka)
+  implementation(libs.vanniktech.maven.publish)
 }
 
 kotlin {
