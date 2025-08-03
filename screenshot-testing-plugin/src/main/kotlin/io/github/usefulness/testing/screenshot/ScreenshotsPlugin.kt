@@ -14,7 +14,6 @@ import io.github.usefulness.testing.screenshot.tasks.RunScreenshotTestsTask
 import io.github.usefulness.testing.screenshot.tasks.VerifyScreenshotTestTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.configurationcache.extensions.capitalized
 
 public class ScreenshotsPlugin : Plugin<Project> {
     internal companion object {
@@ -97,7 +96,7 @@ public class ScreenshotsPlugin : Plugin<Project> {
                 .wiredWith(VerifyScreenshotTestTask::connectedTestOutput)
                 .toListenTo(InternalArtifactType.CONNECTED_ANDROID_TEST_ADDITIONAL_OUTPUT)
         } else {
-            val agpTask = "connected${variantName.capitalized()}"
+            val agpTask = "connected${variantName.replaceFirstChar(Char::titlecase)}"
             record.configure { task ->
                 task.dependsOn(agpTask)
                 task.connectedTestOutput.set(

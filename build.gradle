@@ -22,7 +22,7 @@ allprojects {
       }
     }
     kotlin {
-      jvmToolchain(21)
+      jvmToolchain(libs.versions.java.compile.get().toInteger())
     }
   }
 }
