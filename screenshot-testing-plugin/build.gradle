@@ -40,13 +40,6 @@ tasks.register("generateBuildConfig") {
   }
 }
 
-tasks.withType(KotlinCompile).configureEach {
-  compilerOptions {
-    apiVersion = KotlinVersion.KOTLIN_1_8
-    languageVersion = KotlinVersion.KOTLIN_1_8
-  }
-}
-
 tasks.named("compileKotlin") {
   dependsOn("generateBuildConfig")
   sourceSets {
@@ -76,6 +69,11 @@ gradlePlugin {
 
 kotlin {
   explicitApi()
+  compilerOptions {
+    apiVersion = KotlinVersion.KOTLIN_2_0
+    languageVersion = KotlinVersion.KOTLIN_2_0
+    freeCompilerArgs.add("-Xannotation-default-target=param-property")
+  }
 }
 
 dependencies {

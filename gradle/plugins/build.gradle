@@ -6,10 +6,12 @@ plugins {
 dependencies {
   implementation(libs.kotlin.gradle)
   implementation(libs.agp.gradle.api)
+  implementation(libs.jetbrains.dokka)
+  implementation(libs.vanniktech.maven.publish)
 }
 
 kotlin {
-  jvmToolchain(21)
+  jvmToolchain(libs.versions.java.compile.get().toInteger())
 }
 
 gradlePlugin {
