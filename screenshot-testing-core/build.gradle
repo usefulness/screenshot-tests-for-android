@@ -13,12 +13,12 @@ poko {
 android {
   namespace = "io.github.usefulness.testing.screenshot.tests"
   defaultConfig {
-    minSdk 21
+    minSdk = 21
     testInstrumentationRunner "io.github.usefulness.testing.screenshot.CustomScreenshotTestRunner"
   }
   testBuildType = "release"
   testOptions {
-    targetSdk = 33
+    targetSdk = 36
   }
   publishing {
     singleVariant("release")
