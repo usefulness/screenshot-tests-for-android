@@ -23,9 +23,6 @@ public open class ScreenshotsPluginExtension @Inject constructor(
     public val failureDirectory: DirectoryProperty = objectFactory.directoryProperty()
         .value(projectLayout.buildDirectory.dir("reports/failedScreenshots"))
 
-    @Deprecated("use comparisonMethod instead", replaceWith = ReplaceWith("comparisonMethod = RootMeanSquareErrorValue(tolerance = ...)"))
-    public val tolerance: Property<Float> = objectFactory.property(Float::class.java).value(0.0f)
-
     public val comparisonMethod: Property<ComparisonMethod> = objectFactory.property(ComparisonMethod::class.java)
         .value(ComparisonMethod.DropboxDiffer())
 }
