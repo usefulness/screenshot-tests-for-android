@@ -1,12 +1,10 @@
 package io.github.usefulness.testing.screenshot
 
-import com.android.build.api.AndroidPluginVersion
 import com.android.build.api.dsl.CommonExtension
 import com.android.build.api.variant.AndroidComponentsExtension
 import com.android.build.api.variant.AndroidTest
 import com.android.build.api.variant.HasAndroidTest
 import com.android.build.gradle.internal.scope.InternalArtifactType
-import com.android.build.gradle.internal.tasks.DeviceProviderInstrumentTestTask
 import io.github.usefulness.testing.screenshot.generated.ScreenshotTestBuildConfig
 import io.github.usefulness.testing.screenshot.tasks.CleanScreenshotsTask
 import io.github.usefulness.testing.screenshot.tasks.RecordScreenshotTestTask
@@ -37,7 +35,7 @@ public class ScreenshotsPlugin : Plugin<Project> {
             }
         }
         val android = extensions.getByName("android") as CommonExtension<*, *, *, *, *, *>
-        android.defaultConfig {
+        android.defaultConfig.apply {
             testInstrumentationRunnerArguments["useTestStorageService"] = "true"
             testInstrumentationRunner = TEST_RUNNER_CLASS
         }
@@ -49,7 +47,6 @@ public class ScreenshotsPlugin : Plugin<Project> {
                 generateTasksFor(
                     variant = androidTest,
                     screenshotExtensions = screenshotExtensions,
-                    pluginVersion = androidComponents.pluginVersion,
                 )
             }
         }
@@ -68,11 +65,7 @@ public class ScreenshotsPlugin : Plugin<Project> {
         task.dependsOn(CleanScreenshotsTask.taskName(variantName))
     }
 
-    private fun Project.generateTasksFor(
-        variant: AndroidTest,
-        screenshotExtensions: ScreenshotsPluginExtension,
-        pluginVersion: AndroidPluginVersion,
-    ) {
+    private fun Project.generateTasksFor(variant: AndroidTest, screenshotExtensions: ScreenshotsPluginExtension) {
         val variantName = variant.name
 
         tasks.register(CleanScreenshotsTask.taskName(variantName))
@@ -87,28 +80,12 @@ public class ScreenshotsPlugin : Plugin<Project> {
             screenshotExtensions = screenshotExtensions,
         )
 
-        if (pluginVersion >= AndroidPluginVersion(8, 3, 0)) {
-            variant.artifacts.use(record)
-                .wiredWith(RecordScreenshotTestTask::connectedTestOutput)
-                .toListenTo(InternalArtifactType.CONNECTED_ANDROID_TEST_ADDITIONAL_OUTPUT)
+        variant.artifacts.use(record)
+            .wiredWith(RecordScreenshotTestTask::connectedTestOutput)
+            .toListenTo(InternalArtifactType.CONNECTED_ANDROID_TEST_ADDITIONAL_OUTPUT)
 
-            variant.artifacts.use(verify)
-                .wiredWith(VerifyScreenshotTestTask::connectedTestOutput)
-                .toListenTo(InternalArtifactType.CONNECTED_ANDROID_TEST_ADDITIONAL_OUTPUT)
-        } else {
-            val agpTask = "connected${variantName.replaceFirstChar(Char::titlecase)}"
-            record.configure { task ->
-                task.dependsOn(agpTask)
-                task.connectedTestOutput.set(
-                    tasks.named(agpTask).flatMap { (it as DeviceProviderInstrumentTestTask).additionalTestOutputDir },
-                )
-            }
-            verify.configure { task ->
-                task.dependsOn(agpTask)
-                task.connectedTestOutput.set(
-                    tasks.named(agpTask).flatMap { (it as DeviceProviderInstrumentTestTask).additionalTestOutputDir },
-                )
-            }
-        }
+        variant.artifacts.use(verify)
+            .wiredWith(VerifyScreenshotTestTask::connectedTestOutput)
+            .toListenTo(InternalArtifactType.CONNECTED_ANDROID_TEST_ADDITIONAL_OUTPUT)
     }
 }

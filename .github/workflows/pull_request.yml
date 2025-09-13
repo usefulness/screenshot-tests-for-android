@@ -46,8 +46,6 @@ jobs:
 
       - run: ./gradlew check --scan
 
-      - run: ./gradlew projectCoverage
-
       - run: ./gradlew publishToMavenLocal
 
       - run: ./gradlew publishPlugins -m
