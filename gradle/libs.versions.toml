@@ -43,7 +43,7 @@ chrisbanes-insetter = { module = "dev.chrisbanes.insetter:insetter", version.ref
 kotlinx-serialization-json-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "maven-kotlin-serialization" }
 sksamuel-scrimage-core = "com.sksamuel.scrimage:scrimage-core:4.3.5"
 dropbox-differ = "com.dropbox.differ:differ:0.3.0"
-jetbrains-dokka = "org.jetbrains.dokka:dokka-gradle-plugin:2.0.0"
+jetbrains-dokka = "org.jetbrains.dokka:dokka-gradle-plugin:2.1.0"
 vanniktech-maven-publish = { module = "com.vanniktech:gradle-maven-publish-plugin", version.ref = "maven-vanniktech" }
 
 [plugins]
