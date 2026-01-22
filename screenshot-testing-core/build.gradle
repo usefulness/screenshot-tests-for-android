@@ -25,6 +25,12 @@ android {
   }
 }
 
+kotlin {
+  compilerOptions {
+    freeCompilerArgs.add("-Xannotation-default-target=param-property")
+  }
+}
+
 androidComponents {
   beforeVariants(selector().withBuildType("release")) { builder ->
     builder.enable = true
