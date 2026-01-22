@@ -34,7 +34,7 @@ public class ScreenshotsPlugin : Plugin<Project> {
                 )
             }
         }
-        val android = extensions.getByName("android") as CommonExtension<*, *, *, *, *, *>
+        val android = extensions.getByName("android") as CommonExtension
         android.defaultConfig.apply {
             testInstrumentationRunnerArguments["useTestStorageService"] = "true"
             testInstrumentationRunner = TEST_RUNNER_CLASS
