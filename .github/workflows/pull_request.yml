@@ -53,12 +53,12 @@ jobs:
       - run: git diff --exit-code
 
       - if: ${{ always() }}
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: test-results
           path: "${{ github.workspace }}/**/build/reports/tests"
 
-      - uses: actions/upload-artifact@v6
+      - uses: actions/upload-artifact@v7
         if: ${{ always() }}
         with:
           name: lint-results
@@ -109,14 +109,14 @@ jobs:
 
       - name: Upload screenshot tests result-1
         if: ${{ always() }}
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: screenshots-1
           path: "${{ github.workspace }}/**/build/reports/androidTests/connected/"
 
       - name: Upload failed screenshots-1
         if: ${{ failure() }}
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: failedScreenshots-1
           path: "${{ github.workspace }}/**/build/reports/failedScreenshots"
@@ -138,14 +138,14 @@ jobs:
 
       - name: Upload screenshot tests result-2
         if: ${{ always() }}
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: screenshots-2
           path: "${{ github.workspace }}/**/build/reports/androidTests/connected/"
 
       - name: Upload failed screenshots-2
         if: ${{ failure() }}
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: failedScreenshots-2
           path: "${{ github.workspace }}/**/build/reports/failedScreenshots"
