@@ -6,8 +6,10 @@ import org.gradle.api.file.ProjectLayout
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
+import org.gradle.work.DisableCachingByDefault
 import javax.inject.Inject
 
+@DisableCachingByDefault(because = "Runs connected screenshot tests and records their outputs")
 public open class RecordScreenshotTestTask @Inject constructor(
     objectFactory: ObjectFactory,
     layout: ProjectLayout,

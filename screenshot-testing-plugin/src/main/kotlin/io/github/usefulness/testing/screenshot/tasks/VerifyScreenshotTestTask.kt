@@ -5,9 +5,13 @@ import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.ProjectLayout
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.tasks.InputDirectory
+import org.gradle.api.tasks.PathSensitive
+import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.TaskAction
+import org.gradle.work.DisableCachingByDefault
 import javax.inject.Inject
 
+@DisableCachingByDefault(because = "Runs connected screenshot tests and verifies their outputs")
 public open class VerifyScreenshotTestTask @Inject constructor(
     objectFactory: ObjectFactory,
     layout: ProjectLayout,
@@ -18,6 +22,7 @@ public open class VerifyScreenshotTestTask @Inject constructor(
     }
 
     @get:InputDirectory
+    @get:PathSensitive(PathSensitivity.RELATIVE)
     public override val referenceDirectory: DirectoryProperty = super.referenceDirectory
 
     init {

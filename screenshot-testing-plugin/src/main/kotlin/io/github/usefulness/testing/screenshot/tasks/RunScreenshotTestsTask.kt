@@ -13,8 +13,12 @@ import org.gradle.api.provider.Property
 import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.OutputDirectory
+import org.gradle.api.tasks.PathSensitive
+import org.gradle.api.tasks.PathSensitivity
+import org.gradle.work.DisableCachingByDefault
 import java.io.File
 
+@DisableCachingByDefault(because = "Runs connected screenshot tests and processes device test outputs")
 public abstract class RunScreenshotTestsTask internal constructor(
     objectFactory: ObjectFactory,
     private val projectLayout: ProjectLayout,
@@ -27,6 +31,7 @@ public abstract class RunScreenshotTestsTask internal constructor(
     internal val comparisonMethod: Property<ComparisonMethod> = objectFactory.property(ComparisonMethod::class.java)
 
     @get:InputDirectory
+    @get:PathSensitive(PathSensitivity.RELATIVE)
     public val connectedTestOutput: DirectoryProperty = objectFactory.directoryProperty()
 
     @get:Internal
