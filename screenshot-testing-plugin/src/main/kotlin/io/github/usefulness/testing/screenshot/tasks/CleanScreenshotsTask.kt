@@ -8,8 +8,10 @@ import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
+import org.gradle.work.DisableCachingByDefault
 import javax.inject.Inject
 
+@DisableCachingByDefault(because = "Deletes generated screenshot reports")
 public open class CleanScreenshotsTask @Inject constructor(
     objectFactory: ObjectFactory,
     private val projectLayout: ProjectLayout,
